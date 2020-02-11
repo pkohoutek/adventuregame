@@ -1,0 +1,73 @@
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.File;
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class SceneManager {
+
+	private static int currentScene = 0;
+	private static String filename = "advsave1.txt";
+	
+	
+	
+	public static void loadScene(int scene)
+	{
+		currentScene = scene;
+	}
+	
+	public static void nextScene() {
+		currentScene += 1;
+	}
+	
+	public static int getScene() {
+		return currentScene;
+	}
+	
+	
+	public static void saveGame() {
+		PrintWriter outputStream = null;
+		try
+		{
+			outputStream = new PrintWriter(filename);
+		}
+		catch(FileNotFoundException e)
+		{
+			System.out.println("An error occured opening " + filename
+					+ ". Exiting game.");
+			System.exit(0);
+		}
+		outputStream.println(currentScene);
+		outputStream.close();
+		
+	}
+	
+	public static void loadGame() {
+		Scanner inputStream = null;
+		try
+		{
+			inputStream = new Scanner(new File(filename));
+		}
+		catch(FileNotFoundException e)
+		{
+			System.out.println("Error opening the file. Exiting game.");
+			System.exit(0);
+		}
+		String sScene = inputStream.nextLine();
+		try 
+		{
+			currentScene = Integer.parseInt(sScene);
+		}
+		catch(NumberFormatException e)
+		{
+			System.out.println("Error opening the file. Exiting game.");
+			System.exit(0);
+		}
+		inputStream.close();
+	}
+		
+	
+	
+	
+	
+}
