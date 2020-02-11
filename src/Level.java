@@ -205,7 +205,7 @@ public class Level {
 	}
 	
 	private Prop generateTrigger() {
-		Prop trigger = new Prop("Trigger activated", 3,4, true);
+		Prop trigger = new Prop("Trigger activated", 1,4, true);
 		return trigger;
 	}
 	
@@ -245,7 +245,7 @@ public class Level {
 		return map.canMove(move, playerX, playerY);
 	}
 	
-	public void checkTrigger(int playerX, int playerY)
+	public boolean checkTrigger(int playerX, int playerY)
 	{
 		boolean isTrigger = false;
 		for (int num = 0; num < triggers.size(); num++)
@@ -254,13 +254,12 @@ public class Level {
 					&& playerY == triggers.get(num).getY() 
 						&& triggers.get(num).isTrigger())
 			{
-				isTrigger = true;
 				triggers.get(num).printTriggerText();
+				isTrigger = true;
+				triggers.get(num).triggerOff();
 			}
-		}
-		
-
-		
+		}		
+		return isTrigger;
 	}
 	
 	public int mapX() {

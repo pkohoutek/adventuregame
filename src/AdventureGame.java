@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 
-public class Test {
+public class AdventureGame {
 
 	private static boolean finishedTurn = false, gameOver = false;
 
@@ -13,7 +13,7 @@ public class Test {
 		Scanner keyboard = new Scanner(System.in);
 		// Map map = new Map(5, 5);
 		
-		Level testLevel = new Level(1, 1, 1, 0, 0, "Escape room story goes here", "Level 0 is very mysterious... oOoooOOoh", 5, 6);
+		Level testLevel = new Level(1, 1, 1, 1, 0, "Escape room story goes here", "Level 0 is very mysterious... oOoooOOoh", 5, 6);
 
 		
 	
@@ -28,7 +28,6 @@ public class Test {
 			
 			while (!finishedTurn)
 			{
-				//map.printMap(player.getX(), player.getY());
 				testLevel.displayLevel(player.getX(), player.getY());
 				if (invalidEntry)
 				{
@@ -39,10 +38,6 @@ public class Test {
 				System.out.println("1 - Move\t 2 - Inspect \t 0 - Exit");
 				while (!keyboard.hasNextInt())
 				{
-					//map.printMap(player.getX(), player.getY());
-//					testLevel.displayLevel(player.getX(), player.getY());
-//					System.out.println("Invalid entry!");
-//					System.out.println("1 - Move\t 2 - Inspect \t 0 - Exit");
 					sOption = keyboard.next();
 
 				}
@@ -54,7 +49,6 @@ public class Test {
 						{
 							if (bonk)
 							{
-								//map.printMap(player, bonk);
 								testLevel.displayLevel(player.getX(), player.getY(), bonk);
 								bonk = false;
 							}
@@ -66,7 +60,6 @@ public class Test {
 							}
 							else
 							{
-								//map.printMap(player.getX(), player.getY());
 								testLevel.displayLevel(player.getX(), player.getY());
 								System.out.print("\n");
 							}	
@@ -74,7 +67,6 @@ public class Test {
 							System.out.println("Right - 4\tBack a Menu - 0");
 							while (!keyboard.hasNextInt())
 							{
-								//map.printMap(player.getX(), player.getY());
 								testLevel.displayLevel(player.getX(), player.getY());
 								System.out.println("Invalid entry!");
 								System.out.println("Move Up - 1\tDown - 2\tMove Left - 3");
@@ -95,6 +87,13 @@ public class Test {
 								if (testLevel.checkMove(iMove, player.getX(), player.getY()))
 								{
 									player.move(iMove);
+									if(testLevel.checkTrigger(player.getX(), player.getY()))
+									{
+										System.out.println("Press enter to continue...");
+										keyboard.nextLine();
+									    keyboard.nextLine();   // needs 2 next lines to work properly, quirk of java operating on multiple OS cmd line?
+									}
+
 								}
 								else {
 									bonk = true;
@@ -124,4 +123,5 @@ public class Test {
 		}
 
 	} 
+	
 }
