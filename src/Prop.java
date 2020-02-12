@@ -1,6 +1,16 @@
 
 public class Prop {
 	
+	
+	/*
+	 * 		Prop Class
+	 * 		creates objects on the map for the player to interact with
+	 * 		this class can be cleaned up, children can be created such as puzzle, trigger or w/e
+	 * 		Right now generates from literals 1 wall, a puzzle like object, and an object that will just have story text
+	 * 
+	 * 		will need further implementation for generating levels
+	 */
+	
 	private int xPos = 0;
 	private int yPos = 0;
 	private boolean puzzle = false;	// the puzzle and trigger can be moved to child classes
@@ -22,6 +32,32 @@ public class Prop {
 		yPos = y;
 		puzzle = false;
 		sSprite = "#";
+	}
+	
+	// prop coping constructor
+	public Prop(Prop prop)
+	{
+		xPos = prop.getX();
+		yPos = prop.getY();
+		sSprite = prop.getSprite();
+		description = "";
+		
+		if (sSprite == "$")
+		{
+			description = prop.getDescription();	
+		}
+		else if (sSprite == "?")
+		{
+			puzzle = true;
+			sPuzzle = prop.getPuzzleText();
+			sAnswer = prop.getPuzzleAnswer();
+		}
+		else if (sSprite == " ")
+		{
+			trigger = true;
+			triggerText = prop.getTriggerText();
+			
+		}
 	}
 	
 	
@@ -57,38 +93,64 @@ public class Prop {
 		sSprite = "?";
 	}
 	
-	public void printDescription() {
-		System.out.println(description);
+	// gets prop description string
+	public String getDescription() {
+		return description;
 	}
+	
+	// prints trigger description string
 	public void printTriggerText() {
 		System.out.println(triggerText);
 	}
 	
+	// gets trigger text String
+	public String getTriggerText() {
+		return triggerText;
+	}
+	
+	// prints puzzle text
 	public void printPuzzle() {
 		System.out.println(sPuzzle);
 	}
 	
+	// getter for puzzle text string
+	public String getPuzzleText() {
+		return sPuzzle;
+	}
+	
+	// getter for puzzle answer string
+	public String getPuzzleAnswer() {
+		return sAnswer;
+	}
+	
+	// method to check players answer 
 	public boolean checkAnswer(String answer) {
 		boolean result = answer == sAnswer? true:false;
 		return result;
 	}
 	
+	// gets the String representation of the sprite (can change type to Sprite when we move to JavaFX),
+	// for scalability
 	public String getSprite() {
 		return sSprite;
 	}
 	
+	// get prop x value
 	public int getX() {
 		return xPos;
 	}
 	
+	// get prop y value
 	public int getY() {
 		return yPos;
 	}
 	
+	// checks if prop is trigger and returns boolean value
 	public boolean isTrigger() {
 		return trigger;
 	}
 	
+	// method to deactivate trigger if a trigger has been activated
 	public void triggerOff() {
 		trigger = false;		
 	}

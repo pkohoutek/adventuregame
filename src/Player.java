@@ -11,6 +11,7 @@ public class Player {
 	private int yPos = 0;
 	
 	
+	// constructor takes x/y position
 	public Player(int x, int y) {
 		xPos = x;
 		yPos = y;
@@ -21,24 +22,23 @@ public class Player {
 	// moves player if map location is clear
 	// returns true if the player can move and false otherwise
 	// boolean can change if not necessary
-	public boolean move(int move) {
+	public void move(int move) {
 		switch(move) {
-		case 1:
+		case 1:				// player moves up
 			yPos += 1;
 			break;
-		case 2:
+		case 2:				// player moves down
 			yPos -= 1;
 			break;
-		case 3:
+		case 3:				// player moves left
 			xPos -= 1;
 			break;
-		case 4:
+		case 4:				// player moves right
 			xPos += 1;
 			break;
-		default:
-			break;
+		default:			// if for some reason a value other than 1-4 gets passed as an argument,
+			break;			// default is to do nothing
 		}
-		return true;
 	}
 	
 	// prints key array to console
@@ -50,7 +50,7 @@ public class Player {
 	// method to interact with puzzles 
 	// and other games on the map
 	public void interact() {
-		
+		// put code in here
 	}
 	
 	// method to clear keys when entering
@@ -62,10 +62,12 @@ public class Player {
 		}
 	}
 	
+	// get player x position
 	public int getX() {
 		return xPos;
 	}
 	
+	// get player y position
 	public int getY() {
 		return yPos;
 	}

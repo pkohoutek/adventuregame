@@ -10,8 +10,9 @@ public class Map {
 	private int xLen = 5, yLen = 5;				// map x,y dimensions
 	private String[][] sMap = new String[yLen][xLen];	// string representation of map, can add to constructors
 	private int smashIndex = 0;
-	private boolean[][] isTrigger = new boolean[yLen][xLen];
-	private final String[] smash = { "BONK", "BUMP", "SMASH", "CRASH", 
+	private boolean[][] isTrigger = new boolean[yLen][xLen];   // boolean array to keep track of trigger locations on map
+	 // string array for onomatopoeia (s.p.) words when player hits wall (i took the old 60s batman show as inspiration
+	private final String[] SMASH = { "BONK", "BUMP", "SMASH", "CRASH", 
 			"OUCH", "BANG", "BLOOP", "CLANK", "CLUNK", "KAPOW", "CRUNCH", "CRRAAAAACK",
 			"OOOF", "OUCH", "OWWWW", "PLOP", "RIP", "POWIE", "SWAAP",
 			"UGGGH", "WHACK", "WHAMMM", "Z-ZWAP", "WHAP", "ZAP", "ZLONK",
@@ -19,11 +20,12 @@ public class Map {
 			"RAKKK", "SPLATS", "SPLATT", "THUNK", "THWACK", "THWAPP"};
 	private Random random = new Random();
 	
-	
+	// default constructor that builds empty map with default dimensions
 	public Map() {
 		buildMap();
 	}
 	
+	// constructor to build map with the x and y length as parameters
 	public Map(int x, int y) {
 		xLen = x;
 		yLen = y;
@@ -32,6 +34,9 @@ public class Map {
 		buildMap();
 	}
 	
+	
+	// build map method that generates the sMap String array
+	// iterates backwards so that (0,0) is in bottom left corner
 	private void buildMap() {
 		for (int y = yLen - 1; y >= 0; y--)
 		{
@@ -42,7 +47,8 @@ public class Map {
 		}
 	}
 
-	public void printMap(int playerX, int playerY) {
+	// prints map to console with spaces between tiles
+	public void printMapSpaces(int playerX, int playerY) {
 		System.out.println("\n\n\n\nLevel " + SceneManager.getScene());
 		for (int x = 0; x < xLen; x++)
 		{	
@@ -73,14 +79,7 @@ public class Map {
 					else {
 						System.out.print("| " + sMap[y][x] + " ");
 					}
-				}	/*
-				else if (y == 0)
-				{
-					if (player.getX() == x && player.getY() == y)
-					{
-						System.out.print(" P ");
-					}
-				} */
+				}	
 				else if (x == xLen - 1)
 				{
 
@@ -120,7 +119,9 @@ public class Map {
 		
 	}
 	
-	public void printMap(int playerX, int playerY, boolean hitWall) {
+	
+	// prints map with spaces between tiles and if player hit wall then prints descriptive smash text
+	public void printMapSpaces(int playerX, int playerY, boolean hitWall) {
 		System.out.println("\n\n\n\nLevel " + SceneManager.getScene());
 		for (int x = 0; x < xLen; x++)
 		{	
@@ -151,14 +152,7 @@ public class Map {
 					else {
 						System.out.print("| " + sMap[y][x] + " ");
 					}
-				}	/*
-				else if (y == 0)
-				{
-					if (player.getX() == x && player.getY() == y)
-					{
-						System.out.print(" P ");
-					}
-				} */
+				}	
 				else if (x == xLen - 1)
 				{
 
@@ -198,13 +192,164 @@ public class Map {
 		
 		if (hitWall)
 		{
-			smashIndex = random.nextInt(smash.length - 1);
-			System.out.println("*** " + smash[smashIndex] + "! ***");
+			smashIndex = random.nextInt(SMASH.length - 1);
+			System.out.println("*** " + SMASH[smashIndex] + "! ***");
 			
 		}
 	}
 	
+	// prints map without spaces, and if player hit wall prints descriptive text
+	public void printMap(int playerX, int playerY, boolean hitWall) {
+		System.out.println("\n\n\n\nLevel " + SceneManager.getScene());
+		for (int x = 0; x < xLen; x++)
+		{	
+			if (x == 0)
+			{
+				System.out.print(" _");
+			}
+			else if (x == xLen - 1)
+			{
+				System.out.println("_ ");
+			}
+			else 
+			{
+				System.out.print("_");
+			}
+
+		}
+		for (int y = yLen - 1; y >= 0; y--)
+		{
+			for (int x = 0; x < xLen; x++)
+			{
+				if (x == 0)
+				{
+					if (playerX == x && playerY == y)
+					{
+						System.out.print("|P");
+					}
+					else {
+						System.out.print("|" + sMap[y][x]);
+					}
+				}	
+				else if (x == xLen - 1)
+				{
+
+					if (playerX == x && playerY == y)
+					{
+						System.out.println("P|");
+					}
+					else {
+						System.out.println(sMap[y][x] + "|");
+					}
+				}
+				else if (playerX == x && playerY == y)
+				{
+					System.out.print("P");
+				}
+				else
+				{
+					System.out.print(sMap[y][x]);
+				}				
+			}
+		}
+		for (int x = 0; x < xLen; x++)
+		{	
+			if ( x == 0) {
+				System.out.print("|_");
+			}
+			else if (x == xLen - 1)
+			{
+				System.out.println("_|");
+			}
+			else 
+			{
+				System.out.print("_");
+			}
+
+		}
+		
+		if (hitWall)
+		{
+			smashIndex = random.nextInt(SMASH.length - 1);
+			System.out.println("*** " + SMASH[smashIndex] + "! ***");
+			
+		}
+	}
 	
+	// prints map without spaces
+	public void printMap(int playerX, int playerY) {
+		System.out.println("\n\n\n\nLevel " + SceneManager.getScene());
+		for (int x = 0; x < xLen; x++)
+		{	
+			if (x == 0)
+			{
+				System.out.print(" _");
+			}
+			else if (x == xLen - 1)
+			{
+				System.out.println("_ ");
+			}
+			else 
+			{
+				System.out.print("_");
+			}
+
+		}
+		for (int y = yLen - 1; y >= 0; y--)
+		{
+			for (int x = 0; x < xLen; x++)
+			{
+				if (x == 0)
+				{
+					if (playerX == x && playerY == y)
+					{
+						System.out.print("|P");
+					}
+					else {
+						System.out.print("|" + sMap[y][x]);
+					}
+				}	
+				else if (x == xLen - 1)
+				{
+
+					if (playerX == x && playerY == y)
+					{
+						System.out.println("P|");
+					}
+					else {
+						System.out.println(sMap[y][x] + "|");
+					}
+				}
+				else if (playerX == x && playerY == y)
+				{
+					System.out.print("P");
+				}
+				else
+				{
+					System.out.print(sMap[y][x]);
+				}				
+			}
+		}
+		for (int x = 0; x < xLen; x++)
+		{	
+			if ( x == 0) {
+				System.out.print("|_");
+			}
+			else if (x == xLen - 1)
+			{
+				System.out.println("_|");
+			}
+			else 
+			{
+				System.out.print("_");
+			}
+
+		}
+		
+	}	
+	
+	
+	// checks if players next move is good, returns true if so, false otherwise
 	public boolean canMove(int move, int playerX, int playerY) {
 		
 		boolean canMove = false;
@@ -289,6 +434,7 @@ public class Map {
 				break;
 			default:
 				canMove = false;
+				break;
 		}
 		
 
@@ -296,6 +442,7 @@ public class Map {
 	}
 	
 	
+	// adds prop string to map, and adds trigger to boolean array
 	public void addProp(Prop prop)
 	{
 		sMap[prop.getY()][prop.getX()] = prop.getSprite();
@@ -305,10 +452,13 @@ public class Map {
 		}
 	}
 	
+	
+	// simple map x length getter
 	public int getXLen(){
 		return xLen;
 	}
 	
+	// simple map y length getter
 	public int getYLen() {
 		return yLen;
 	}
