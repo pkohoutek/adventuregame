@@ -14,8 +14,20 @@ public class Level {
 	private ArrayList<Prop> triggers = new ArrayList<Prop>(); 
 	private ArrayList<String> storyText = new ArrayList<String>();
 	private ArrayList<String> description = new ArrayList<String>();
-	private Map map = new Map();
+	private Map map;
+	private LevelGenerator levelGenerator;
 
+	
+	
+	
+	public Level(int level)
+	{
+		levelNumber = 1;
+		levelGenerator = new LevelGenerator(level);
+		map = levelGenerator.getMap();
+		props = levelGenerator.getProps();
+		
+	}
 	// instantiates level without puzzles, can be used for making scenes with story elements
 	// no map
 	public Level(int lNum,  String[] sText, String[] dText) {

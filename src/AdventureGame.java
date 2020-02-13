@@ -23,10 +23,10 @@ public class AdventureGame {
 		// instantiate player and keyboard for input
 		Player player = new Player(0, 0);
 		Scanner keyboard = new Scanner(System.in);
-
+		Level testLevel = new Level(1);
 		// generating a test level just for demo purposes
-		Level testLevel = new Level(1, 1, 1, 1, 0, "Escape room story goes here"
-				, "Level 0 is very mysterious... oOoooOOoh", 20, 6);
+	//	Level testLevel = new Level(1, 1, 1, 1, 0, "Escape room story goes here"
+	//			, "Level 0 is very mysterious... oOoooOOoh", 20, 6);
 
 		
 	

@@ -42,17 +42,17 @@ public class Prop {
 		sSprite = prop.getSprite();
 		description = "";
 		
-		if (sSprite == "$")
+		if (sSprite.equals( "$"))
 		{
 			description = prop.getDescription();	
 		}
-		else if (sSprite == "?")
+		else if (sSprite.equals("?"))
 		{
 			puzzle = true;
 			sPuzzle = prop.getPuzzleText();
 			sAnswer = prop.getPuzzleAnswer();
 		}
-		else if (sSprite == " ")
+		else if (sSprite.equals(" "))
 		{
 			trigger = true;
 			triggerText = prop.getTriggerText();
