@@ -21,9 +21,10 @@ public class AdventureGame {
 		
 		
 		// instantiate player and keyboard for input
-		Player player = new Player(0, 0);
-		Scanner keyboard = new Scanner(System.in);
 		Level testLevel = new Level(1);
+		Player player = new Player(testLevel.getStartX(), testLevel.getStartY());
+		Scanner keyboard = new Scanner(System.in);
+
 		// generating a test level just for demo purposes
 	//	Level testLevel = new Level(1, 1, 1, 1, 0, "Escape room story goes here"
 	//			, "Level 0 is very mysterious... oOoooOOoh", 20, 6);
@@ -36,7 +37,7 @@ public class AdventureGame {
 		int iOption, iMove;		
 		
 		
-		// loops through gameplay until player selects exit game
+		// loops through game play until player selects exit game
 		while (!gameOver) 
 		{
 			// booleans for if a player has finished a turn moving or inspecting an object,
@@ -79,7 +80,7 @@ public class AdventureGame {
 								testLevel.displayLevel(player.getX(), player.getY(), hitObject);
 								hitObject = false;
 							}
-							// checks if the plaer input was incorrect during the last loop and prints a message
+							// checks if the player input was incorrect during the last loop and prints a message
 							// informing them of invalid input
 							else if (invalidEntry)
 							{
@@ -149,6 +150,13 @@ public class AdventureGame {
 				// on the tile of an object
 				else if (iOption == 2)
 				{
+					if (testLevel.canInteract(player.getX(), player.getY()))
+					{
+						testLevel.interaction(player.getX(), player.getY());
+						System.out.println("Press enter to continue...");
+						keyboard.nextLine();	// waits for the user to hit enter so longer story elements can be read before continuing
+					    keyboard.nextLine();   // needs 2 next lines to work properly, quirk of java operating on multiple OS cmd line?
+					}
 					finishedTurn = true;
 				}
 				// if the player selects 0, ends main menu loop and exits "GameManager" loop to exit game

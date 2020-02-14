@@ -267,15 +267,15 @@ public class Map {
 		for (int x = 0; x < xLen; x++)
 		{	
 			if ( x == 0) {
-				System.out.print("|_");
+				System.out.print("|#");
 			}
 			else if (x == xLen - 1)
 			{
-				System.out.println("_|");
+				System.out.println("#|");
 			}
 			else 
 			{
-				System.out.print("_");
+				System.out.print("#");
 			}
 
 		}
@@ -462,6 +462,11 @@ public class Map {
 		{
 			isTrigger[prop.getY()][prop.getX()] = true;
 		}
+	}
+	
+	public void addProp(Wall wall)
+	{
+		sMap[wall.getY()][wall.getX()] = wall.getSprite();
 	}
 	
 	

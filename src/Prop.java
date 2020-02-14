@@ -25,15 +25,7 @@ public class Prop {
 	private String sPuzzle = "Put instructions, question, riddle, etc in here.";
 	private String sAnswer = "Put answer key here";
 	
-	// non-interactive prop, think walls, columns, etc can be replaced with a image (sprite) when we move to graphical
-	// can be moved to a child class using extends
-	public Prop(int x, int y) {
-		xPos = x;
-		yPos = y;
-		puzzle = false;
-		sSprite = "#";
-	}
-	
+
 	// prop coping constructor
 	public Prop(Prop prop)
 	{
@@ -98,9 +90,14 @@ public class Prop {
 		return description;
 	}
 	
+	public void printDescription()
+	{
+		System.out.println(description);
+	}
+	
 	// prints trigger description string
 	public void printTriggerText() {
-		System.out.println(triggerText);
+		System.out.println("\n\n\n\n" + triggerText);
 	}
 	
 	// gets trigger text String

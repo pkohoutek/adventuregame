@@ -16,16 +16,21 @@ public class Level {
 	private ArrayList<String> description = new ArrayList<String>();
 	private Map map;
 	private LevelGenerator levelGenerator;
+	private int playerStartX, playerStartY;
 
 	
 	
 	
 	public Level(int level)
 	{
-		levelNumber = 1;
+		levelNumber = level;
 		levelGenerator = new LevelGenerator(level);
 		map = levelGenerator.getMap();
 		props = levelGenerator.getProps();
+		triggers = levelGenerator.getTriggers();
+		playerStartX = levelGenerator.getPlayerStartX();
+		playerStartY = levelGenerator.getPlayerStartY();
+		
 		
 	}
 	// instantiates level without puzzles, can be used for making scenes with story elements
@@ -48,8 +53,7 @@ public class Level {
 	// constructor to make a scene with a generic map, a few props
 	// can be used if you want to make a room with story elements and props and no puzzles
 	// possible could take a Prop array as parameter and then generate story props using index
-	public Level(int numProps, int lNum,  String[] sText, String[] dText) {
-		
+	public Level(int numProps, int lNum,  String[] sText, String[] dText) {	
 		
 		levelNumber = lNum;
 		for (int num = 0; num < numProps; num++)
@@ -133,7 +137,7 @@ public class Level {
 		}
 		for (int num = 0; num < numWalls; num++)
 		{
-			walls.add(generateWall());
+//			walls.add(generateWall());
 			map.addProp(walls.get(num));
 		}
 		for (int num = 0; num < sText.length; num++)
@@ -189,7 +193,7 @@ public class Level {
 		}
 		for (int num = 0; num < numWalls; num++)
 		{
-			walls.add(generateWall());
+			//walls.add(generateWall());
 			map.addProp(walls.get(num));
 		}
 		for (int num = 0; num < numTriggers; num++)
@@ -217,14 +221,11 @@ public class Level {
 		return puzzle;
 	}
 	
-	private Prop generateWall() {
-		Prop decoration = new Prop(3, 1);
-		return decoration;
-	}
+
 	
 	// test class to try to generate maps from text files to allow us some cool scalability and easier
 	// level creation
-	private Prop generateWallFromFile() {
+	private Wall generateWallFromFile() {
 		Scanner inputStream = null;
 		String filename = "level" + Integer.toString(levelNumber) + ".lvl";
 		try
@@ -240,8 +241,8 @@ public class Level {
 		{
 			String line = inputStream.nextLine();
 		}
-		Prop decoration = new Prop(3, 1);
-		return decoration;
+		Wall wall = new Wall(3, 1);
+		return wall;
 	}
 	
 	private Prop generateTrigger() {
@@ -316,6 +317,49 @@ public class Level {
 		return isTrigger;
 	}
 	
+	public boolean canInteract(int playerX, int playerY)
+	{
+		boolean interact = false;
+		for (int num = 0; num < props.size(); num++)
+		{
+			if (playerX == props.get(num).getX() &&
+					playerY == props.get(num).getY())
+			{
+				interact = true;
+			}
+		}
+		
+		for (int num = 0; num < puzzles.size(); num++)
+		{
+			if (playerX == puzzles.get(num).getX())
+			{
+				interact = true;
+			}
+		}
+		return interact;
+	}
+	
+	
+	public void interaction(int playerX, int playerY)
+	{
+		for (int num = 0; num < props.size(); num++)
+		{
+			if (playerX == props.get(num).getX() &&
+					playerY == props.get(num).getY())
+			{
+				System.out.println("\n\n\n\n" + props.get(num).getDescription());
+			}
+		}
+		
+		for (int num = 0; num < puzzles.size(); num++)
+		{
+			if (playerX == puzzles.get(num).getX())
+			{
+				System.out.println("\n\n\n\n" + puzzles.get(num).getDescription());
+			}
+		}
+	}
+	
 	// simple getter for Map X length if needed
 	public int mapX() {
 		return map.getXLen();
@@ -325,6 +369,18 @@ public class Level {
 	public int mapY() {
 		return map.getYLen();
 	}
+	
+	public int getStartX()
+	{
+		return playerStartX;
+	}
+	
+	
+	public int getStartY()
+	{
+		return playerStartY;
+	}
+	
 	
 }
 

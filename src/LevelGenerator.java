@@ -15,13 +15,16 @@ public class LevelGenerator {
 	private int levelNumber = 0;
 	private int levelX = 0;
 	private int levelY = 0;
+	private int startX = 0;
+	private int startY = 0;
 
 	private ArrayList<Prop> props;
-	private ArrayList<Prop> walls; // walls for level design
+	private ArrayList<Wall> walls; // walls for level design
 	private ArrayList<Prop> puzzles;
 	private ArrayList<Prop> triggers; 
 	private ArrayList<String> storyText;
 	private ArrayList<String> descriptions;
+	private ArrayList<String> triggerText;
 	private Map map;
 	
 
@@ -30,14 +33,16 @@ public class LevelGenerator {
 	
 	public LevelGenerator(int lNumber){
 		levelNumber = lNumber;
-		walls = new ArrayList<Prop>();
+		walls = new ArrayList<Wall>();
 		props = new ArrayList<Prop>();
 		triggers = new ArrayList<Prop>();
 		puzzles = new ArrayList<Prop>();
 		storyText = new ArrayList<String>();
 		descriptions = genDescription();
+		triggerText = genTriggerText();
 		
 		generate();
+		genPlayerStart();
 		putObjectsInMap();
 
 	}
@@ -49,7 +54,7 @@ public class LevelGenerator {
 		
 		for (int num = 0; num < walls.size(); num++) 
 		{
-			Prop wall = new Prop(walls.get(num));
+			Wall wall = new Wall(walls.get(num));
 			map.addProp(wall);
 		}
 		for (int num = 0; num < props.size(); num++)
@@ -87,9 +92,7 @@ public class LevelGenerator {
 
 		while (inputStream.hasNextLine() && !endDescriptions)
 		{
-			System.out.println(endDescriptions);
 			String line = inputStream.nextLine();
-			line.trim();
 			String description = "";
 
 			if (line.equals("[PROPDES]") && !endDescriptions)
@@ -106,25 +109,144 @@ public class LevelGenerator {
 						propDesc.add(description);
 						description = "";
 					}
+					else if (line.equals("\n"))
+					{
+						description = "" + description + "\n";	
+					}
 					else
 					{
-						description = "" + description + line;
+						description = "" + description + line + "\n";
 					}
 				}
 			}
 		}
-		return propDesc;
-		
+		inputStream.close();
+		return propDesc;		
+	}
+	
+	private ArrayList<String> genTriggerText()
+	{
+		ArrayList<String> trTexts = new ArrayList<String>();
+		boolean endTrText = false;
+		Scanner inputStream = null;
+		String filename = "level" + Integer.toString(levelNumber) + ".prop";
+		try
+		{
+			File file = new File(filename);
+			inputStream = new Scanner(file);
+		}
+		catch(FileNotFoundException e)
+		{
+			System.out.println("Error generating trigger. Exiting game.");
+			System.out.println(e);
+			System.exit(0);
+		}
+
+		while (inputStream.hasNextLine() && !endTrText)
+		{
+			String line = inputStream.nextLine();
+			String trText = "";
+
+			if (line.equals("[TRIGGER]"))
+			{
+				while(!endTrText)
+				{
+					line = inputStream.nextLine();
+					if (line.equals("[/TRIGGER]"))
+					{
+						endTrText = true;
+					}
+					else if  (line.equals("[/trigger]"))
+					{
+						trTexts.add(trText);
+						trText = "";
+					}
+					else if (line.equals("\n"))
+					{
+						trText = "" + trText + "\n";	
+					}
+					else
+					{
+						trText = "" + trText + line + "\n";
+					}
+				}
+			}
+		}
+		inputStream.close();
+		return trTexts;		
+				
+	}
+	
+	private void genPlayerStart()
+	{
+		boolean endStart = false;
+		int count = 0;
+		Scanner inputStream = null;
+		String filename = "level" + Integer.toString(levelNumber) + ".prop";
+		try
+		{
+			File file = new File(filename);
+			inputStream = new Scanner(file);
+		}
+		catch(FileNotFoundException e)
+		{
+			System.out.println("Error opening level file. Exiting game.");
+			System.out.println(e);
+			System.exit(0);
+		}
+
+		while (inputStream.hasNextLine() && !endStart)
+		{
+			String line = inputStream.nextLine();
+			line.trim();
+
+			if (line.equals("[START]") && !endStart)
+			{
+				while(!endStart)
+				{
+					line = inputStream.nextLine();
+					if (line.equals("[/START]"))
+					{
+						endStart = true;
+					}
+					else if (count == 0)
+					{
+						try {
+							startX = Integer.parseInt(line);
+							count++;
+						}
+						catch(NumberFormatException e)
+						{
+							System.out.println("Error generating player start. Exiting game.");
+							System.out.println(e);
+							System.exit(1);
+						}
+					}	
+					else if (count == 1){
+						try {
+							startY = Integer.parseInt(line);
+							count++;
+						}
+						catch(NumberFormatException e)
+						{
+							System.out.println("Error generating player start. Exiting game.");
+							System.out.println(e);
+							System.exit(1);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	
 	public void generate() {
-		walls = new ArrayList<Prop>();
+		walls = new ArrayList<Wall>();
 		Scanner inputStream = null;
 		String filename = "level" + Integer.toString(levelNumber) + ".map";
 		ArrayList<String> sMap = new ArrayList<String>();
 		ArrayList<String> tMap = new ArrayList<String>();
-		int propCount = 0;
+		int propCount = 0, triggerCount = 0;
 
 		try
 		{
@@ -157,7 +279,7 @@ public class LevelGenerator {
 				char c = sMap.get(yIndex).charAt(x);
 				if (c == '#')
 				{
-					Prop wall = new Prop(x, yIndex);
+					Wall wall = new Wall(x, yIndex);
 					walls.add(wall);
 				}
 				else if (c == '$')
@@ -166,6 +288,16 @@ public class LevelGenerator {
 					propCount++;
 					Prop prop = new Prop(propDes, x, yIndex, isTrigger);
 					props.add(prop);
+				}
+				else if (c == 'x')
+				{
+					String trText = triggerText.get(triggerCount);
+					triggerCount++;
+					Prop trigger = new Prop(trText, x, yIndex, true);
+					triggers.add(trigger);
+					
+					
+					
 				}
 				
 			}
@@ -183,6 +315,28 @@ public class LevelGenerator {
 			tProps.add(new Prop(props.get(num)));
 		}
 		return tProps;
+	}
+	
+	public ArrayList<Prop> getTriggers()
+	{
+		ArrayList<Prop> tTriggers = new ArrayList<Prop>();
+		for (int num = 0; num < triggers.size(); num++)
+		{
+			tTriggers.add(new Prop(triggers.get(num)));
+		}
+		return tTriggers;
+	}
+	
+	
+	public int getPlayerStartX()
+	{
+		return startX;
+	}
+	
+	
+	public int getPlayerStartY()
+	{
+		return startY;
 	}
 	
 }

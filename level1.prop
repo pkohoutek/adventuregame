@@ -1,3 +1,7 @@
+[START]
+4
+2
+[/START]
 [PROPDES]
 You stand infront of a large aquarium. Oddly the aquarium does not appear to 
 contain any fish. The main attraction appears to be a sunken pirate ship 
@@ -25,3 +29,13 @@ off your hands and the watch, you notice a engraving.
 Wonder what that means?
 [/des]
 [/PROPDES]
+[TRIGGER]
+You hear the sound of footsteps behind you!
+
+You spin around and see nothing behind you in the shadows.
+Your mind must be playing tricks on you.
+[/trigger]
+You see the door to get out of this god forsaken place only steps away.
+Do you have what it takes to escape the room?!?
+[/trigger]
+[/TRIGGER]
