@@ -9,15 +9,23 @@ public class LevelGenerator {
 	/*
 	 * 	Test class to use a text file to generate a map
 	 * 	WIP
-	 * 
+	 * 	Currently able to build map with walls, interactive props,
+	 * 	and triggers.
+	 * 	
+	 * 	Plan to add functionality for whatever puzzles and other
+	 * 	features are implemented in the future
 	 */
 	
+	
+	// config parameters
 	private int levelNumber = 0;
-	private int levelX = 0;
+	private int levelX = 0;				// level x/y length for map generation
 	private int levelY = 0;
-	private int startX = 0;
+	
+	private int startX = 0;				// player x/y start position in level
 	private int startY = 0;
 
+	// Arrays for the props, walls, puzzles, story texts, triggers, etc
 	private ArrayList<Prop> props;
 	private ArrayList<Wall> walls; // walls for level design
 	private ArrayList<Prop> puzzles;
@@ -25,12 +33,13 @@ public class LevelGenerator {
 	private ArrayList<String> storyText;
 	private ArrayList<String> descriptions;
 	private ArrayList<String> triggerText;
-	private Map map;
+	private Map map;						// generates level map
 	
 
 	
 	
-	
+	// Level constructor takes level number and generates level from .map and .prop files
+	// plan on changing .prop files to .cfg or something
 	public LevelGenerator(int lNumber){
 		levelNumber = lNumber;
 		walls = new ArrayList<Wall>();
@@ -47,6 +56,7 @@ public class LevelGenerator {
 
 	}
 	
+	// puts walls and other visible objects (not triggers) in the map
 	private void putObjectsInMap()
 	{
 		
@@ -64,6 +74,8 @@ public class LevelGenerator {
 		}
 	}
 	
+	
+	// returns copy of the level map 
 	public Map getMap()
 	{
 		Map tMap = new Map(map);
@@ -71,7 +83,7 @@ public class LevelGenerator {
 	}
 	
 
-	
+	// method creates a string ArrayList of the descriptions of props
 	private ArrayList<String> genDescription()
 	{
 		ArrayList<String> propDesc = new ArrayList<String>();
@@ -123,7 +135,8 @@ public class LevelGenerator {
 		inputStream.close();
 		return propDesc;		
 	}
-	
+
+	// method generates trigger text for triggers in the level 
 	private ArrayList<String> genTriggerText()
 	{
 		ArrayList<String> trTexts = new ArrayList<String>();
@@ -177,6 +190,7 @@ public class LevelGenerator {
 				
 	}
 	
+	// method generates player X, Y start position from the level config file
 	private void genPlayerStart()
 	{
 		boolean endStart = false;
@@ -240,6 +254,9 @@ public class LevelGenerator {
 	}
 	
 	
+	
+	// method generates walls, props, and triggers
+	// will be expanded for future objects
 	public void generate() {
 		walls = new ArrayList<Wall>();
 		Scanner inputStream = null;
@@ -294,10 +311,7 @@ public class LevelGenerator {
 					String trText = triggerText.get(triggerCount);
 					triggerCount++;
 					Prop trigger = new Prop(trText, x, yIndex, true);
-					triggers.add(trigger);
-					
-					
-					
+					triggers.add(trigger);							
 				}
 				
 			}
@@ -307,6 +321,8 @@ public class LevelGenerator {
 		levelX = sMap.get(0).length();
 	}
 	
+	
+	// getter method returns copy of props ArrayList
 	public ArrayList<Prop> getProps()
 	{
 		ArrayList<Prop> tProps = new ArrayList<Prop>();
@@ -317,6 +333,7 @@ public class LevelGenerator {
 		return tProps;
 	}
 	
+	// get method returns copy of triggers ArrayList
 	public ArrayList<Prop> getTriggers()
 	{
 		ArrayList<Prop> tTriggers = new ArrayList<Prop>();
@@ -328,12 +345,13 @@ public class LevelGenerator {
 	}
 	
 	
+	// getter returns player's starting X position for level
 	public int getPlayerStartX()
 	{
 		return startX;
 	}
 	
-	
+	// getter returns players starting Y position for level
 	public int getPlayerStartY()
 	{
 		return startY;

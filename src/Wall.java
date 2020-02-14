@@ -1,6 +1,15 @@
 
 public class Wall {
 
+	/*
+	 *      Wall Class 
+	 *      represents a wall object that is not traversable by
+	 *      the player
+	 * 
+	 */
+	
+	
+	// config parameters, x/y position, and the String sprite representation
 	private int xPos = 0;
 	private int yPos = 0;
 	private String sSprite;
@@ -14,6 +23,7 @@ public class Wall {
 		sSprite = "#";
 	}
 	
+	// copy constructor if needed
 	public Wall(Wall wall)
 	{
 		this.xPos = wall.xPos;
