@@ -32,7 +32,7 @@ public class LevelGenerator {
 	private ArrayList<String> storyText;
 	private ArrayList<String> descriptions;
 	private ArrayList<String> triggerText;
-	private Door door;
+//	private Door door;
 	private Map map;						// generates level map
 	
 
