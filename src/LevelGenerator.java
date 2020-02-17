@@ -32,6 +32,7 @@ public class LevelGenerator {
 	private ArrayList<String> storyText;
 	private ArrayList<String> descriptions;
 	private ArrayList<String> triggerText;
+	private Door door;
 	private Map map;						// generates level map
 	
 
@@ -256,7 +257,7 @@ public class LevelGenerator {
 	
 	// method generates walls, props, and triggers
 	// will be expanded for future objects
-	public void generate() {
+	private void generate() {
 		walls = new ArrayList<Wall>();
 		Scanner inputStream = null;
 		String filename = "level" + Integer.toString(levelNumber) + ".map";

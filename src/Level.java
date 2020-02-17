@@ -9,7 +9,7 @@ public class Level {
 	private int levelNumber = 0;
 	// array lists for the levels props and puzzles, and story text (can be changed, just testing things)
 	private ArrayList<Prop> props;
-	private ArrayList<Prop> walls = new ArrayList<Prop>(); // walls for level design (can remove?)
+	private ArrayList<Wall> walls = new ArrayList<Wall>(); // walls for level design (can remove?)
 	private ArrayList<Prop> puzzles = new ArrayList<Prop>();
 	private ArrayList<Trigger> triggers; 
 	private ArrayList<String> storyText = new ArrayList<String>();   // elements to be added
