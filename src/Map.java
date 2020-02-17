@@ -357,6 +357,10 @@ public class Map {
 		sMap[wall.getY()][wall.getX()] = wall.getSprite();
 	}
 	
+	public void addDoor(Door door) {
+		sMap[door.getYPos()][door.getXPos()] = door.getSprite();
+	}
+	
 	
 	// simple map x length getter
 	public int getXLen(){

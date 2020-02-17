@@ -32,7 +32,7 @@ public class LevelGenerator {
 	private ArrayList<String> storyText;
 	private ArrayList<String> descriptions;
 	private ArrayList<String> triggerText;
-//	private Door door;
+    private Door door;
 	private Map map;						// generates level map
 	
 
@@ -72,6 +72,7 @@ public class LevelGenerator {
 			Prop prop = new Prop(props.get(num));
 			map.addProp(prop);
 		}
+		map.addDoor(door);
 	}
 	
 	
@@ -313,6 +314,10 @@ public class LevelGenerator {
 					Trigger trigger = new Trigger(x, yIndex, trText);
 					triggers.add(trigger);							
 				}
+				else if (c == '=')
+				{
+					door = new Door(x, yIndex);
+				}
 				
 			}
 		} 
@@ -342,6 +347,11 @@ public class LevelGenerator {
 			tTriggers.add(new Trigger(triggers.get(num)));
 		}
 		return tTriggers;
+	}
+	
+	public Door getDoor() {
+		Door tDoor = new Door(door);
+		return tDoor;
 	}
 	
 	
