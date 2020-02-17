@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.*;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class LevelGenerator {
 	private ArrayList<Prop> props;
 	private ArrayList<Wall> walls; // walls for level design
 	private ArrayList<Prop> puzzles;
-	private ArrayList<Prop> triggers; 
+	private ArrayList<Trigger> triggers; 
 	private ArrayList<String> storyText;
 	private ArrayList<String> descriptions;
 	private ArrayList<String> triggerText;
@@ -44,7 +43,7 @@ public class LevelGenerator {
 		levelNumber = lNumber;
 		walls = new ArrayList<Wall>();
 		props = new ArrayList<Prop>();
-		triggers = new ArrayList<Prop>();
+		triggers = new ArrayList<Trigger>();
 		puzzles = new ArrayList<Prop>();
 		storyText = new ArrayList<String>();
 		descriptions = genDescription();
@@ -89,7 +88,7 @@ public class LevelGenerator {
 		ArrayList<String> propDesc = new ArrayList<String>();
 		boolean endDescriptions = false;
 		Scanner inputStream = null;
-		String filename = "level" + Integer.toString(levelNumber) + ".prop";
+		String filename = "level" + Integer.toString(levelNumber) + ".cfg";
 		try
 		{
 			File file = new File(filename);
@@ -142,7 +141,7 @@ public class LevelGenerator {
 		ArrayList<String> trTexts = new ArrayList<String>();
 		boolean endTrText = false;
 		Scanner inputStream = null;
-		String filename = "level" + Integer.toString(levelNumber) + ".prop";
+		String filename = "level" + Integer.toString(levelNumber) + ".cfg";
 		try
 		{
 			File file = new File(filename);
@@ -196,7 +195,7 @@ public class LevelGenerator {
 		boolean endStart = false;
 		int count = 0;
 		Scanner inputStream = null;
-		String filename = "level" + Integer.toString(levelNumber) + ".prop";
+		String filename = "level" + Integer.toString(levelNumber) + ".cfg";
 		try
 		{
 			File file = new File(filename);
@@ -303,14 +302,14 @@ public class LevelGenerator {
 				{
 					String propDes = descriptions.get(propCount);
 					propCount++;
-					Prop prop = new Prop(propDes, x, yIndex, isTrigger);
+					Prop prop = new Prop(propDes, x, yIndex);
 					props.add(prop);
 				}
 				else if (c == 'x')
 				{
 					String trText = triggerText.get(triggerCount);
 					triggerCount++;
-					Prop trigger = new Prop(trText, x, yIndex, true);
+					Trigger trigger = new Trigger(x, yIndex, trText);
 					triggers.add(trigger);							
 				}
 				
@@ -334,12 +333,12 @@ public class LevelGenerator {
 	}
 	
 	// get method returns copy of triggers ArrayList
-	public ArrayList<Prop> getTriggers()
+	public ArrayList<Trigger> getTriggers()
 	{
-		ArrayList<Prop> tTriggers = new ArrayList<Prop>();
+		ArrayList<Trigger> tTriggers = new ArrayList<Trigger>();
 		for (int num = 0; num < triggers.size(); num++)
 		{
-			tTriggers.add(new Prop(triggers.get(num)));
+			tTriggers.add(new Trigger(triggers.get(num)));
 		}
 		return tTriggers;
 	}

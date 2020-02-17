@@ -8,19 +8,18 @@ public class Level {
 	// level number of object
 	private int levelNumber = 0;
 	// array lists for the levels props and puzzles, and story text (can be changed, just testing things)
-	private ArrayList<Prop> props = new ArrayList<Prop>();
-	private ArrayList<Prop> walls = new ArrayList<Prop>(); // walls for level design
+	private ArrayList<Prop> props;
+	private ArrayList<Prop> walls = new ArrayList<Prop>(); // walls for level design (can remove?)
 	private ArrayList<Prop> puzzles = new ArrayList<Prop>();
-	private ArrayList<Prop> triggers = new ArrayList<Prop>(); 
-	private ArrayList<String> storyText = new ArrayList<String>();
-	private ArrayList<String> description = new ArrayList<String>();
+	private ArrayList<Trigger> triggers; 
+	private ArrayList<String> storyText = new ArrayList<String>();   // elements to be added
+	private ArrayList<String> description = new ArrayList<String>(); // elements to be added
 	private Map map;
 	private LevelGenerator levelGenerator;
-	private int playerStartX, playerStartY;
-
+	private int playerStartX, playerStartY;	
 	
-	
-	
+	// constructor uses level number combined LevelGenerator to generate map, props, puzzles, and 
+	// triggers from text config files.
 	public Level(int level)
 	{
 		levelNumber = level;
@@ -50,253 +49,23 @@ public class Level {
 			}
 	}
 	
-	// constructor to make a scene with a generic map, a few props
-	// can be used if you want to make a room with story elements and props and no puzzles
-	// possible could take a Prop array as parameter and then generate story props using index
-	public Level(int numProps, int lNum,  String[] sText, String[] dText) {	
-		
-		levelNumber = lNum;
-		for (int num = 0; num < numProps; num++)
-		{
-			props.add(generateProp());
-			map.addProp(props.get(num));
-		}
-		for (int num = 0; num < sText.length; num++)
-		{
-			storyText.add(sText[num]);
-		}
-		for (int num = 0; num < dText.length; num++)
-		{
-			description.add(dText[num]);
-		}
-}
-	
-	// constructor to make a scene with a generic map, a few props
-	// can be used if you want to make a room with story elements and props and no puzzles
-	// includes x,y values to make a different sized room for more props
-	public Level(int numProps, int lNum,  String[] sText, String[] dText, int x, int y) {
-		
-		levelNumber = lNum;
-		map = new Map(x, y);						
-		for (int num = 0; num < numProps; num++)
-		{
-			props.add(generateProp());
-			map.addProp(props.get(num));
-		}
-		for (int num = 0; num < sText.length; num++)
-		{
-			storyText.add(sText[num]);
-		}
-		for (int num = 0; num < dText.length; num++)
-		{
-			description.add(dText[num]);
-		}
-}
-	
-	// constructor to make level with props and puzzles using arrays for story text and level description text, etc
-	public Level(int numProps, int numPuzzles, int lNum, String[] sText, String[] dText, int x, int y) {
-		
-		levelNumber = lNum;
-		map = new Map(x, y);
-		for (int num = 0; num < numProps; num++)
-		{
-			props.add(generateProp());
-			map.addProp(props.get(num));
-		}
-		
-		for (int num = 0; num < numPuzzles; num++)
-		{
-			puzzles.add(generatePuzzle());
-			map.addProp(puzzles.get(num));
-		}
-		for (int num = 0; num < sText.length; num++)
-		{
-			storyText.add(sText[num]);
-		}
-		for (int num = 0; num < dText.length; num++)
-		{
-			description.add(dText[num]);
-		}
-	}
-	
-	
-	// constructor to make level with props and puzzles using arrays for story text and level description text, etc
-	public Level(int numProps, int numPuzzles, int numWalls, int lNum, String[] sText, String[] dText, int x, int y) {
-		
-		levelNumber = lNum;
-		map = new Map(x, y);
-		for (int num = 0; num < numProps; num++)
-		{
-			props.add(generateProp());
-			map.addProp(props.get(num));
-		}		
-		for (int num = 0; num < numPuzzles; num++)
-		{
-			puzzles.add(generatePuzzle());
-			map.addProp(puzzles.get(num));
-		}
-		for (int num = 0; num < numWalls; num++)
-		{
-//			walls.add(generateWall());
-			map.addProp(walls.get(num));
-		}
-		for (int num = 0; num < sText.length; num++)
-		{
-			storyText.add(sText[num]);
-		}
-		for (int num = 0; num < dText.length; num++)
-		{
-			description.add(dText[num]);
-		}
-	}
-	
-
-	// constructor to make level with props and puzzles using just one string for story text and level description text, etc
-	// can use \n to format for new lines for story.
-	public Level(int numProps, int numPuzzles, int lNum, String sText, String dText, int x, int y) {
-		
-		levelNumber = lNum;
-		map = new Map(x, y);
-		for (int num = 0; num < numProps; num++)
-		{
-			props.add(generateProp());
-			map.addProp(props.get(num));
-		}
-		
-		for (int num = 0; num < numPuzzles; num++)
-		{
-			puzzles.add(generatePuzzle());
-			map.addProp(puzzles.get(num));
-		}
-		storyText.add(sText);
-		description.add(dText);
-		
-	}
-	
-	
-	// constructor to make level with props and puzzles using just one string for story text and level description text, etc
-	// can use \n to format for new lines for story.
-	public Level(int numProps, int numPuzzles, int numWalls, int numTriggers, int lNum, String sText, String dText, int x, int y) {
-		
-		levelNumber = lNum;
-		map = new Map(x, y);
-		for (int num = 0; num < numProps; num++)
-		{
-			props.add(generateProp());
-			map.addProp(props.get(num));
-		}
-		
-		for (int num = 0; num < numPuzzles; num++)
-		{
-			puzzles.add(generatePuzzle());
-			map.addProp(puzzles.get(num));
-		}
-		for (int num = 0; num < numWalls; num++)
-		{
-			//walls.add(generateWall());
-			map.addProp(walls.get(num));
-		}
-		for (int num = 0; num < numTriggers; num++)
-		{
-			triggers.add(generateTrigger());
-			map.addProp(triggers.get(num));
-		}
-		storyText.add(sText);
-		description.add(dText);
-		
-	}
-	
-	// can use a method to generate prop/puzzle description, prop/puzzle questions, and puzzle answers based
-	// on random number generated and using matching indexes in either a large String array, or
-	// from lines using a delimiter of our choice. 
-	// plan on moving the generate methods to a LevelGenerator class.
-	private Prop generateProp() {
-		Prop prop = new Prop("Put description in here.", 2, 1, false);
-		return prop;
-	}
-	
-	// simple puzzle generator
-	private Prop generatePuzzle() {
-		Prop puzzle = new Prop("Put description in here.", "What is 1 + 1", "1", 3, 4);
-		return puzzle;
-	}
-	
-
-	
-	// test class to try to generate maps from text files to allow us some cool scalability and easier
-	// level creation
-	private Wall generateWallFromFile() {
-		Scanner inputStream = null;
-		String filename = "level" + Integer.toString(levelNumber) + ".lvl";
-		try
-		{
-			inputStream = new Scanner(new File(filename));
-		}
-		catch(FileNotFoundException e)
-		{
-			System.out.println("Error generating walls. Exiting game.");
-			System.exit(0);
-		}
-		while (inputStream.hasNextLine())
-		{
-			String line = inputStream.nextLine();
-		}
-		Wall wall = new Wall(3, 1);
-		return wall;
-	}
-	
-	private Prop generateTrigger() {
-		Prop trigger = new Prop("Trigger activated", 1,4, true);
-		return trigger;
-	}
-	
-	
 	// get level number for map view
 	public int getLevelNum() {
 		return levelNumber;
 	}
 	
-	
-	// method can generate story from story.txt file, we can use a delimiter to 
-	// keep count of levels and get the story for the level number
-	private String[] generateStory() {
-		String[] foo = {"bar", "bar"};
-		return foo;
+	public void displayLevel(int playerX, int playerY, boolean hitObject, String sPlayer) {
+		map.printMap(playerX, playerY, hitObject, sPlayer);
 	}
-	
-	
-	// method can generate level description (flavor text when entering room/inspecting room, or sumthing) from ldesc.txt file, we can use a delimiter to 
-	// keep count of levels and get the story for the level number
-	private String[] generateDesc() {
-		String[] foo = {"bar", "bar"};
-		return foo;
-	}
-	
 	
 	// displays level without spaces between the map String "tiles"
-	public void displayLevel(int playerX, int playerY) {
-		map.printMap(playerX, playerY);
+	public void displayLevel(int playerX, int playerY, String sPlayer) {
+		map.printMap(playerX, playerY, sPlayer);
 	}
-	
-	// diplays level with spaces between the map String "tiles"
-	public void displayLevelSpaces(int playerX, int playerY) {
-		map.printMapSpaces(playerX, playerY);
-	}
-	
-	// has map object print the map to screen
-	public void displayLevel(int playerX, int playerY, boolean hitObject) {
-		map.printMap(playerX, playerY, hitObject);
-	}
-	
-	// has map object print the map with spaces to the screen
-	public void displayLevelSpaces(int playerX, int playerY, boolean hitObject) {
-		map.printMapSpaces(playerX, playerY, hitObject);
-	}
-	
-	
+		
 	// checks the map to see if the player can move
-	public boolean checkMove(int move, int playerX, int playerY) {
-		return map.canMove(move, playerX, playerY);
+	public boolean checkMove(int move, int playerX, int playerY, int playerXMin, int playerXMax) {
+		return map.canMove(move, playerX, playerY, playerXMin, playerXMax);
 	}
 	
 	// checks the map to see if the player has stepped on a trigger
@@ -317,45 +86,62 @@ public class Level {
 		return isTrigger;
 	}
 	
-	public boolean canInteract(int playerX, int playerY)
+	public boolean canInteract(int playerXMin, int playerXMax, int playerY)
 	{
 		boolean interact = false;
 		for (int num = 0; num < props.size(); num++)
 		{
-			if (playerX == props.get(num).getX() &&
-					playerY == props.get(num).getY())
+			for (int x = playerXMin; x <= playerXMax; x++)
 			{
-				interact = true;
+				if (x == props.get(num).getX() &&
+						playerY == props.get(num).getY())
+				{
+					interact = true;
+				}
 			}
 		}
 		
 		for (int num = 0; num < puzzles.size(); num++)
 		{
-			if (playerX == puzzles.get(num).getX())
+			for (int x = playerXMin; x <= playerXMax; x++)
 			{
-				interact = true;
+				if (x == puzzles.get(num).getX())
+				{
+					interact = true;
+				}
 			}
 		}
 		return interact;
 	}
 	
 	
-	public void interaction(int playerX, int playerY)
+	public void interaction(int playerXMin, int playerXMax, int playerY)
 	{
+		boolean activated = false;
 		for (int num = 0; num < props.size(); num++)
 		{
-			if (playerX == props.get(num).getX() &&
-					playerY == props.get(num).getY())
+			for (int x = playerXMin; x <= playerXMax; x++)
 			{
-				System.out.println("\n\n\n\n" + props.get(num).getDescription());
+				if (x == props.get(num).getX() &&
+						playerY == props.get(num).getY() && !activated)
+				{
+					activated = true;
+					System.out.println("\n\n\n\n" + props.get(num).getDescription());
+				}
 			}
 		}
 		
+		activated = false;
+		
 		for (int num = 0; num < puzzles.size(); num++)
 		{
-			if (playerX == puzzles.get(num).getX())
+			for (int x = playerXMin; x <= playerXMax; x++)
 			{
-				System.out.println("\n\n\n\n" + puzzles.get(num).getDescription());
+				if (x == puzzles.get(num).getX())
+				{
+					activated = true;
+					System.out.println("\n\n\n\n" + puzzles.get(num).getDescription());
+				}
 			}
 		}
 	}
@@ -374,7 +160,6 @@ public class Level {
 	{
 		return playerStartX;
 	}
-	
 	
 	public int getStartY()
 	{

@@ -6,15 +6,24 @@ public class Player {
 	 * 	Interacts with objects on the level map
 	 */
 	
-	private String[] keys = new String[4];
+	private final int MAXKEYS = 5;
+	private String[] keys = new String[MAXKEYS];  // variable we can use for puzzles solved to check if door should be opened
 	private int xPos = 0;
 	private int yPos = 0;
+	private int xRangeMin;
+	private int xRangeMax;
+	private Animator animator;
+	private String sSprite;
 	
 	
 	// constructor takes x/y position
 	public Player(int x, int y) {
 		xPos = x;
+		xRangeMin = xPos - 3;
+		xRangeMax = xPos + 3;
 		yPos = y;
+		animator = new Animator();
+		sSprite = "<(^.^)>"; 
 	}
 	
 	
@@ -26,15 +35,23 @@ public class Player {
 		switch(move) {
 		case 1:				// player moves up
 			yPos += 1;
+			setSprite(move);
 			break;
 		case 2:				// player moves down
 			yPos -= 1;
+			setSprite(move);
 			break;
 		case 3:				// player moves left
 			xPos -= 1;
+			xRangeMin -= 1;
+			xRangeMax -= 1;
+			setSprite(move);
 			break;
 		case 4:				// player moves right
 			xPos += 1;
+			xRangeMin += 1;
+			xRangeMax += 1;
+			setSprite(move);
 			break;
 		default:			// if for some reason a value other than 1-4 gets passed as an argument,
 			break;			// default is to do nothing
@@ -70,6 +87,26 @@ public class Player {
 	// get player y position
 	public int getY() {
 		return yPos;
+	}
+	
+	public int getMaxX() {
+		return xRangeMax;
+	}
+	
+	public int getMinX() {
+		return xRangeMin;
+	}
+	
+	public String getSprite(){
+		return sSprite;
+	}
+	
+	public void hitAnimation(int move, boolean hitObject){
+		sSprite = animator.getSprite(move, hitObject);
+	}
+	
+	private void setSprite(int move){
+		sSprite = animator.getSprite(move);
 	}
 	
 }

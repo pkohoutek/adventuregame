@@ -44,33 +44,18 @@ public class Prop {
 			sPuzzle = prop.getPuzzleText();
 			sAnswer = prop.getPuzzleAnswer();
 		}
-		else if (sSprite.equals(" "))
-		{
-			trigger = true;
-			triggerText = prop.getTriggerText();
-			
-		}
 	}
 	
 	
 	// story prop / trigger
 	// can be split and moved to a child classes
-	public Prop(String des, int x, int y, boolean isTrigger) {
+	public Prop(String des, int x, int y) {
 		xPos = x;
 		yPos = y;
 		puzzle = false;
-		if (isTrigger)
-		{
-			trigger = true;
-			triggerText = des;
-			description = "";
-			sSprite = " ";			
-		}
-		else {
-			description = des;
-			sSprite = "$";
-		}		
-	}
+		description = des;
+		sSprite = "$";		
+	} 
 	
 	// Puzzle prop
 	// can be moved to a child class and have more specific attributes
@@ -93,16 +78,6 @@ public class Prop {
 	public void printDescription()
 	{
 		System.out.println(description);
-	}
-	
-	// prints trigger description string
-	public void printTriggerText() {
-		System.out.println("\n\n\n\n" + triggerText);
-	}
-	
-	// gets trigger text String
-	public String getTriggerText() {
-		return triggerText;
 	}
 	
 	// prints puzzle text
@@ -142,14 +117,7 @@ public class Prop {
 		return yPos;
 	}
 	
-	// checks if prop is trigger and returns boolean value
-	public boolean isTrigger() {
-		return trigger;
-	}
 	
-	// method to deactivate trigger if a trigger has been activated
-	public void triggerOff() {
-		trigger = false;		
-	}
+
 	
 }

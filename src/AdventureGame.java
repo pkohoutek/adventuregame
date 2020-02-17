@@ -16,6 +16,13 @@ public class AdventureGame {
 	
 
 	public static void main(String[] args) {
+		
+		game();
+		System.exit(0);
+	}
+	
+	
+	public static void game() {
 		// this is the main gameplay loop controller, can be loaded by the scene
 		// and this code can be moved to a method in a class such as GameManager
 		
@@ -48,7 +55,7 @@ public class AdventureGame {
 			// loops until player backs out of movement, inspection menu 
 			while (!finishedTurn)
 			{
-				testLevel.displayLevel(player.getX(), player.getY());   // displays map
+				testLevel.displayLevel(player.getX(), player.getY(), player.getSprite());   // displays map
 				// if player made an invalid entry in the main menu, prints invalid entry below map
 				if (invalidEntry)
 				{
@@ -77,39 +84,55 @@ public class AdventureGame {
 							if (hitObject)
 							{	
 								// prints map and adds a descriptive String to inform the player they hit a wall
-								testLevel.displayLevel(player.getX(), player.getY(), hitObject);
+								testLevel.displayLevel(player.getX(), player.getY(), hitObject, player.getSprite());
 								hitObject = false;
 							}
 							// checks if the player input was incorrect during the last loop and prints a message
 							// informing them of invalid input
 							else if (invalidEntry)
 							{
-								testLevel.displayLevel(player.getX(), player.getY());
+								testLevel.displayLevel(player.getX(), player.getY(), player.getSprite());
 								System.out.println("Invalid entry!");
 								invalidEntry = false;
 							}
 							// else player didn't hit a wall or entry an invalid input so display the map normally
 							else
 							{
-								testLevel.displayLevel(player.getX(), player.getY());
+								testLevel.displayLevel(player.getX(), player.getY(), player.getSprite());
 								System.out.print("\n");
 							}	
 							System.out.println("Move Up - 1\tDown - 2\tMove Left - 3");
-							System.out.println("Right - 4\tBack a Menu - 0");
+							if (testLevel.canInteract(player.getMinX(), player.getMaxX(), player.getY())) {
+									System.out.println("Right - 4\tInspect - 5\tBack to Menu - 0");
+							}	
+							else{
+								System.out.println("Right - 4\tBack to Menu - 0");
+							}
 							// check player input, verifying its an integer and displays invalid entry message if it isn't
 							while (!keyboard.hasNextInt())
 							{
-								testLevel.displayLevel(player.getX(), player.getY());
+								testLevel.displayLevel(player.getX(), player.getY(), player.getSprite());
 								System.out.println("Invalid entry!");
-								System.out.println("Move Up - 1\tDown - 2\tMove Left - 3");
-								System.out.println("Right - 4\tBack a Menu - 0");
+								if (testLevel.canInteract(player.getMinX(), player.getMaxX(), player.getY())) {
+									System.out.println("Right - 4\tInspect - 5\tBack to Menu - 0");
+								}	
+								else{
+									System.out.println("Right - 4\tBack to Menu - 0");
+								}
 								sOption = keyboard.next();
 							}
 							iMove = keyboard.nextInt();
 							// if the integer input is less than 0 or greater than 4, its an invalid move
 							// will print invalid entry at the start of the loop
 							// (can be changed to CONSTANTS once we finalize everything
-							if (iMove < 0 || iMove > 4)
+							if (testLevel.canInteract(player.getMinX(), player.getMaxX(), player.getY()) && iMove == 5)
+							{						
+								testLevel.interaction(player.getMinX(), player.getMaxX(), player.getY());
+								System.out.println("Press enter to continue...");
+								keyboard.nextLine();	// waits for the user to hit enter so longer story elements can be read before continuing
+								keyboard.nextLine();   // needs 2 next lines to work properly, quirk of java operating on multiple OS cmd line?
+							}
+							else if (iMove < 0 || iMove > 4)
 							{
 								invalidEntry = true;
 							}
@@ -117,12 +140,13 @@ public class AdventureGame {
 							else if(iMove == 0)
 							{
 								back= true;
-							}
+							}							
 							// else player made an correct input
 							else
 							{
 								// if the player is able to move in the input direction
-								if (testLevel.checkMove(iMove, player.getX(), player.getY()))
+								if (testLevel.checkMove(iMove, player.getX(), player.getY(), 
+										player.getMinX(), player.getMaxX()))
 								{
 									// move player
 									player.move(iMove);
@@ -138,6 +162,7 @@ public class AdventureGame {
 								// if the player isn't able to move, hitObject is true and will print text informing them they hit a wall
 								else {
 									hitObject = true;
+									player.hitAnimation(iMove, hitObject);
 								}
 							}
 						}
@@ -150,9 +175,9 @@ public class AdventureGame {
 				// on the tile of an object
 				else if (iOption == 2)
 				{
-					if (testLevel.canInteract(player.getX(), player.getY()))
+					if (testLevel.canInteract(player.getMinX(), player.getMaxX(), player.getY()))
 					{
-						testLevel.interaction(player.getX(), player.getY());
+						testLevel.interaction(player.getMinX(), player.getMaxX(), player.getY());
 						System.out.println("Press enter to continue...");
 						keyboard.nextLine();	// waits for the user to hit enter so longer story elements can be read before continuing
 					    keyboard.nextLine();   // needs 2 next lines to work properly, quirk of java operating on multiple OS cmd line?
@@ -171,10 +196,8 @@ public class AdventureGame {
 					invalidEntry = true;
 				}
 			}
-
 		
 		}
-		System.exit(0);
-	} 
+	}
 	
 }
