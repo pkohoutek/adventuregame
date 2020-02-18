@@ -425,7 +425,7 @@ public class LevelGenerator {
 							}
 							else
 							{
-								ciphQText = "" + ciphQText + line;
+								ciphQText = "" + ciphQText + line + "\n";
 							}
 						}
 					}					
@@ -497,7 +497,7 @@ public class LevelGenerator {
 							}
 							else
 							{
-								ciphHText = "" + ciphHText + line;
+								ciphHText = "" + ciphHText + line + "\n";
 							}
 						}
 					}					
@@ -570,7 +570,7 @@ public class LevelGenerator {
 							}
 							else
 							{
-								ciphAText = "" + ciphAText + line;
+								ciphAText = "" + ciphAText + line;   // no new line to avoid String equals not working
 							}
 						}
 					}					
