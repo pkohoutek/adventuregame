@@ -269,7 +269,6 @@ public class Map {
 	public boolean canMove(int move, int playerX, int playerY, int playerXMin, int playerXMax) {
 		
 		boolean canMove = false;
-		boolean canMoveX = false;
 		
 		// check to make sure a player isn't trying to walk into bounds of map
 		switch(move){
@@ -284,7 +283,8 @@ public class Map {
 					{
 						// if the player wants to move up to an wall/non traversable object
 						if (playerYNext <= yLen - 1)
-							if (sMap[playerYNext][x].equalsIgnoreCase("#"))
+							if (sMap[playerYNext][x].equalsIgnoreCase("#")
+									|| sMap[playerYNext][x].equalsIgnoreCase("|"))
 							{
 								canMove = false;
 							}
@@ -302,7 +302,8 @@ public class Map {
 					{
 						// if the player wants to move up to an wall/non traversable object
 						if (playerYNext >= 0)
-							if (sMap[playerYNext][x].equalsIgnoreCase("#"))
+							if (sMap[playerYNext][x].equalsIgnoreCase("#")
+									|| sMap[playerYNext][x].equalsIgnoreCase("|"))
 							{
 								canMove = false;
 							}
@@ -316,7 +317,8 @@ public class Map {
 				{
 					int playerXNext = playerXMin - 1;
 					// check map for immovable objects
-					if (sMap[playerY][playerXNext].equalsIgnoreCase("#"))
+					if (sMap[playerY][playerXNext].equalsIgnoreCase("#")
+						 || sMap[playerY][playerXNext].equalsIgnoreCase("|"))
 					{
 						canMove = false;
 					}				
@@ -329,7 +331,8 @@ public class Map {
 				{
 					int playerXNext = playerXMax + 1;
 					// check map for immovable objects
-					if (sMap[playerY][playerXNext].equalsIgnoreCase("#"))
+					if (sMap[playerY][playerXNext].equalsIgnoreCase("#")
+							 || sMap[playerY][playerXNext].equalsIgnoreCase("|"))
 					{
 						canMove = false;
 					}			
@@ -358,9 +361,38 @@ public class Map {
 	}
 	
 	public void addDoor(Door door) {
-		sMap[door.getYPos()][door.getXPos()] = door.getSprite();
+		if (door.isVertical())
+		{
+			if (door.getXPos() == 1)
+			{
+				sMap[door.getYPos()][door.getXPos()] = door.getSprite();
+				sMap[door.getYPos()][door.getXPos() - 1] = door.getSprite();
+			}
+			
+			else if (door.getXPos() == xLen - 2)
+			{
+				sMap[door.getYPos()][door.getXPos()] = door.getSprite();
+				sMap[door.getYPos()][door.getXPos() + 1] = door.getSprite();
+			}
+		}
+		else {
+			sMap[door.getYPos()][door.getXPos()] = door.getSprite();
+		}
+
 	}
 	
+	public void addPuzzle(Puzzle puzzle){
+		sMap[puzzle.getY()][puzzle.getX()] = puzzle.getSprite();
+	}
+	
+	public void addPuzzle(Cipher cipher) {
+		sMap[cipher.getY()][cipher.getX()] = cipher.getSprite();
+	}
+	
+	public void clearSquare(int x, int y)
+	{
+		sMap[y][x] = " ";
+	}
 	
 	// simple map x length getter
 	public int getXLen(){

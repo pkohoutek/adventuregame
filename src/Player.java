@@ -89,6 +89,16 @@ public class Player {
 		return yPos;
 	}
 	
+	public void setX(int x) {
+		xPos = x;
+		xRangeMin = xPos - 3;
+		xRangeMax = xPos + 3;
+	}
+	
+	public void setY(int y) {
+		yPos = y;
+	}
+	
 	public int getMaxX() {
 		return xRangeMax;
 	}

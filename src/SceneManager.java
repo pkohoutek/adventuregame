@@ -34,6 +34,11 @@ public class SceneManager {
 		return currentScene;
 	}
 	
+	// sets scene to argument value 
+	public static void setScene(int scene) {
+		currentScene = scene;
+	}
+	
 	// saves game to text file
 	public static void saveGame() {
 		PrintWriter outputStream = null;

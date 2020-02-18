@@ -12,7 +12,7 @@ public class AdventureGame {
 	 */
 
 	private static boolean finishedTurn = false, gameOver = false;
-
+	private static int levelNum = 1; // for testing
 	
 
 	public static void main(String[] args) {
@@ -28,7 +28,8 @@ public class AdventureGame {
 		
 		
 		// instantiate player and keyboard for input
-		Level testLevel = new Level(1);
+		SceneManager.setScene(levelNum);
+		Level testLevel = new Level(SceneManager.getScene());
 		Player player = new Player(testLevel.getStartX(), testLevel.getStartY());
 		Scanner keyboard = new Scanner(System.in);
 
@@ -71,7 +72,7 @@ public class AdventureGame {
 					sOption = keyboard.next();
 
 				}
-				iOption = keyboard.nextInt();	// integer has been entered succesfully and assigned 
+				iOption = keyboard.nextInt();	// integer has been entered successfully and assigned 
 				// if option 1 selected the player wants to move
 				if (iOption == 1)
 				{
@@ -128,9 +129,18 @@ public class AdventureGame {
 							if (testLevel.canInteract(player.getMinX(), player.getMaxX(), player.getY()) && iMove == 5)
 							{						
 								testLevel.interaction(player.getMinX(), player.getMaxX(), player.getY());
+								if (testLevel.isDoorOpen())
+								{
+									SceneManager.nextScene();
+									levelNum = SceneManager.getScene();
+									testLevel = new Level(levelNum);
+									player.setX(testLevel.getStartX());
+									player.setY(testLevel.getStartY());
+									finishedTurn = true;
+								}
 								System.out.println("Press enter to continue...");
 								keyboard.nextLine();	// waits for the user to hit enter so longer story elements can be read before continuing
-								keyboard.nextLine();   // needs 2 next lines to work properly, quirk of java operating on multiple OS cmd line?
+								keyboard.nextLine();
 							}
 							else if (iMove < 0 || iMove > 4)
 							{
