@@ -6,12 +6,11 @@ public class Level {
 	private int levelNumber;
 	// array lists for the levels props and puzzles, and story text (can be changed, just testing things)
 	private ArrayList<Prop> props;
-	private ArrayList<Wall> walls = new ArrayList<Wall>(); // walls for level design (can remove?)
 	private ArrayList<Puzzle> puzzles = new ArrayList<Puzzle>();
 	private ArrayList<Cipher> ciphers;
 	private ArrayList<Trigger> triggers; 
-	private ArrayList<String> storyText = new ArrayList<String>();   // elements to be added
-	private ArrayList<String> description = new ArrayList<String>(); // elements to be added
+	private String levelIntroText;   
+	private String levelExitText;
 	private Map map;
 	private Door door;
 	private LevelGenerator levelGenerator;
@@ -31,24 +30,20 @@ public class Level {
 		ciphers = levelGenerator.getCiphers();
 		playerStartX = levelGenerator.getPlayerStartX();
 		playerStartY = levelGenerator.getPlayerStartY();
+		levelIntroText = levelGenerator.getIntroText();
+		levelExitText = levelGenerator.getExitText();
 		
 		
 	}
 	// instantiates level without puzzles, can be used for making scenes with story elements
 	// no map
-	public Level(int lNum,  String[] sText, String[] dText) {
+	public Level(int lNum,  String iText, String oText) {
 		
 			levelNumber = lNum;
 			// iterates over String array to add story, level description text elements to level
 			// can be used for specific level children where they have level specific methods
-			for (int num = 0; num < sText.length; num++)
-			{
-				storyText.add(sText[num]);
-			}
-			for (int num = 0; num < dText.length; num++)
-			{
-				description.add(dText[num]);
-			}
+			levelIntroText = iText;
+			levelExitText = oText;
 	}
 	
 	// get level number for map view
@@ -168,7 +163,6 @@ public class Level {
 			{
 			    if (!door.isLocked()) {
 			    	door.openDoor();
-					System.out.println("End of Level");
 			    }
 			    else {
 			    	System.out.println("Door is locked!");
@@ -179,7 +173,6 @@ public class Level {
 			{
 			    if (!door.isLocked()) {
 			    	door.openDoor();
-					System.out.println("End of Level");
 			    }
 			    else {
 			    	System.out.println("Door is locked!");
@@ -190,7 +183,6 @@ public class Level {
 			{
 			    if (!door.isLocked()) {
 			    	door.openDoor();
-					System.out.println("End of Level");
 			    }
 			    else {
 			    	System.out.println("Door is locked!");
@@ -201,7 +193,6 @@ public class Level {
 			{
 			    if (!door.isLocked()) {
 			    	door.openDoor();
-					System.out.println("End of Level");
 			    }
 			    else {
 			    	System.out.println("Door is locked!");
@@ -332,5 +323,12 @@ public class Level {
 	}
 	
 	
+	public String getIntroText() {
+		return levelIntroText;
+	}
+	
+	public String getExitText() {
+		return levelExitText;
+	}
 }
 

@@ -38,6 +38,7 @@ public class LevelGenerator {
 	private ArrayList<String> ciphQuestions;
 	private ArrayList<String> ciphAnswers;
 	private ArrayList<String> ciphHints;
+	private String introText, exitText;
 	private Door door;
 	private Map map;						// generates level map
 	
@@ -61,7 +62,7 @@ public class LevelGenerator {
 		ciphQuestions = genCipherQuestions();
 		ciphHints = genCipherHints();
 		ciphAnswers = genCipherAnswers();
-		
+		genLevelText();
 		generate();
 		genPlayerStart();
 		putObjectsInMap();
@@ -142,10 +143,13 @@ public class LevelGenerator {
 					{
 						endDescriptions = true;
 					}
-					else if  (line.equals("[/des]"))
+					else if  (line.equals("<pdes>"))
+					{
+						description = "";
+					}
+					else if  (line.equals("</pdes>"))
 					{
 						propDesc.add(description);
-						description = "";
 					}
 					else if (line.equals("\n"))
 					{
@@ -195,10 +199,13 @@ public class LevelGenerator {
 					{
 						endTrText = true;
 					}
-					else if  (line.equals("[/trigger]"))
+					else if  (line.equals("<trigger>"))
+					{
+						trText = "";
+					}
+					else if  (line.equals("</trigger>"))
 					{
 						trTexts.add(trText);
-						trText = "";
 					}
 					else if (line.equals("\n"))
 					{
@@ -246,21 +253,24 @@ public class LevelGenerator {
 				{
 					line = inputStream.nextLine();
 					line.trim();
-					if (line.equals("[questions]"))
+					if (line.equals("<PQUESTIONS>"))
 					{
 						boolean endQuestions = false;
 						while (!endQuestions)
 						{
 							line = inputStream.nextLine();
 							line.trim();
-							if (line.equals("[/questions]"))
+							if (line.equals("</PQUESTIONS>"))
 							{
 								endQuestions = true;
 							}
-							else if (line.equals("[/question]"))
+							else if (line.equals("<pquestion>"))
+							{
+								puzQText = "";
+							}
+							else if (line.equals("</pquestion>"))
 							{
 								puzQuestions.add(puzQText);
-								puzQText = "";
 							}
 							else if (line.equals("\n"))
 							{
@@ -316,7 +326,7 @@ public class LevelGenerator {
 				{
 					line = inputStream.nextLine();
 					line.trim();
-					if (line.equals("[answers]"))
+					if (line.equals("<PANSWERS>"))
 					{							
 
 						boolean endAnswers = false;
@@ -324,14 +334,17 @@ public class LevelGenerator {
 						{
 							line = inputStream.nextLine();
 							line.trim();
-							if (line.equals("[/answers]"))
+							if (line.equals("</PANSWERS>"))
 							{
 								endAnswers = true;
 							}
-							else if  (line.equals("[/answer]"))
+							else if  (line.equals("<panswer>"))
+							{
+								puzAText = "";
+							}
+							else if  (line.equals("</panswer>"))
 							{
 								puzAnswers.add(puzAText);
-								puzAText = "";
 							}
 							else if (line.equals("\n"))
 							{
@@ -635,7 +648,92 @@ public class LevelGenerator {
 		}
 	}
 	
-	
+	// method generates level intro and exit text from .cfg file
+	private void genLevelText()
+	{
+		boolean endLevelText = false;
+		String tIntroText = "";
+		String tExitText = "";
+		Scanner inputStream = null;
+		String filename = "level" + Integer.toString(levelNumber) + ".cfg";
+		try
+		{
+			File file = new File(filename);
+			inputStream = new Scanner(file);
+		}
+		catch(FileNotFoundException e)
+		{
+			System.out.println("Error generating puzzle questions. Exiting game.");
+			System.out.println(e);
+			System.exit(0);
+		}
+
+		while (inputStream.hasNextLine() && !endLevelText)
+		{
+			String line = inputStream.nextLine();
+			line.trim();
+
+
+			if (line.equals("[LEVELTEXT]"))
+			{
+				while(!endLevelText)
+				{
+					line = inputStream.nextLine();
+					line.trim();
+					if (line.equals("<STARTTEXT>"))
+					{
+						boolean endIntro = false;
+						while (!endIntro)
+						{
+							line = inputStream.nextLine();
+							line.trim();
+							if (line.equals("</STARTTEXT>"))
+							{
+								endIntro = true;
+							}
+							else if (line.equals("\n"))
+							{
+								tIntroText = "" + tIntroText + "\n";	
+							}
+							else
+							{
+								tIntroText = "" + tIntroText + line + "\n";
+							}
+						}
+					}
+					if (line.equals("<ENDTEXT>"))
+					{
+						boolean endEnding = false;
+						while (!endEnding)
+						{
+							line = inputStream.nextLine();
+							line.trim();
+							if (line.equals("</ENDTEXT>"))
+							{
+								endEnding = true;
+							}
+							else if (line.equals("\n"))
+							{
+								tExitText = "" + tExitText + "\n";	
+							}
+							else
+							{
+								tExitText = "" + tExitText + line + "\n";
+							}
+						}
+					}
+					if (line.equals("[/LEVELTEXT]"))
+					{
+						endLevelText = true;
+					}	
+
+				}
+			}
+		}
+		inputStream.close();
+		introText = tIntroText;
+		exitText = tExitText;
+	}
 	
 	// method generates walls, props, and triggers
 	// will be expanded for future objects
@@ -705,7 +803,6 @@ public class LevelGenerator {
 				}
 				else if (c == '@')
 				{
-					System.out.println(ciphQuestions.size());
 					String cQuestion = ciphQuestions.get(cipherCount);
 					String cHint = ciphHints.get(cipherCount);
 					String cAnswer = ciphAnswers.get(cipherCount);
@@ -800,5 +897,14 @@ public class LevelGenerator {
 	{
 		return startY;
 	}
+	
+	public String getIntroText() {
+		return introText;
+	}
+	
+	public String getExitText() {
+		return exitText;
+	}
+
 	
 }
