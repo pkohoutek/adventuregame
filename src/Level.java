@@ -66,6 +66,9 @@ public class Level {
 	}
 	
 	// checks the map to see if the player has stepped on a trigger
+	// triggers activate dead center on players x position so be dilligent
+	// placing them in levels, can be modified to activate if any part
+	// of the player avatar is on the same x/y location as player.
 	public boolean checkTrigger(int playerX, int playerY)
 	{
 		boolean isTrigger = false;
@@ -83,6 +86,9 @@ public class Level {
 		return isTrigger;
 	}
 	
+	// iterates over all interactive objects returning true 
+	// if there is an object in the players range
+	// this code will have to be updated when moving to JavaFX
 	public boolean canInteract(int playerXMin, int playerXMax, int playerY)
 	{
 		boolean interact = false;
@@ -153,7 +159,8 @@ public class Level {
 	// method to interact with objects that the player is in contact with
 	public void interaction(int playerXMin, int playerXMax, int playerY)
 	{
-		// to avoid printing trigger multiple times
+		// to avoid printing trigger multiple times if the player moves up on a
+		// trigger. Can be removed in the future.
 		boolean activated = false;
 		// loop through the player characters x range
 		for (int x = playerXMin; x <= playerXMax; x++)
@@ -221,7 +228,7 @@ public class Level {
 						playerY == puzzles.get(num).getY() 
 						&& !puzzles.get(num).isSolved())
 				{
-					puzzles.get(num).doPuzzle();
+					puzzles.get(num).playPuzzle();
 					// if puzzle has been solved
 					if (puzzles.get(num).isSolved())
 					{
@@ -260,7 +267,7 @@ public class Level {
 						// have completed the level objectives
 						if (!isDoorLocked())
 						{
-							System.out.println("The door has unlocked!");
+							System.out.println("\n\n\nThe door has unlocked!");
 						}
 					}
 				}
@@ -294,10 +301,12 @@ public class Level {
 		}
 	}
 	
+	// boolean getter to return if the level's door is still locked
 	public boolean isDoorLocked() {
 		return door.isLocked();
 	}
 	
+	// boolean getter to return if the player has opened the door to exit the level
 	public boolean isDoorOpen() {
 		return door.isOpen();
 	}
@@ -312,21 +321,24 @@ public class Level {
 		return map.getYLen();
 	}
 	
+	// getter that returns the players X starting position for the level
 	public int getStartX()
 	{
 		return playerStartX;
 	}
 	
+	// getter that returns the players Y starting position for the level
 	public int getStartY()
 	{
 		return playerStartY;
 	}
 	
-	
+	// getter for Level introduction text (for story elements)
 	public String getIntroText() {
 		return levelIntroText;
 	}
 	
+	// getter for Level exit text (for story elements)
 	public String getExitText() {
 		return levelExitText;
 	}

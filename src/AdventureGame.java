@@ -17,7 +17,8 @@ public class AdventureGame {
 	
 
 	public static void main(String[] args) {
-		
+		// TitleScreen.load(); class to display game title can use ascii art generator
+		// MainMenu.menu(); // load main menu
 		game();
 		System.exit(0);
 	}

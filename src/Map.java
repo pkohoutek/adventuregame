@@ -27,6 +27,7 @@ public class Map {
 		
 	}
 	
+	// copy constructor
 	public Map(Map map)
 	{
 		xLen = map.getXLen();
@@ -58,7 +59,7 @@ public class Map {
 	}
 
 	
-	// prints map without spaces, and if player hit wall prints descriptive text
+	// prints map and if player hit wall prints descriptive text
 	public void printMap(int playerX, int playerY, boolean hitWall, String sPlayer) {
 		int playerLen = sPlayer.length();
 		int playerXMin = playerX - (playerLen / 2);
@@ -355,11 +356,13 @@ public class Map {
 
 	}
 	
+	// adds walls to map
 	public void addProp(Wall wall)
 	{
 		sMap[wall.getY()][wall.getX()] = wall.getSprite();
 	}
 	
+	// adds door to map
 	public void addDoor(Door door) {
 		if (door.isVertical())
 		{
@@ -381,14 +384,17 @@ public class Map {
 
 	}
 	
+	// adds puzzle to map
 	public void addPuzzle(Puzzle puzzle){
 		sMap[puzzle.getY()][puzzle.getX()] = puzzle.getSprite();
 	}
 	
+	// adds cipher puzzle to map
 	public void addPuzzle(Cipher cipher) {
 		sMap[cipher.getY()][cipher.getX()] = cipher.getSprite();
 	}
 	
+	// clears array element in map (used when completed a puzzle or cipher)
 	public void clearSquare(int x, int y)
 	{
 		sMap[y][x] = " ";
@@ -404,6 +410,7 @@ public class Map {
 		return yLen;
 	}
 	
+	// returns the string array map
 	public String[][] getSMap()
 	{
 		String[][] tempArray = sMap.clone();

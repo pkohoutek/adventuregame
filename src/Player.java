@@ -2,12 +2,11 @@
 public class Player {
 	
 	/*	Player Class
-	 * 	Handles player avatar position
-	 * 	Interacts with objects on the level map
+	 * 	Handles player avatar position on map,
+	 *  used to interact with objects in the Level class.
+	 *  Also handles string representation of the player on map
 	 */
 	
-	private final int MAXKEYS = 5;
-	private String[] keys = new String[MAXKEYS];  // variable we can use for puzzles solved to check if door should be opened
 	private int xPos = 0;
 	private int yPos = 0;
 	private int xRangeMin;
@@ -57,28 +56,7 @@ public class Player {
 			break;			// default is to do nothing
 		}
 	}
-	
-	// prints key array to console
-	// add formatting to make it look nice
-	public void viewKeys() {
-		System.out.println(keys.toString());
-	}
-	
-	// method to interact with puzzles 
-	// and other games on the map
-	public void interact() {
-		// put code in here
-	}
-	
-	// method to clear keys when entering
-	// new level
-	public void clearKeys() {
-		for (int num = 0; num < keys.length; num++)
-		{
-			keys[num] = "";
-		}
-	}
-	
+		
 	// get player x position
 	public int getX() {
 		return xPos;
@@ -89,32 +67,43 @@ public class Player {
 		return yPos;
 	}
 	
+	// set players X position (when moving to a new level)
+	// can/should be used for other events in game that might teleport
+	// or move the player avatar
 	public void setX(int x) {
 		xPos = x;
 		xRangeMin = xPos - 3;
 		xRangeMax = xPos + 3;
 	}
 	
+	// set players X position (when moving to a new level)
+	// can/should be used for other events in game that might teleport
+	// or move the player avatar
 	public void setY(int y) {
 		yPos = y;
 	}
 	
+	// getter for player avatars max X value
 	public int getMaxX() {
 		return xRangeMax;
 	}
 	
+	// getter for player avatar's min X value
 	public int getMinX() {
 		return xRangeMin;
 	}
 	
+	// getter for player String representation of their sprite
 	public String getSprite(){
 		return sSprite;
 	}
 	
+	// updates player String representation of their sprite
 	public void hitAnimation(int move, boolean hitObject){
 		sSprite = animator.getSprite(move, hitObject);
 	}
 	
+	// sets players String representation of their Sprite
 	private void setSprite(int move){
 		sSprite = animator.getSprite(move);
 	}

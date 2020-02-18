@@ -37,34 +37,43 @@ public class Door {
 		}
 	}
 	
+	// public method for classes to check if door is locked
 	public boolean isLocked() {
 		return lock;
 	}
 	
+	// used to determine how to display door on map
+	// and how to interact with door 
 	public boolean isVertical() {
 		return vertical;
 	}
 	
+	// public method to unlock door
 	public void unLock() {
 		this.lock = false;
 	}
 	
+	// method for classes to check if the door has been opened
 	public  boolean isOpen() {
 		return open;
 	}
 	
+	// method to open door
 	public void openDoor() {
 		open = true;
 	}
 	
+	// getter for doors X position
 	public int getXPos() {
 		return xPos;
 	}
 	
+	// getter for doors Y position
 	public int getYPos() {
 		return yPos;
 	}
 	
+	// returns the sprite for the door
 	public String getSprite() {
 		return sSprite;
 	}

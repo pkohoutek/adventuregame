@@ -28,14 +28,17 @@ public class Trigger {
 		tText = text;
 	}
 	
+	// getter for trigger string
 	public String getTriggerText() {
 		return tText;
 	}
 	
+	// getter for trigger x position on map
 	public int getX() {
 		return xPos;
 	}
 	
+	// getter for trigger y position on map
 	public int getY() {
 		return yPos;
 	}

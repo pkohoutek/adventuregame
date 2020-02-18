@@ -4,8 +4,8 @@ public class Wall {
 	/*
 	 *      Wall Class 
 	 *      represents a wall object that is not traversable by
-	 *      the player
-	 * 
+	 *      the player. Used to add variation to levels and to guide
+	 *      the player to goals 
 	 */	
 	
 	// config parameters, x/y position, and the String sprite representation

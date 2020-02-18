@@ -1,6 +1,15 @@
 import java.util.Scanner;
 
 public class Puzzle {
+	
+	/*		Puzzle Class
+	 * 
+	 * 		Players solve puzzles and by solving puzzles
+	 * 		are able to unlock the level door to move on to the next level	 * 
+	 */
+	
+	
+	
 	private boolean solved;
 	private int xPos;
 	private int yPos;
@@ -21,10 +30,14 @@ public class Puzzle {
 		this.answer = a;
 		solved = false;
 	}
+	
+	// helper method to check answer
 	private boolean checkAns(String tempAns) {
 		return tempAns.equalsIgnoreCase(answer);
 	}
-	public void doPuzzle() {
+	
+	// method to play the puzzle
+	public void playPuzzle() {
 		System.out.println(question);
 		Scanner input = new Scanner(System.in);
 		System.out.println("Enter your answer or press 'Q' to quit");
@@ -45,31 +58,38 @@ public class Puzzle {
 		setSolved();		
 	}
 	
+	// getter to check if puzzle is solved
 	public boolean isSolved() {
 		return solved;
 	}
 	
+	// getter for puzzles x position on map
 	public int getX()
 	{
 		return xPos;
-	}
+	}	
 	
+	// getter for puzzles y position on map
 	public int getY() {
 		return yPos;
 	}
 	
+	// getter for puzzle question
 	public String getQuestion() {
 		return question;
 	}
 	
+	// getter for puzzle answer
 	public String getAnswer() {
 		return answer;
 	}
 	
+	// getter for string representation of the puzzle sprite
 	public String getSprite() {
 		return sSprite;
 	}
 	
+	// setter to set the puzzle as solved
 	public void setSolved() {
 		solved = true;
 	}

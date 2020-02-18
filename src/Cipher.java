@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Cipher extends Puzzle{
 
-
+	// String hint attribute for Cypher
 	private String hint="The hint is 'EJTKU'. And the algorithm is X(alphabetic index)-2\r\n";
 	
 	public Cipher(int x, int y, String question, String answer, String h){
@@ -16,7 +16,7 @@ public class Cipher extends Puzzle{
 		this.hint = cipher.getHint();
 	}
 	
-	
+	// method to play cipher puzzle
 	public void playCipher() {
 		
 		boolean isCorrect = false;
@@ -61,32 +61,39 @@ public class Cipher extends Puzzle{
 	}
 	
 	
+	// getter for hint String
 	public String getHint() {
 		return hint;
 	}
 	
 	
+	// getter for Question String
 	public String getQuestion() {
 		return super.getQuestion();
 	}
 	
+	// getter for Answer string
 	public String getAnswer() {
 		return super.getAnswer();
 	}
 	
+	// getter for String sprite representation
 	public String getSprite() {
 		return super.getSprite();
 	}
 	
+	// getter to check if the cipher has been solved
 	public boolean isSolved() {
 		return super.isSolved();
 	}
 	
+	// getter for Cipher's X position
 	public int getX()
 	{
 		return super.getX();
 	}
 	
+	// getter for Cipher's Y position	
 	public int getY() {
 		return super.getY();
 	}
