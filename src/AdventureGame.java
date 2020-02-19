@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 
@@ -51,6 +52,7 @@ public class AdventureGame {
 		while (!gameOver) 
 		{
 			if (startOfLevel) {
+				clearConsole();
 				System.out.println("\n\n\n" + level.getIntroText());
 				System.out.println("\n\nPress enter to continue...");
 				keyboard.nextLine();	// waits for the user to hit enter so longer story elements can be read before continuing
@@ -64,6 +66,7 @@ public class AdventureGame {
 			// loops until player backs out of movement, inspection menu 
 			while (!finishedTurn)
 			{
+				clearConsole();
 				level.displayLevel(player.getX(), player.getY(), player.getSprite());   // displays map
 				// if player made an invalid entry in the main menu, prints invalid entry below map
 				if (invalidEntry)
@@ -93,6 +96,7 @@ public class AdventureGame {
 							if (hitObject)
 							{	
 								// prints map and adds a descriptive String to inform the player they hit a wall
+								clearConsole();
 								level.displayLevel(player.getX(), player.getY(), hitObject, player.getSprite());
 								hitObject = false;
 							}
@@ -100,6 +104,7 @@ public class AdventureGame {
 							// informing them of invalid input
 							else if (invalidEntry)
 							{
+								clearConsole();
 								level.displayLevel(player.getX(), player.getY(), player.getSprite());
 								System.out.println("Invalid entry!");
 								invalidEntry = false;
@@ -107,6 +112,7 @@ public class AdventureGame {
 							// else player didn't hit a wall or entry an invalid input so display the map normally
 							else
 							{
+								clearConsole();
 								level.displayLevel(player.getX(), player.getY(), player.getSprite());
 								System.out.print("\n");
 							}	
@@ -120,6 +126,7 @@ public class AdventureGame {
 							// check player input, verifying its an integer and displays invalid entry message if it isn't
 							while (!keyboard.hasNextInt())
 							{
+								clearConsole();
 								level.displayLevel(player.getX(), player.getY(), player.getSprite());
 								System.out.println("Invalid entry!");
 								if (level.canInteract(player.getMinX(), player.getMaxX(), player.getY())) {
@@ -135,10 +142,12 @@ public class AdventureGame {
 							// will print invalid entry at the start of the loop
 							// (can be changed to CONSTANTS once we finalize everything
 							if (level.canInteract(player.getMinX(), player.getMaxX(), player.getY()) && iMove == 5)
-							{						
+							{		
+								clearConsole();
 								level.interaction(player.getMinX(), player.getMaxX(), player.getY());
 								if (level.isDoorOpen())
 								{
+									clearConsole();
 									System.out.println("\n\n\n" + level.getExitText());
 									SceneManager.nextScene();
 									levelNum = SceneManager.getScene();
@@ -150,6 +159,7 @@ public class AdventureGame {
 								System.out.println("\n\nPress enter to continue...");
 								keyboard.nextLine();	// waits for the user to hit enter so longer story elements can be read before continuing
 								keyboard.nextLine();
+								clearConsole();
 							}
 							else if (iMove < 0 || iMove > 4)
 							{
@@ -169,7 +179,8 @@ public class AdventureGame {
 								{
 									// move player
 									player.move(iMove);
-									// check the players new location for a trigger (will discuss this at next meeting)
+									// check the players new location for a trigger 
+									clearConsole();
 									if(level.checkTrigger(player.getX(), player.getY()))
 									{
 										System.out.println("Press enter to continue...");
@@ -196,6 +207,7 @@ public class AdventureGame {
 				{
 					if (level.canInteract(player.getMinX(), player.getMaxX(), player.getY()))
 					{
+						clearConsole();
 						level.interaction(player.getMinX(), player.getMaxX(), player.getY());
 						System.out.println("Press enter to continue...");
 						keyboard.nextLine();	// waits for the user to hit enter so longer story elements can be read before continuing
@@ -217,6 +229,22 @@ public class AdventureGame {
 			}
 		
 		}
+	}
+	
+	
+	// credit to Abhishek Kashyap from: 
+	// https://stackoverflow.com/questions/2979383/java-clear-the-console
+	public final static void clearConsole() {
+	    //Clears Screen in java
+	    try {
+	        if (System.getProperty("os.name").contains("Windows")) {
+	            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+	        }
+	        else {
+	            //Runtime.getRuntime().exec("clear");
+	        	System.out.print("\033[H\033[2J");
+	        }
+	    } catch (IOException | InterruptedException ex) {}
 	}
 	
 }

@@ -153,7 +153,7 @@ public class LevelGenerator {
 			String description = "";
 			// if found delimiter indicating that we have reached Prop Description
 			// text
-			if (line.equals("[PROPDES]") && !endDescriptions)
+			if (line.equals("<PROPS>") && !endDescriptions)
 			{
 				// continue looping until we have reached the end of descriptions
 				while(!endDescriptions)
@@ -162,7 +162,7 @@ public class LevelGenerator {
 					line.trim();
 					// if the line is the delimiter indicating that we have reached the end
 					// of prop descriptions, exit while loop.
-					if (line.equals("[/PROPDES]"))
+					if (line.equals("</PROPS>"))
 					{
 						endDescriptions = true;
 					}
@@ -223,7 +223,7 @@ public class LevelGenerator {
 			String line = inputStream.nextLine();
 			String trText = "";
 			// if we find the trigger text delimiter
-			if (line.equals("[TRIGGER]"))
+			if (line.equals("<TRIGGERS>"))
 			{
 				// while we have not reached the end of the trigger text in the
 				// level#.cfg file
@@ -232,7 +232,7 @@ public class LevelGenerator {
 					line = inputStream.nextLine();
 					line.trim();
 					// if we find the end trigger text delimiter we are done
-					if (line.equals("[/TRIGGER]"))
+					if (line.equals("</TRIGGERS>"))
 					{
 						endTrText = true;
 					}
@@ -294,7 +294,7 @@ public class LevelGenerator {
 			line.trim();
 			String puzQText = "";
 			// if we find the start of the puzzle delimiter
-			if (line.equals("[PUZZLE]"))
+			if (line.equals("<PUZZLES>"))
 			{
 				// while we havent reached the end of the puzzle section
 				// of the level#.cfg file
@@ -343,7 +343,7 @@ public class LevelGenerator {
 							}
 						}
 					}
-					if (line.equals("[/PUZZLE]"))
+					if (line.equals("</PUZZLES>"))
 					{
 						endPuzText = true;
 					}	
@@ -384,7 +384,7 @@ public class LevelGenerator {
 			String puzAText = "";
 			// if the line is the delimiter indicating we are in the puzzle
 			// section of the level#.cfg file
-			if (line.equals("[PUZZLE]"))
+			if (line.equals("<PUZZLES>"))
 			{
 				// while we haven't reached the end of the puzzle section of 
 				// the level#.cfg file
@@ -433,7 +433,7 @@ public class LevelGenerator {
 						}
 					}	
 					// if we have reached the end of the puzzle section we are done
-					if (line.equals("[/PUZZLE]"))
+					if (line.equals("</PUZZLES>"))
 					{
 						endPuzText = true;
 					}
@@ -473,7 +473,7 @@ public class LevelGenerator {
 			String ciphQText = "";
 			// if we find the delimiter indicating the start of the cipher section of
 			// the level#.cfg file
-			if (line.equals("[CIPHER]"))
+			if (line.equals("<CIPHERS>"))
 			{
 				// while not at the end of the cipher text section
 				while(!endCiphText)
@@ -522,7 +522,7 @@ public class LevelGenerator {
 						}
 					}
 					// if we reached the end of the cipher section we are done
-					if (line.equals("[/CIPHER]"))
+					if (line.equals("</CIPHERS>"))
 					{
 						endCiphText = true;
 					}
@@ -560,7 +560,7 @@ public class LevelGenerator {
 			String line = inputStream.nextLine();
 			String ciphHText = "";
 			// if we have found the cipher section of the level.cfg file
-			if (line.equals("[CIPHER]"))
+			if (line.equals("<CIPHERS>"))
 			{
 				// while not at the end of the cipher text section
 				while(!endCiphText)
@@ -609,7 +609,7 @@ public class LevelGenerator {
 					}	
 					// if we find the delimiter indicating we are at the end
 					// of the cipher string, we are done
-					if (line.equals("[/CIPHER]"))
+					if (line.equals("</CIPHERS>"))
 					{
 						endCiphText = true;
 					}
@@ -648,7 +648,7 @@ public class LevelGenerator {
 			String line = inputStream.nextLine();
 			String ciphAText = "";
 			// if we found the delimiter indicating the cipher section of cfg file
-			if (line.equals("[CIPHER]"))
+			if (line.equals("<CIPHERS>"))
 			{
 				// while we have not reached the end of the cipher section
 				while(!endCiphText)
@@ -698,7 +698,7 @@ public class LevelGenerator {
 					}		
 					// if we have reached the end of the cipher section in the cfg file
 					// we are done
-					if (line.equals("[/CIPHER]"))
+					if (line.equals("</CIPHERS>"))
 					{
 						endCiphText = true;
 					}
@@ -735,7 +735,7 @@ public class LevelGenerator {
 			String line = inputStream.nextLine();
 			line.trim();
 			// if line equals the delimiter indicating player start location
-			if (line.equals("[START]"))
+			if (line.equals("<START>"))
 			{
 				// while we haven't reached the end of the player start
 				// section in the .cfg file
@@ -745,7 +745,7 @@ public class LevelGenerator {
 					line.trim();
 					// if we find delimited indicating end of player start section
 					// we are done
-					if (line.equals("[/START]"))
+					if (line.equals("</START>"))
 					{
 						endStart = true;
 					}
@@ -813,7 +813,7 @@ public class LevelGenerator {
 
 			// if we have reached the delimiter indicating the start
 			// of the level text section of the config file
-			if (line.equals("[LEVELTEXT]"))
+			if (line.equals("<LEVELTEXT>"))
 			{
 				// while we haven't reached the end of the level text
 				// section of the config file
@@ -874,7 +874,7 @@ public class LevelGenerator {
 						}
 					}
 					// if we reached the end of the level text section we are done
-					if (line.equals("[/LEVELTEXT]"))
+					if (line.equals("</LEVELTEXT>"))
 					{
 						endLevelText = true;
 					}	
