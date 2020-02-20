@@ -60,13 +60,13 @@ public class Map {
 
 	
 	// prints map and if player hit wall prints descriptive text
-	public void printMap(int playerX, int playerY, boolean hitWall, String sPlayer, String gTimer) {
+	public void printMap(int playerX, int playerY, boolean hitWall, String sPlayer) {
 		int playerLen = sPlayer.length();
 		int playerXMin = playerX - (playerLen / 2);
 		int playerXMax = playerX + (playerLen / 2);
 		
 		System.out.println("\n\n\n\nLevel " + SceneManager.getScene()  +  
-				"\t\t\t\t    Time Left: " + gTimer);
+				"\t\t\t\t    Time Left: " + GameClock.getTimer());
 		for (int x = 0; x < xLen; x++)
 		{	
 			if (x == 0)
@@ -167,13 +167,13 @@ public class Map {
 	}
 	
 	// prints map without spaces
-	public void printMap(int playerX, int playerY, String sPlayer, String gTimer) {
+	public void printMap(int playerX, int playerY, String sPlayer) {
 		int playerLen = sPlayer.length();
 		int playerXMin = playerX - (playerLen / 2);
 		int playerXMax = playerX + (playerLen / 2);
 
 		System.out.println("\n\n\n\nLevel " + SceneManager.getScene() +  
-				"\t\t\t  Time Left: " + gTimer);
+				"\t\t\t  Time Left: " + GameClock.getTimer());
 		for (int x = 0; x < xLen; x++)
 		{	
 			if (x == 0)

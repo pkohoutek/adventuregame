@@ -11,17 +11,17 @@ public class GameClock {
 	
 	// time when clock is initialized at the start of the game
 	// used to calculate gameover time
-	private int gStartHour;
-	private int gstartMinute;
-	private int gstartSecond;
+	private static int gStartHour;
+	private static int gstartMinute;
+	private static int gstartSecond;
 	
 	// time when game is over 
-	private int gameOverHour;
-	private int gameOverMinute;
-	private int gameOverSecond;
+	private static int gameOverHour;
+	private static int gameOverMinute;
+	private static int gameOverSecond;
 	
 	// game timer constant
-	private final int TIMELIMIT = 20;
+	private static final int TIMELIMIT = 20;
 	
 	public GameClock() {
 		// put code here
@@ -30,14 +30,21 @@ public class GameClock {
 	}
 	
 	
-	public boolean gameOver() {
+	public static boolean gameOver() {
 		// put code here
 		
 		return false;
 	}
 	
-	public String getTimer() {
+	public static String getTimer() {
 		return "20:00";
 	}
 	
+	public static int getMinutesRemaining() {
+		return 20; 
+	}
+	
+	public static int getSecondsRemaining() {
+		return 0;
+	}
 }

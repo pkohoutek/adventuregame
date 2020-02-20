@@ -26,16 +26,10 @@ public class SceneManager {
 	// loads next scene
 	public static void nextScene() {
 		// if the next level exits increment to the next scene
-		if (nextLevelExist(currentScene + 1))
+		if (nextLevelExist())
 		{
 			currentScene += 1;
 		}
-		// else player has beaten the game
-		else {
-			System.out.println("\n\n\n\nCONTRATULATIONS YOU WIN");
-			System.exit(0);
-		}
-
 	}
 	
 	// returns current scene int
@@ -46,7 +40,7 @@ public class SceneManager {
 	// sets scene to argument value 
 	public static void setScene(int scene) {
 		// if the level file exists
-		if (nextLevelExist(scene))
+		if (levelExist(scene))
 		{
 			currentScene = scene;
 		}
@@ -59,7 +53,7 @@ public class SceneManager {
 	}
 	
 	// saves game to text file
-	public static void saveGame() {
+	public static void saveGame(int minutes, int seconds) {
 		PrintWriter outputStream = null;
 		try
 		{
@@ -72,6 +66,8 @@ public class SceneManager {
 			System.exit(0);
 		}
 		outputStream.println(currentScene);
+		outputStream.println(Integer.toString(minutes));
+		outputStream.println(Integer.toString(seconds));
 		outputStream.close();
 		
 	}
@@ -102,16 +98,39 @@ public class SceneManager {
 	}
 		
 	// method returns boolean if level .cfg file exists for the next level
-	private static boolean nextLevelExist(int levelNumber) {
+	public static boolean nextLevelExist() {
 		boolean lExist = false;
-		String filename = "level" + Integer.toString(levelNumber) + ".cfg";
-		File testFile = new File(filename);
+		int nextScene = currentScene + 1;
+		String levelFile = "level" + Integer.toString(nextScene) + ".cfg";
+		File testFile = new File(levelFile);
 		if (testFile.exists())
 		{
 			lExist = true;
+		}		
+		return lExist;
+	}
+	
+	// method returns boolean if level .cfg file exists for the next level
+	private static boolean levelExist(int lvlNum) {
+		boolean lExist = false;
+		String levelFile = "level" + Integer.toString(lvlNum) + ".cfg";
+		File testFile = new File(levelFile);
+		if (testFile.exists())
+		{
+			lExist = true;
+		}		
+		return lExist;
+	}
+	
+	public static boolean saveExist() {
+		boolean saveExist = false;
+		File testFile = new File(filename);
+		if (testFile.exists())
+		{
+			saveExist = true;
 		}
 		
-		return lExist;
+		return saveExist;
 	}
 	
 	

@@ -13,7 +13,6 @@ public class Level {
 	private String levelExitText;
 	private Map map;
 	private Door door;
-	private GameClock gameClock;
 	private LevelGenerator levelGenerator;
 	private int playerStartX, playerStartY;	
 	
@@ -34,7 +33,7 @@ public class Level {
 		playerStartY = levelGenerator.getPlayerStartY();
 		levelIntroText = levelGenerator.getIntroText();
 		levelExitText = levelGenerator.getExitText();
-		gameClock = new GameClock();
+
 		
 		
 	}
@@ -55,12 +54,12 @@ public class Level {
 	}
 	
 	public void displayLevel(int playerX, int playerY, boolean hitObject, String sPlayer) {
-		map.printMap(playerX, playerY, hitObject, sPlayer, gameClock.getTimer());
+		map.printMap(playerX, playerY, hitObject, sPlayer);
 	}
 	
 	// displays level without spaces between the map String "tiles"
 	public void displayLevel(int playerX, int playerY, String sPlayer) {
-		map.printMap(playerX, playerY, sPlayer, gameClock.getTimer());
+		map.printMap(playerX, playerY, sPlayer);
 	}
 		
 	// checks the map to see if the player can move
@@ -345,5 +344,6 @@ public class Level {
 	public String getExitText() {
 		return levelExitText;
 	}
+
 }
 

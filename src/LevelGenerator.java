@@ -1079,6 +1079,6 @@ public class LevelGenerator {
 	public String getExitText() {
 		return exitText;
 	}
-
+	
 	
 }
