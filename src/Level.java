@@ -6,15 +6,17 @@ public class Level {
 	private int levelNumber;
 	// array lists for the levels props and puzzles, and story text (can be changed, just testing things)
 	private ArrayList<Prop> props;
-	private ArrayList<Puzzle> puzzles = new ArrayList<Puzzle>();
+	private ArrayList<Puzzle> puzzles;
 	private ArrayList<Cipher> ciphers;
 	private ArrayList<Trigger> triggers; 
 	private String levelIntroText;   
 	private String levelExitText;
 	private Map map;
 	private Door door;
+	private GameClock gameClock;
 	private LevelGenerator levelGenerator;
 	private int playerStartX, playerStartY;	
+	
 	
 	// constructor uses level number combined LevelGenerator to generate map, props, puzzles, and 
 	// triggers from text config files.
@@ -32,6 +34,7 @@ public class Level {
 		playerStartY = levelGenerator.getPlayerStartY();
 		levelIntroText = levelGenerator.getIntroText();
 		levelExitText = levelGenerator.getExitText();
+		gameClock = new GameClock();
 		
 		
 	}
@@ -52,12 +55,12 @@ public class Level {
 	}
 	
 	public void displayLevel(int playerX, int playerY, boolean hitObject, String sPlayer) {
-		map.printMap(playerX, playerY, hitObject, sPlayer);
+		map.printMap(playerX, playerY, hitObject, sPlayer, gameClock.getTimer());
 	}
 	
 	// displays level without spaces between the map String "tiles"
 	public void displayLevel(int playerX, int playerY, String sPlayer) {
-		map.printMap(playerX, playerY, sPlayer);
+		map.printMap(playerX, playerY, sPlayer, gameClock.getTimer());
 	}
 		
 	// checks the map to see if the player can move
@@ -297,7 +300,7 @@ public class Level {
 		
 		if (locked == false)
 		{
-			door.unLock();
+			door.unlock();
 		}
 	}
 	

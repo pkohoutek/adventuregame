@@ -16,10 +16,10 @@ public class Trigger {
 	private String tText = "Put text here if you want to have story "
 			+ "elements when stepping in a specific location";
 	
-	public Trigger(Trigger trigger) {
-		xPos = trigger.getX();
-		yPos = trigger.getY();
-		tText = trigger.getTriggerText();
+	public Trigger(Trigger tTrigger) {
+		xPos = tTrigger.getX();
+		yPos = tTrigger.getY();
+		tText = tTrigger.getTriggerText();
 	}	
 	
 	public Trigger(int xStart, int yStart, String text){

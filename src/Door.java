@@ -49,7 +49,7 @@ public class Door {
 	}
 	
 	// public method to unlock door
-	public void unLock() {
+	public void unlock() {
 		this.lock = false;
 	}
 	

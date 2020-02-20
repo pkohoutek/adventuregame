@@ -4,18 +4,37 @@ import java.util.Scanner;
 
 public class AdventureGame {
 	
-	/*
-	 * 		Main game loop is here
-	 * 		can be moved to a class like GameManager.
+	/*		Adventure Game
+	 * 		Main function contains the basic game loop
+	 * 		basic logic can be moved to a class like GameManager
+	 * 		when we move to JavaFX and GUI.
 	 * 		
-	 * 		loops through player movement and inspection of objects on map
-	 * 
+	 * 		game() loops through player options on movement, return to title screen, 
+	 * 		and inspections.
+	 * 		
+	 * 		Contains a clear scream method from: 
+	 * 			https://stackoverflow.com/questions/2979383/java-clear-the-console
+	 * 		
 	 */
 
 	private static boolean finishedTurn = false, gameOver = false;
 	private static int levelNum = 1; // for testing
 	private static boolean startOfLevel = true;
-	
+	private static Scanner keyboard;
+	private static final String TITLE =
+
+		"           ____  ____   ___   __   ____  ____ \n" + 
+		"          (  __)/ ___) / __) / _\\ (  _ \\(  __)\n" + 
+		"           ) _) \\___ \\( (__ /    \\ ) __/ ) _) \n" + 
+		"          (____)(____/ \\___)\\_/\\_/(__)  (____)\n" + 
+		"                ____   __    __   _  _ \n" + 
+		"               (  _ \\ /  \\  /  \\ ( \\/ )\n" + 
+		"                )   /(  O )(  O )/ \\/ \\\n" + 
+		"               (__\\_) \\__/  \\__/ \\_)(_/\r\n" + 
+		"  __   ____  _  _  ____  __ _  ____  _  _  ____  ____ \r\n" + 
+		" / _\\ (    \\/ )( \\(  __)(  ( \\(_  _)/ )( \\(  _ \\(  __)\r\n" + 
+		"/    \\ ) D (\\ \\/ / ) _) /    /  )(  ) \\/ ( )   / ) _) \r\n" + 
+		"\\_/\\_/(____/ \\__/ (____)\\_)__) (__) \\____/(__\\_)(____)";
 
 	public static void main(String[] args) {
 		// TitleScreen.load(); class to display game title can use ascii art generator
@@ -34,7 +53,7 @@ public class AdventureGame {
 		SceneManager.setScene(levelNum);
 		Level level = new Level(SceneManager.getScene());
 		Player player = new Player(level.getStartX(), level.getStartY());
-		Scanner keyboard = new Scanner(System.in);
+		keyboard = new Scanner(System.in);
 
 		// generating a test level just for demo purposes
 	//	Level level = new Level(1, 1, 1, 1, 0, "Escape room story goes here"
@@ -47,7 +66,7 @@ public class AdventureGame {
 		String sOption;
 		int iOption, iMove;		
 		
-		
+		title();
 		// loops through game play until player selects exit game
 		while (!gameOver) 
 		{
@@ -231,9 +250,24 @@ public class AdventureGame {
 		}
 	}
 	
+
+	private static void title() {
+		clearConsole();
+		System.out.println(TITLE);
+		System.out.println("\n\n");
+		System.out.println("\t*** press enter for main menu ***");
+		keyboard.nextLine();
+	}
 	
-	// credit to Abhishek Kashyap from: 
-	// https://stackoverflow.com/questions/2979383/java-clear-the-console
+	//
+	// clearConsole method clears terminal/cmd and checks 
+	// Operating system and runs the revelant commmand.
+	// It is used to improve immersion and user experience.
+	//
+	// credit for code goes to Abhishek Kashyap & community at Stack Overflow.
+	// URL: 
+	// 	https://stackoverflow.com/questions/2979383/java-clear-the-console
+	// 
 	public final static void clearConsole() {
 	    //Clears Screen in java
 	    try {
