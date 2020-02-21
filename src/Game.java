@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.util.Scanner;
 
+import javafx.scene.shape.MoveTo;
+
 public class Game {
 	
 	/*		Game
@@ -33,10 +35,6 @@ public class Game {
 		level = new Level(SceneManager.getScene());
 		player = new Player(level.getStartX(), level.getStartY());
 		keyboard = new Scanner(System.in);
-
-		// generating a test level just for demo purposes
-	//	Level level = new Level(1, 1, 1, 1, 0, "Escape room story goes here"
-	//			, "Level 0 is very mysterious... oOoooOOoh", 20, 6);
 
 		
 	
@@ -80,7 +78,7 @@ public class Game {
 					invalidEntry = false;
 				}
 				System.out.println("Please choose an option: ");			// main menu options
-				System.out.println("1 - Move\t  \t 0 - Exit");
+				System.out.println("1 - Move\t  \t 0 - Main Menu");
 
 				// checks that next input by user is an integer
 				while (!keyboard.hasNextInt() && !gameOver)
@@ -123,13 +121,16 @@ public class Game {
 								System.out.print("\n");
 							}
 							System.out.println("Move Up - 1\tDown - 2\tMove Left - 3");
+							// if the player is in contact with an interactive object print the "inspect" option
 							if (level.canInteract(player.getMinX(), player.getMaxX(), player.getY())) {
 									System.out.println("Right - 4\tInspect - 5\tBack to Menu - 0");
 							}	
+							// else print the options without "Inspect"
 							else{
 								System.out.println("Right - 4\tBack to Menu - 0");
 							}
-							// check player input, verifying its an integer and displays invalid entry message if it isn't
+							// check player input, verifying its an integer and loops for input
+							// displaying invalid entry message if it isn't
 							while (!keyboard.hasNextInt() && !gameOver)
 							{
 								clearConsole();
@@ -201,6 +202,8 @@ public class Game {
 									clearConsole();
 									}
 								}
+								// if the player is not in contact with an interactive object and
+								// not selected a valid movement option (1 - up, 2 - down, 3 - left, 4 - right)
 								else if (iMove < 0 || iMove > 4)
 								{
 									invalidEntry = true;
@@ -208,17 +211,19 @@ public class Game {
 								// else if entry is 0, go back a menu
 								else if(iMove == 0)
 								{
-									back= true;
+									back = true;
 								}							
 								// else player made an correct input
 								else
 								{
+									Move direction = getDirection(iMove, hitObject);
 									// if the player is able to move in the input direction
-									if (level.checkMove(iMove, player.getX(), player.getY(), 
+									if (level.checkMove(direction, player.getX(), player.getY(), 
 											player.getMinX(), player.getMaxX()))
 									{
+
 										// move player
-										player.move(iMove);
+										player.move(direction);
 										// check the players new location for a trigger 
 										clearConsole();
 										if(level.checkTrigger(player.getX(), player.getY()))
@@ -232,14 +237,15 @@ public class Game {
 									// if the player isn't able to move, hitObject is true and will print text informing them they hit a wall
 									else {
 										hitObject = true;
-										player.hitAnimation(iMove, hitObject);
+										direction = getDirection(iMove, hitObject);
+										player.hitAnimation(direction);
 									}
 								}
 							}
 						}					
 					finishedTurn = true; // if the player backs out of move menu, finished turn is true
 										// takes the player back to the main level menu where they can
-										// choose to move again, inspect an object, or exit
+										// choose to move again or exit
 				}
 				// if the player selects 0, ends main menu loop and exits "GameManager" loop to exit game
 				else if (iOption == 0)
@@ -256,6 +262,58 @@ public class Game {
 		}
 	}
 	
+	
+	
+	
+	
+	private static Move getDirection(int iMove, boolean hitObject) {
+		Move direction;
+		// if the player is moving up or down but is blocked by an object or end of map string array
+		if ((iMove == 1 || iMove == 2 ) && hitObject){
+			iMove = 7;   // move 7 represents the element number that the player has hit an object moving up or down
+		}
+		// if the player is moving left and hit an object
+		else if (iMove == 3 && hitObject){
+			iMove = 5;	// move 5 represents the element number that the player has hit an object moving left
+		}
+		// if the player is moving right and hit an object
+		else if(iMove == 4 && hitObject)
+		{
+			iMove = 6;	// move 6 represents the number that the player has hit an object moving right. 
+		}
+		switch(iMove)
+		{
+		case 1:
+			 direction = Move.UP;
+			break;
+		
+		case 2:
+			direction = Move.DOWN;
+			break;
+		case 3:
+			direction = Move.LEFT;
+			break;
+		case 4:
+			direction = Move.RIGHT;
+			break;
+		case 5:
+			direction = Move.HITLEFT;
+			break;
+		case 6:
+			direction = Move.HITRIGHT;
+			break;
+		case 7:
+			direction = Move.HITUPDOWN;
+			break;
+		case 8:
+			direction = Move.IDLE;
+			break;
+		default:
+			direction = Move.IDLE;
+			break;
+		}
+		return direction;
+	}
 
 	//
 	// clearConsole method clears terminal/cmd and checks 

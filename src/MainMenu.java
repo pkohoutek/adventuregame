@@ -8,9 +8,10 @@ public class MainMenu {
 	 * 
 	 */
 
+	private static boolean endGame = false;
 	private static final String TITLE =
 
-			"           ____  ____   ___   __   ____  ____ \n" + 
+			"          ____  ____   ___   __   ____  ____ \n" + 
 			"          (  __)/ ___) / __) / _\\ (  _ \\(  __)\n" + 
 			"           ) _) \\___ \\( (__ /    \\ ) __/ ) _) \n" + 
 			"          (____)(____/ \\___)\\_/\\_/(__)  (____)\n" + 
@@ -57,16 +58,17 @@ public class MainMenu {
 			Game.play();
 		}
 		else if(ans ==3) {
-			System.exit(0);
-		}else {
-			System.out.println("You did not enter one of the options");
-			System.exit(0);
+			endGame = true;
 		}
 	}	
 	
 
 	public static String getGameTitle() {
 		return TITLE;
+	}
+	
+	public static boolean exitGame() {
+		return endGame;
 	}
 
 

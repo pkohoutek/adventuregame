@@ -63,7 +63,7 @@ public class Level {
 	}
 		
 	// checks the map to see if the player can move
-	public boolean checkMove(int move, int playerX, int playerY, int playerXMin, int playerXMax) {
+	public boolean checkMove(Move move, int playerX, int playerY, int playerXMin, int playerXMax) {
 		return map.canMove(move, playerX, playerY, playerXMin, playerXMax);
 	}
 	

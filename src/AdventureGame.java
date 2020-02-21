@@ -5,29 +5,20 @@ import java.util.Scanner;
 public class AdventureGame {
 	
 	/*		Adventure Game
-	 * 		Main function contains the basic game loop
-	 * 		basic logic can be moved to a class like GameManager
-	 * 		when we move to JavaFX and GUI.
-	 * 		
-	 * 		game() loops through player options on movement, return to title screen, 
-	 * 		and inspections.
-	 * 		
-	 * 		Contains a clear scream method from: 
-	 * 			https://stackoverflow.com/questions/2979383/java-clear-the-console
+	 * 		Main function calls MainMenu.menu() to begin game,
+	 * 		and loops until the user chooses to exit the game.
 	 * 		
 	 */
 
 
 	public static void main(String[] args) {
-		// TitleScreen.load(); class to display game title can use ascii art generator
-		// MainMenu.menu(); // load main menu
 		
-		while(true)
+		while(!MainMenu.exitGame())
 		{
 			MainMenu.menu();
 		}
-	}
-	
-	
-	
+		Game.clearConsole();
+		System.out.println("Exiting game... Thanks for playing!");
+		System.exit(0);
+	}	
 }

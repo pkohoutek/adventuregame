@@ -30,23 +30,23 @@ public class Player {
 	// moves player if map location is clear
 	// returns true if the player can move and false otherwise
 	// boolean can change if not necessary
-	public void move(int move) {
+	public void move(Move move) {
 		switch(move) {
-		case 1:				// player moves up
+		case UP:				// player moves up
 			yPos += 1;
 			setSprite(move);
 			break;
-		case 2:				// player moves down
+		case DOWN:				// player moves down
 			yPos -= 1;
 			setSprite(move);
 			break;
-		case 3:				// player moves left
+		case LEFT:				// player moves left
 			xPos -= 1;
 			xRangeMin -= 1;
 			xRangeMax -= 1;
 			setSprite(move);
 			break;
-		case 4:				// player moves right
+		case RIGHT:				// player moves right
 			xPos += 1;
 			xRangeMin += 1;
 			xRangeMax += 1;
@@ -99,12 +99,12 @@ public class Player {
 	}
 	
 	// updates player String representation of their sprite
-	public void hitAnimation(int move, boolean hitObject){
-		sSprite = animator.getSprite(move, hitObject);
+	public void hitAnimation(Move move){
+		sSprite = animator.getSprite(move);
 	}
 	
 	// sets players String representation of their Sprite
-	private void setSprite(int move){
+	private void setSprite(Move move){
 		sSprite = animator.getSprite(move);
 	}
 	

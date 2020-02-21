@@ -18,6 +18,8 @@ public class Map {
 			"UGGGH", "WHACK", "WHAMMM", "Z-ZWAP", "WHAP", "ZAP", "ZLONK",
 			"ZOWIE", "ZZZZZZWAP", "SLOSH", "SOCK", "KLONK", "KRUNCH", "KERPLOP",
 			"RAKKK", "SPLATS", "SPLATT", "THUNK", "THWACK", "THWAPP"};
+	
+	//private enum pos { };
 	private Random random;
 	
 	// default constructor that builds empty map with default dimensions
@@ -65,8 +67,8 @@ public class Map {
 		int playerXMin = playerX - (playerLen / 2);
 		int playerXMax = playerX + (playerLen / 2);
 		
-		System.out.println("\n\n\n\nLevel " + SceneManager.getScene()  +  
-				"\t\t\t\t    Time Left: " + GameClock.getTimer());
+		System.out.println("\n\n\n\nLevel " + SceneManager.getScene() +  
+				"\t\t\t  Time Left: " + GameClock.getTimer());
 		for (int x = 0; x < xLen; x++)
 		{	
 			if (x == 0)
@@ -100,9 +102,9 @@ public class Map {
 				else if (x == xLen - 1)
 				{
 
-					if (playerX == x && playerY == y)
+					if (playerX + 3 == x && playerY == y)
 					{
-						System.out.println(sPlayer.charAt(0) + "|");
+						System.out.println(sPlayer.charAt(6) + "|");
 					}
 					else {
 						System.out.println(sMap[y][x] + "|");
@@ -215,6 +217,7 @@ public class Map {
 						System.out.println(sMap[y][x] + "|");
 					}
 				}
+				// print player on map
 				else if (playerX - 3 == x && playerY == y)
 				{
 					System.out.print(sPlayer.charAt(0));
@@ -269,14 +272,14 @@ public class Map {
 	
 	
 	// checks if players next move is good, returns true if so, false otherwise
-	public boolean canMove(int move, int playerX, int playerY, int playerXMin, int playerXMax) {
+	public boolean canMove(Move move, int playerX, int playerY, int playerXMin, int playerXMax) {
 		
 		boolean canMove = false;
 		
 		// check to make sure a player isn't trying to walk into bounds of map
 		switch(move){
 			// check if player can move up
-			case 1:
+			case UP:
 				canMove = playerY < yLen - 1? true:false;
 				if (canMove) // if not at the top of the map
 				{
@@ -295,7 +298,7 @@ public class Map {
 				}
 				break;
 			// check if player can move down
-			case 2:
+			case DOWN:
 				canMove = playerY > 0? true:false;
 				if (canMove) // if not at the bottom of the map
 				{
@@ -314,7 +317,7 @@ public class Map {
 				}
 				break;
 			// check if player can move left
-			case 3:
+			case LEFT:
 				canMove = playerXMin > 0? true:false;
 				if (canMove) // if not at the left end of the map
 				{
@@ -328,8 +331,8 @@ public class Map {
 				}
 				break;
 			// check if player can move right
-			case 4:
-				canMove = playerX < xLen - 1? true:false;
+			case RIGHT:
+				canMove = playerXMax < xLen - 1? true:false;
 				if (canMove) // if not at the right end of the map
 				{
 					int playerXNext = playerXMax + 1;
@@ -342,7 +345,7 @@ public class Map {
 					
 				}
 				break;
-			// if somehow a value outside of 1-4 is passed through as an argument
+			// if somehow a value outside of UP, DOWN, LEFT, RIGHT is passed through as an argument
 			default:
 				canMove = false;
 				break;
@@ -366,20 +369,26 @@ public class Map {
 	
 	// adds door to map
 	public void addDoor(Door door) {
+		// if the door is vertical ie "||"
 		if (door.isVertical())
 		{
+			// if the door object is at x position 1, print add the door "|" string to map
+			// and add an addition character in the index position before.
 			if (door.getXPos() == 1)
 			{
 				sMap[door.getYPos()][door.getXPos()] = door.getSprite();
 				sMap[door.getYPos()][door.getXPos() - 1] = door.getSprite();
 			}
-			
+			// if the door is at the second last x position on the map
+			// add the door string to map, and add an additional string at the 
+			// last index position of array
 			else if (door.getXPos() == xLen - 2)
 			{
 				sMap[door.getYPos()][door.getXPos()] = door.getSprite();
 				sMap[door.getYPos()][door.getXPos() + 1] = door.getSprite();
 			}
 		}
+		// else the door is horizontal, ie "=", add it to the map
 		else {
 			sMap[door.getYPos()][door.getXPos()] = door.getSprite();
 		}
@@ -397,6 +406,7 @@ public class Map {
 	}
 	
 	// clears array element in map (used when completed a puzzle or cipher)
+	// can be used to remove walls or other objects as well for gameplay purposes
 	public void clearSquare(int x, int y)
 	{
 		sMap[y][x] = " ";
