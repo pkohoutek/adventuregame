@@ -38,6 +38,16 @@ public class MainMenu {
 		}
 		keyboard = new Scanner(System.in);
 		int ans = keyboard.nextInt();
+		while(!(ans ==1 || ans==2 || ans ==3)){
+			System.out.println("Pleas Enter one of the options bellow: ");
+			if (SceneManager.saveExist()) {
+				System.out.println(" 1 - New Game\t  2 - Continue Game\t3 - Exit Game");
+			}
+			else {
+				System.out.println(" 1 - New Game\t\t\t\t3 - Exit Game");
+			}
+			ans = keyboard.nextInt();
+		}
 		if(ans == 1) {
 			SceneManager.setScene(1);
 			Game.play();
