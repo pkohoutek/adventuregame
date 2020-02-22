@@ -14,7 +14,7 @@ public class SceneManager {
 	 */
 
 	private static int currentScene = 0;
-	private static String filename = "advgame.sav";
+	private final static String FILENAME = "advgame.sav";
 	
 	
 	// load scene from argument
@@ -57,17 +57,23 @@ public class SceneManager {
 		PrintWriter outputStream = null;
 		try
 		{
-			outputStream = new PrintWriter(filename);
+			outputStream = new PrintWriter(FILENAME);
 		}
 		catch(FileNotFoundException e)
 		{
-			System.out.println("An error occured opening " + filename
+			System.out.println("An error occured opening " + FILENAME
 					+ ". Exiting game.");
 			System.exit(0);
 		}
+		outputStream.println("<LEVELNUM>");
 		outputStream.println(currentScene);
+		outputStream.println("</LEVELNUM>");
+		outputStream.println("<MINLEFT>");
 		outputStream.println(Integer.toString(minutes));
+		outputStream.println("</MINLEFT>");
+		outputStream.println("<SECLEFT>");
 		outputStream.println(Integer.toString(seconds));
+		outputStream.println("</SECLEFT>");
 		outputStream.close();
 		
 	}
@@ -75,26 +81,109 @@ public class SceneManager {
 	// loads game from text file
 	public static void loadGame() {
 		Scanner inputStream = null;
+		String line = "";
 		try
 		{
-			inputStream = new Scanner(new File(filename));
+			inputStream = new Scanner(new File(FILENAME));
 		}
 		catch(FileNotFoundException e)
 		{
 			System.out.println("Error opening the file. Exiting game.");
 			System.exit(0);
 		}
-		String sScene = inputStream.nextLine();
-		try 
+		while (inputStream.hasNextLine())
 		{
-			currentScene = Integer.parseInt(sScene);
+			line = inputStream.nextLine();
+			line.trim();
+			if (line.equals("<LEVELNUM>"))
+			{
+				line = inputStream.nextLine();
+				try 
+				{
+					currentScene = Integer.parseInt(line);
+				}
+				catch(NumberFormatException e)
+				{
+					System.out.println("Error opening the file. Exiting game.");
+					System.exit(0);
+				}
+			}
 		}
-		catch(NumberFormatException e)
+		inputStream.close();
+	}
+	
+	public static int loadMinutes() {
+		Scanner inputStream = null;
+		String line = "";
+		int minLeft = 0;
+		
+		try
+		{
+			inputStream = new Scanner(new File(FILENAME));
+		}
+		catch(FileNotFoundException e)
 		{
 			System.out.println("Error opening the file. Exiting game.");
 			System.exit(0);
 		}
+		while (inputStream.hasNextLine())
+		{
+			line = inputStream.nextLine();
+			line.trim();
+			if (line.equals("<MINLEFT>"))
+			{
+				line = inputStream.nextLine();
+				try 
+				{
+					minLeft = Integer.parseInt(line);
+				}
+				catch(NumberFormatException e)
+				{
+					System.out.println("Error opening the file. Exiting game.");
+					System.exit(0);
+				}
+			}
+		}
 		inputStream.close();
+		return minLeft;
+	}
+	
+	
+	
+	public static int loadSeconds() {
+		Scanner inputStream = null;
+		String line = "";
+		int secLeft = 0;
+		
+		try
+		{
+			inputStream = new Scanner(new File(FILENAME));
+		}
+		catch(FileNotFoundException e)
+		{
+			System.out.println("Error opening the file. Exiting game.");
+			System.exit(0);
+		}
+		while (inputStream.hasNextLine())
+		{
+			line = inputStream.nextLine();
+			line.trim();
+			if (line.equals("<SECLEFT>"))
+			{
+				line = inputStream.nextLine();
+				try 
+				{
+					secLeft = Integer.parseInt(line);
+				}
+				catch(NumberFormatException e)
+				{
+					System.out.println("Error opening the file. Exiting game.");
+					System.exit(0);
+				}
+			}
+		}
+		inputStream.close();
+		return secLeft;
 	}
 		
 	// method returns boolean if level .cfg file exists for the next level
@@ -124,7 +213,7 @@ public class SceneManager {
 	
 	public static boolean saveExist() {
 		boolean saveExist = false;
-		File testFile = new File(filename);
+		File testFile = new File(FILENAME);
 		if (testFile.exists())
 		{
 			saveExist = true;

@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 public class MainMenu {
 	
@@ -27,28 +28,43 @@ public class MainMenu {
 
 	private static Scanner keyboard;
 
+	
+	// method displays the main options are: start a new game, 
+	// continue their last game, or exiting the game
 	public static void menu() {
-		Game.clearConsole();
-		System.out.println(TITLE);
-		System.out.println("\n");
-		if (SceneManager.saveExist()) {
-			System.out.println(" 1 - New Game\t  2 - Continue Game\t3 - Exit Game");
-		}
-		else {
-			System.out.println(" 1 - New Game\t\t\t\t3 - Exit Game");
-		}
+		boolean invalid = false;
+		int ans = 0;
 		keyboard = new Scanner(System.in);
-		int ans = keyboard.nextInt();
+
 		while(!(ans ==1 || ans==2 || ans ==3)){
-			System.out.println("Pleas Enter one of the options bellow: ");
+			Game.clearConsole();
+			System.out.println(TITLE);
+			if (invalid) {
+				System.out.print("\nPlease enter one of the options bellow: \n");
+			}
+			else {
+				System.out.println("\n");
+			}
 			if (SceneManager.saveExist()) {
 				System.out.println(" 1 - New Game\t  2 - Continue Game\t3 - Exit Game");
 			}
 			else {
 				System.out.println(" 1 - New Game\t\t\t\t3 - Exit Game");
 			}
-			ans = keyboard.nextInt();
+
+			try {
+				ans = keyboard.nextInt();
+			}
+			catch (InputMismatchException e){
+				invalid = true;
+				keyboard.next();
+			}
+			if (!(ans == 1 || ans == 2 || ans == 3)) {
+				invalid = true;
+			}
+			
 		}
+		
 		if(ans == 1) {
 			SceneManager.setScene(1);
 			Game.play();

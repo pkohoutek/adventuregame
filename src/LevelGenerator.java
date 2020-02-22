@@ -24,7 +24,7 @@ public class LevelGenerator {
 	private int levelNumber = 0;
 	private int levelX = 0;				// level x/y length for map generation
 	private int levelY = 0;
-	
+	private final int X = 0, Y = 1;
 	private int startX = 0;				// player x/y start position in level
 	private int startY = 0;
 
@@ -58,16 +58,16 @@ public class LevelGenerator {
 		triggers = new ArrayList<Trigger>();
 		puzzles = new ArrayList<Puzzle>();
 		ciphers = new ArrayList<Cipher>();
-		descriptions = genPropDescriptions();
-		triggerText = genTriggerText();
-		pQuestions = genPuzzleQuestions();
-		pAnswers = genPuzzleAnswers();
-		ciphQuestions = genCipherQuestions();
-		ciphHints = genCipherHints();
-		ciphAnswers = genCipherAnswers();
-		genLevelText();
+		descriptions = new ArrayList<String>();
+		triggerText = new ArrayList<String>();
+		pQuestions = new ArrayList<String>();
+		pAnswers = new ArrayList<String>();
+		ciphQuestions = new ArrayList<String>();
+		ciphHints = new ArrayList<String>();
+		ciphAnswers = new ArrayList<String>();
+		
+		genGameObjects();
 		generate();
-		genPlayerStart();
 		putObjectsInMap();
 
 	}
@@ -119,19 +119,13 @@ public class LevelGenerator {
 		return tMap;
 	}
 	
-
-	// method creates a string ArrayList of the descriptions of props
-	// from level#.cfg file
-	private ArrayList<String> genPropDescriptions()
+	
+	private void genGameObjects() 
 	{
-		// create new array list for prop descriptive text
-		ArrayList<String> propDesc = new ArrayList<String>();
-		// boolean to end generation when reached the end of the 
-		// Prop description text
-		boolean endDescriptions = false;
 		// create new input stream for level#.cfg file
 		Scanner inputStream = null;
 		String filename = "level" + Integer.toString(levelNumber) + ".cfg";
+		String line = "";
 		// try catch in case file doesn't exist
 		try
 		{
@@ -146,17 +140,17 @@ public class LevelGenerator {
 		}
 		// continue looping while the file still has lines and 
 		// we have not reached the end of the Prop descriptions
-		while (inputStream.hasNextLine() && !endDescriptions)
+		while (inputStream.hasNextLine())
 		{
-			String line = inputStream.nextLine();
+			line = inputStream.nextLine();
 			line.trim();
-			String description = "";
-			// if found delimiter indicating that we have reached Prop Description
-			// text
-			if (line.equals("<PROPS>") && !endDescriptions)
+			
+			if (line.equals("<PROPS>"))
 			{
-				// continue looping until we have reached the end of descriptions
-				while(!endDescriptions)
+				boolean endDescriptions = false;
+				String description = "";
+				// continue looping while we have not reached the end of the Prop descriptions
+				while (!endDescriptions)
 				{
 					line = inputStream.nextLine();
 					line.trim();
@@ -176,7 +170,7 @@ public class LevelGenerator {
 					// Prop description, add description string to prop description ArrayList
 					else if  (line.equals("</pdes>"))
 					{
-						propDesc.add(description);
+						descriptions.add(description);
 					}
 					// if line is empty add a new line to description string
 					else if (line.equals("\n"))
@@ -187,47 +181,18 @@ public class LevelGenerator {
 					else
 					{
 						description = "" + description + line + "\n";
-					}
+					}	
+					
 				}
 			}
-		}
-		inputStream.close();
-		return propDesc;		
-	}
-
-	// method generates trigger text for triggers in the level 
-	// from the level#.cfg file
-	private ArrayList<String> genTriggerText()
-	{
-		// create a new trigger String arraylist
-		ArrayList<String> trTexts = new ArrayList<String>();
-		boolean endTrText = false;
-		Scanner inputStream = null;
-		String filename = "level" + Integer.toString(levelNumber) + ".cfg";
-		// try catch for file not found error
-		try
-		{
-			File file = new File(filename);
-			inputStream = new Scanner(file);
-		}
-		catch(FileNotFoundException e)
-		{
-			System.out.println("Error generating trigger. Exiting game.");
-			System.out.println(e);
-			System.exit(0);
-		}
-		// while the file has another line and we havent completed
-		// generating the Trigger text Strings
-		while (inputStream.hasNextLine() && !endTrText)
-		{
-			String line = inputStream.nextLine();
-			String trText = "";
-			// if we find the trigger text delimiter
-			if (line.equals("<TRIGGERS>"))
+			
+			else if (line.equals("<TRIGGERS>"))
 			{
-				// while we have not reached the end of the trigger text in the
-				// level#.cfg file
-				while(!endTrText)
+				boolean endTrText = false;
+				String trText = "";
+				
+				// while we haven't completed generating the Trigger text Strings
+				while (!endTrText)
 				{
 					line = inputStream.nextLine();
 					line.trim();
@@ -246,7 +211,7 @@ public class LevelGenerator {
 					// add the trigger text string to the ArrayList
 					else if  (line.equals("</trigger>"))
 					{
-						trTexts.add(trText);
+						triggerText.add(trText);
 					}
 					// if the current line is a new line
 					// append it to the current string
@@ -258,47 +223,18 @@ public class LevelGenerator {
 					else
 					{
 						trText = "" + trText + line + "\n";
-					}
+					}					
 				}
 			}
-		}
-		inputStream.close();
-		return trTexts;						
-	}
-	
-	// method generates Puzzle Question text for Puzzles in the level 
-	private ArrayList<String> genPuzzleQuestions()
-	{
-		// create a new String arraylist for puzzle text
-		ArrayList<String> puzQuestions = new ArrayList<String>();
-		boolean endPuzText = false;
-		Scanner inputStream = null;
-		String filename = "level" + Integer.toString(levelNumber) + ".cfg";
-		// try catch if file is not found
-		try
-		{
-			File file = new File(filename);
-			inputStream = new Scanner(file);
-		}
-		catch(FileNotFoundException e)
-		{
-			System.out.println("Error generating puzzle questions. Exiting game.");
-			System.out.println(e);
-			System.exit(0);
-		}
-		// while there is another line in the .cfg file and
-		// we haven't finished generating puzzle text
-		while (inputStream.hasNextLine() && !endPuzText)
-		{
-			String line = inputStream.nextLine();
-			line.trim();
-			String puzQText = "";
-			// if we find the start of the puzzle delimiter
-			if (line.equals("<PUZZLES>"))
-			{
-				// while we havent reached the end of the puzzle section
-				// of the level#.cfg file
-				while(!endPuzText)
+			else if (line.equals("<PUZZLES>"))
+			{				
+				boolean endPuzText = false;
+				String puzQText = "";
+				String puzAText = "";
+
+				// while there is another line in the .cfg file and
+				// we haven't finished generating puzzle text
+				while (!endPuzText)
 				{
 					line = inputStream.nextLine();
 					line.trim();
@@ -329,7 +265,7 @@ public class LevelGenerator {
 							// string, add it to the puzzle question arraylist
 							else if (line.equals("</pquestion>"))
 							{
-								puzQuestions.add(puzQText);
+								pQuestions.add(puzQText);
 							}
 							// if we find a new line, append it to the current string
 							else if (line.equals("\n"))
@@ -343,58 +279,7 @@ public class LevelGenerator {
 							}
 						}
 					}
-					if (line.equals("</PUZZLES>"))
-					{
-						endPuzText = true;
-					}	
-
-				}
-			}
-		}
-		inputStream.close();
-		return puzQuestions;						
-	}
-	
-	
-	// method generates puzzle answer strings for puzzles in the level 
-	private ArrayList<String> genPuzzleAnswers()
-	{
-
-		ArrayList<String> puzAnswers = new ArrayList<String>();
-		boolean endPuzText = false;
-		Scanner inputStream = null;
-		String filename = "level" + Integer.toString(levelNumber) + ".cfg";
-		// try catch for file not found errors
-		try
-		{
-			File file = new File(filename);
-			inputStream = new Scanner(file);
-		}
-		catch(FileNotFoundException e)
-		{
-			System.out.println("Error generating puzzle answers. Exiting game.");
-			System.out.println(e);
-			System.exit(0);
-		}
-		// while the file has another line, and we haven't reached the 
-		// end of the puzzle section of the .cfg file
-		while (inputStream.hasNextLine() && !endPuzText)
-		{
-			String line = inputStream.nextLine();
-			String puzAText = "";
-			// if the line is the delimiter indicating we are in the puzzle
-			// section of the level#.cfg file
-			if (line.equals("<PUZZLES>"))
-			{
-				// while we haven't reached the end of the puzzle section of 
-				// the level#.cfg file
-				while(!endPuzText)
-				{
-					line = inputStream.nextLine();
-					line.trim();
-					// if we find the delimiter for the puzzle answers section of
-					// the .cfg file
-					if (line.equals("<PANSWERS>"))
+					else if (line.equals("<PANSWERS>"))
 					{							
 
 						boolean endAnswers = false;
@@ -418,7 +303,7 @@ public class LevelGenerator {
 							// add it to the arraylist
 							else if  (line.equals("</panswer>"))
 							{
-								puzAnswers.add(puzAText);
+								pAnswers.add(puzAText);
 							}
 							// if we find a new line, append it to the string
 							else if (line.equals("\n"))
@@ -431,60 +316,28 @@ public class LevelGenerator {
 								puzAText = "" + puzAText + line;
 							}
 						}
-					}	
-					// if we have reached the end of the puzzle section we are done
-					if (line.equals("</PUZZLES>"))
+					}					
+					else if (line.equals("</PUZZLES>"))
 					{
 						endPuzText = true;
-					}
+					}		
 				}
 			}
-		}
-		inputStream.close();
-		return puzAnswers;						
-	}
-	
-	
-	// method generates Cipher question text for Ciphers in the level 
-	private ArrayList<String> genCipherQuestions()
-	{
-
-		ArrayList<String> cipherQuestions = new ArrayList<String>();
-		boolean endCiphText = false;
-		Scanner inputStream = null;
-		String filename = "level" + Integer.toString(levelNumber) + ".cfg";
-		// try catch for file not found errors
-		try
-		{
-			File file = new File(filename);
-			inputStream = new Scanner(file);
-		}
-		catch(FileNotFoundException e)
-		{
-			System.out.println("Error generating cipher questions. Exiting game.");
-			System.out.println(e);
-			System.exit(0);
-		}
-		// while the file has another line, and we haven't reached the 
-		// end of the cipher text
-		while (inputStream.hasNextLine() && !endCiphText)
-		{
-			String line = inputStream.nextLine();
-			String ciphQText = "";
 			// if we find the delimiter indicating the start of the cipher section of
 			// the level#.cfg file
-			if (line.equals("<CIPHERS>"))
+			else if (line.equals("<CIPHERS>"))
 			{
-				// while not at the end of the cipher text section
-				while(!endCiphText)
+				boolean endCiphText = false;
+				 String ciphQText = "";
+				// while we haven't reached the end of the cipher text
+				while (!endCiphText)
 				{
 					line = inputStream.nextLine();
 					line.trim();
 					// if we find the delimiter indicating we are in the Cipher
 					// Questions section of the .cfg file
 					if (line.equals("<CQUESTIONS>"))
-					{							
-
+					{	
 						boolean endQuestions = false;
 						// while not at the end of the cipher queston section
 						while (!endQuestions)
@@ -507,7 +360,7 @@ public class LevelGenerator {
 							// current cipher question, add the string to the arraylist
 							else if  (line.equals("</cquestion>"))
 							{
-								cipherQuestions.add(ciphQText);
+								ciphQuestions.add(ciphQText);
 							}
 							// if we find a new line, append it to the current string
 							else if (line.equals("\n"))
@@ -521,56 +374,10 @@ public class LevelGenerator {
 							}
 						}
 					}
-					// if we reached the end of the cipher section we are done
-					if (line.equals("</CIPHERS>"))
-					{
-						endCiphText = true;
-					}
-				}
-			}
-		}
-		inputStream.close();
-		return cipherQuestions;						
-	}
-	
-	// method generates cipher hint text for ciphers in the level 
-	private ArrayList<String> genCipherHints()
-	{
-
-		ArrayList<String> cipherHints = new ArrayList<String>();
-		boolean endCiphText = false;
-		Scanner inputStream = null;
-		String filename = "level" + Integer.toString(levelNumber) + ".cfg";
-		// try catch for file not found errors
-		try
-		{
-			File file = new File(filename);
-			inputStream = new Scanner(file);
-		}
-		catch(FileNotFoundException e)
-		{
-			System.out.println("Error generating cipher hints. Exiting game.");
-			System.out.println(e);
-			System.exit(0);
-		}
-		// while we haven't reached the end of the file and
-		// have not reached the end of the cipher text section
-		while (inputStream.hasNextLine() && !endCiphText)
-		{
-			String line = inputStream.nextLine();
-			String ciphHText = "";
-			// if we have found the cipher section of the level.cfg file
-			if (line.equals("<CIPHERS>"))
-			{
-				// while not at the end of the cipher text section
-				while(!endCiphText)
-				{
-					line = inputStream.nextLine();
-					line.trim();
 					// if we find the delimiter for the cipher hints section of the file
-					if (line.equals("<CHINTS>"))
-					{							
-
+					else if (line.equals("<CHINTS>"))
+					{
+						String ciphHText = "";
 						boolean endHints = false;
 						// while we haven't reached the end of the cipher hints section
 						while (!endHints)
@@ -593,7 +400,7 @@ public class LevelGenerator {
 							// add string to cipher hints arraylist
 							else if  (line.equals("</chint>"))
 							{
-								cipherHints.add(ciphHText);
+								ciphHints.add(ciphHText);
 							}
 							// if we find a new line, append it to string
 							else if (line.equals("\n"))
@@ -607,59 +414,10 @@ public class LevelGenerator {
 							}
 						}
 					}	
-					// if we find the delimiter indicating we are at the end
-					// of the cipher string, we are done
-					if (line.equals("</CIPHERS>"))
-					{
-						endCiphText = true;
-					}
-				}
-			}
-		}
-		inputStream.close();
-		return cipherHints;						
-	}
-	
-	
-	// method generates cipher answer text for ciphers in the level 
-	private ArrayList<String> genCipherAnswers()
-	{
-
-		ArrayList<String> cipherAnswers = new ArrayList<String>();
-		boolean endCiphText = false;
-		Scanner inputStream = null;
-		String filename = "level" + Integer.toString(levelNumber) + ".cfg";
-		// try catch for file not found errors
-		try
-		{
-			File file = new File(filename);
-			inputStream = new Scanner(file);
-		}
-		catch(FileNotFoundException e)
-		{
-			System.out.println("Error generating cipher answers. Exiting game.");
-			System.out.println(e);
-			System.exit(0);
-		}
-		// while we have another line in the file and we haven't reached the end
-		// of the cipher section in the level.cfg file
-		while (inputStream.hasNextLine() && !endCiphText)
-		{
-			String line = inputStream.nextLine();
-			String ciphAText = "";
-			// if we found the delimiter indicating the cipher section of cfg file
-			if (line.equals("<CIPHERS>"))
-			{
-				// while we have not reached the end of the cipher section
-				while(!endCiphText)
-				{
-					line = inputStream.nextLine();
-					line.trim();
-					// if we find the delimiter indicating we are in the cipher
-					// answers secton of the config file for the level
-					if (line.equals("<CANSWERS>"))
+					else if (line.equals("<CANSWERS>"))
 					{
 						boolean endAnswers = false;
+						String ciphAText = "";
 						// while we have not reached the end of cipher answers section
 						while (!endAnswers)
 						{
@@ -681,7 +439,7 @@ public class LevelGenerator {
 							// cipher answer string, add it to the arraylist
 							else if  (line.equals("</canswer>"))
 							{
-								cipherAnswers.add(ciphAText);
+								ciphAnswers.add(ciphAText);
 							}
 							// if the next line is a new line, append the new line 
 							// to the current string
@@ -696,47 +454,17 @@ public class LevelGenerator {
 							}
 						}
 					}		
-					// if we have reached the end of the cipher section in the cfg file
-					// we are done
+					// if we reached the end of the cipher section we are done
 					if (line.equals("</CIPHERS>"))
 					{
 						endCiphText = true;
 					}
-				}
+				}					
 			}
-		}
-		inputStream.close();
-		return cipherAnswers;						
-	}
-	
-	// method generates player X, Y start position from the level config file
-	private void genPlayerStart()
-	{
-		boolean endStart = false;
-		int count = 0;
-		Scanner inputStream = null;
-		String filename = "level" + Integer.toString(levelNumber) + ".cfg";
-		// try catch for file not found error
-		try
-		{
-			File file = new File(filename);
-			inputStream = new Scanner(file);
-		}
-		catch(FileNotFoundException e)
-		{
-			System.out.println("Error opening level file. Exiting game.");
-			System.out.println(e);
-			System.exit(0);
-		}
-		// while there is still another line in the file and we have not
-		// reached the end of the player start section of the level#.cfg file
-		while (inputStream.hasNextLine() && !endStart)
-		{
-			String line = inputStream.nextLine();
-			line.trim();
-			// if line equals the delimiter indicating player start location
-			if (line.equals("<START>"))
+			else if (line.equals("<START>"))
 			{
+				boolean endStart = false;
+				int count = 0;
 				// while we haven't reached the end of the player start
 				// section in the .cfg file
 				while(!endStart)
@@ -750,7 +478,7 @@ public class LevelGenerator {
 						endStart = true;
 					}
 					// if count is 0, we are at first line which is X value
-					else if (count == 0)
+					else if (count == X)
 					{
 						// try catch for number format exception if someone slips a non numeric
 						// character in config file
@@ -766,7 +494,7 @@ public class LevelGenerator {
 						}
 					}
 					// else if count is 1 we are at the player start y value for level
-					else if (count == 1){
+					else if (count == Y){
 						// try catch for number format exception errors if a non-numeric character is in the line
 						try {
 							startY = Integer.parseInt(line);
@@ -781,43 +509,14 @@ public class LevelGenerator {
 					}
 				}
 			}
-		}
-	}
-	
-	// method generates level intro and exit text from .cfg file
-	private void genLevelText()
-	{
-		boolean endLevelText = false;
-		String tIntroText = "";
-		String tExitText = "";
-		Scanner inputStream = null;
-		String filename = "level" + Integer.toString(levelNumber) + ".cfg";
-		// try catch for file not found exception
-		try
-		{
-			File file = new File(filename);
-			inputStream = new Scanner(file);
-		}
-		catch(FileNotFoundException e)
-		{
-			System.out.println("Error generating puzzle questions. Exiting game.");
-			System.out.println(e);
-			System.exit(0);
-		}
-		// while we haven't reached the end of the file and have not finished generating
-		// level text
-		while (inputStream.hasNextLine() && !endLevelText)
-		{
-			String line = inputStream.nextLine();
-			line.trim();
-
-			// if we have reached the delimiter indicating the start
-			// of the level text section of the config file
-			if (line.equals("<LEVELTEXT>"))
+			else if (line.equals("<LEVELTEXT>"))
 			{
-				// while we haven't reached the end of the level text
-				// section of the config file
-				while(!endLevelText)
+				boolean endLevelText = false;
+				String tIntroText = "";
+				String tExitText = "";
+				// while we haven't reached the end of the file and have not finished generating
+				// level text
+				while (!endLevelText)
 				{
 					line = inputStream.nextLine();
 					line.trim();
@@ -877,15 +576,22 @@ public class LevelGenerator {
 					if (line.equals("</LEVELTEXT>"))
 					{
 						endLevelText = true;
-					}	
-
+					}
 				}
-			}
-		}
+				introText = tIntroText;
+				exitText = tExitText;
+			}			
+		}		
 		inputStream.close();
-		introText = tIntroText;
-		exitText = tExitText;
 	}
+
+
+
+	
+	
+
+
+	
 	
 	// method generates walls, props, puzzles, ciphers, and triggers
 	// based on chars from .map file and adds the constructor parameters
@@ -1003,7 +709,7 @@ public class LevelGenerator {
 		} 
 		inputStream.close();
 		levelY = sMap.size();
-		levelX = sMap.get(0).length();
+		levelX = sMap.get(X).length();
 	}
 	
 	

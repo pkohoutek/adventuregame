@@ -45,7 +45,7 @@ public class Trigger {
 	
 	// prints trigger description string
 	public void printTriggerText() {
-		System.out.println("\n\n\n\n" + tText);
+		System.out.println("\n" + tText);
 	}
 	
 	// checks if prop is trigger and returns boolean value

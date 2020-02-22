@@ -52,6 +52,23 @@ public class GameOver {
 			"  \\$$$$$$   \\$$$$$$$ \\$$  \\$$  \\$$  \\$$$$$$$        \\$$$$$$      \\$      \\$$$$$$$ \\$$";
 	
 	
+	
+	
+	private static final String THANKS = 
+			"___________.__                   __               _____             \r\n" + 
+			"\\__    ___/|  |__ _____    ____ |  | __  ______ _/ ____\\___________ \r\n" + 
+			"  |    |   |  |  \\\\__  \\  /    \\|  |/ / /  ___/ \\   __\\/  _ \\_  __ \\\r\n" + 
+			"  |    |   |   Y  \\/ __ \\|   |  \\    <  \\___ \\   |  | (  <_> )  | \\/\r\n" + 
+			"  |____|   |___|  (____  /___|  /__|_ \\/____  >  |__|  \\____/|__|   \r\n" + 
+			"                \\/     \\/     \\/     \\/     \\/                      \r\n" + 
+			"      __________.__                .__                                    \r\n" + 
+			"      \\______   \\  | _____  ___.__.|__| ____    ____                      \r\n" + 
+			"       |     ___/  | \\__  \\<   |  ||  |/    \\  / ___\\                     \r\n" + 
+			"       |    |   |  |__/ __ \\\\___  ||  |   |  \\/ /_/  >                    \r\n" + 
+			"       |____|   |____(____  / ____||__|___|  /\\___  /                     \r\n" + 
+			"                          \\/\\/             \\//_____/                      \r\n";
+
+	
 	public static void gameOverScreen() {
 		Game.clearConsole();
 		keyboard = new Scanner(System.in);
@@ -67,6 +84,13 @@ public class GameOver {
 		System.out.println("Press enter to continue...");
 		keyboard.nextLine();
 	}
+	
+	
+	public static void thanksScreen() {
+		Game.clearConsole();
+		System.out.println(THANKS);
+	}
+		
 			
 			 
 			

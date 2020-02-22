@@ -17,8 +17,7 @@ public class AdventureGame {
 		{
 			MainMenu.menu();
 		}
-		Game.clearConsole();
-		System.out.println("\n\nExiting game...\n\nThanks for playing!");
+		GameOver.thanksScreen();
 		System.exit(0);
 	}	
 }
