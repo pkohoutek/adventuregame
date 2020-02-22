@@ -35,8 +35,7 @@ public class Game {
 		level = new Level(SceneManager.getScene());
 		player = new Player(level.getStartX(), level.getStartY());
 		keyboard = new Scanner(System.in);
-
-		
+		GameClock.resetTime();		
 	
 		// string and int below for keyboard input for movement, object inspection, and other menu options
 		// we implement
@@ -59,7 +58,7 @@ public class Game {
 			// if they hit a wall/immovable object, or if they made an invalid keyboard entry.
 			finishedTurn = false;
 			boolean hitObject = false, invalidEntry = false;
-			if (GameClock.gameOver())
+			if (GameClock.isGameOver())
 			{
 				finishedTurn = true;
 				gameOver = true;
@@ -138,7 +137,7 @@ public class Game {
 								System.out.println("Invalid entry!");
 								if (level.canInteract(player.getMinX(), player.getMaxX(), player.getY())) {
 									System.out.println("Right - 4\tInspect - 5\tBack to Menu - 0");
-									if (GameClock.gameOver())
+									if (GameClock.isGameOver())
 									{
 										finishedTurn = true;
 										gameOver = true;
@@ -148,7 +147,7 @@ public class Game {
 								}	
 								else{
 									System.out.println("Right - 4\tBack to Menu - 0");
-									if (GameClock.gameOver())
+									if (GameClock.isGameOver())
 									{
 										finishedTurn = true;
 										gameOver = true;
