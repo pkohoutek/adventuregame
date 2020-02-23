@@ -1,5 +1,13 @@
 
 public enum Move {
+	
+	/*
+	 * 	Move Enumerator 
+	 * 	Used for player movement and String
+	 * 	player avatar "animation"
+	 * 
+	 */
+	
 	UP(1), DOWN(2), LEFT(3), RIGHT(4), HITLEFT(5), 
 	HITRIGHT(6), HITUPDOWN(7), IDLE(8);
 	
