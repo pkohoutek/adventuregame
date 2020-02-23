@@ -97,6 +97,18 @@ beat the game (escape the mansion) before the timer expires.
 	invoked, and it is populated and returned to the newly instantiated level by the LevelGenerator 
 	class.
 	
+### Level:
+	Level is the class that represents the level the player is playing in. It is constructed using the 
+	LevelGenerator class with returns ArrayLists containing the game objects for the level, which can 
+	include props, walls, triggers, puzzles, ciphers, and doors. The LevelGenerator also returns the 
+	level map and the level and map determine if a player is able to move to a position on the map.
+
+	Level determines if a player is able to interact with a game object like a puzzle or cipher, and 
+	has checks when the player has completed a level’s objective and tries to unlock the door. If all
+	objectives are completed the level informs the player if the door is unlocked and the player can 
+	exit the level to continue on their quest to escape and solve the mystery of Scarlett’s death.
+
+	
 ### LevelGenerator:
 	LevelGenerator class uses text file input to generate Levels. All map objects and Strings
 	are contained in level_.cfg files (where _ is the level number), and the level’s map containing 
