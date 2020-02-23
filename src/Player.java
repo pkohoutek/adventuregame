@@ -4,7 +4,7 @@ public class Player {
 	/*	Player Class
 	 * 	Handles player avatar position on map,
 	 *  used to interact with objects in the Level class.
-	 *  Also handles string representation of the player on map
+	 *  Also handles string representation of the player avatar on map
 	 */
 	
 	private int xPos = 0;

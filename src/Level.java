@@ -2,6 +2,16 @@ import java.util.ArrayList;
 
 public class Level {
 	
+	/*
+	 * 		Level Class
+	 * 	Level contains all the game objects and the game map. The player interacts
+	 * 	with the objects contained in the level
+	 * 	The level checks the map to ensure the player can move
+	 * 	Levels are constructed using the LeveLGenerator class to provide
+	 * 	modularity and ease of implementation when dealing with the volume
+	 * 	of text of this style of adventure game
+	 */
+	
 	// level number of object
 	private int levelNumber;
 	// array lists for the levels props and puzzles, and story text (can be changed, just testing things)
@@ -217,7 +227,7 @@ public class Level {
 						playerY == props.get(num).getY() && !activated)
 				{
 					activated = true;
-					System.out.println("\n\n\n\n" + props.get(num).getDescription());
+					System.out.println("\n" + props.get(num).getDescription());
 				}
 			}
 		}

@@ -4,6 +4,11 @@ import java.util.Scanner;
 
 public class GameOver {
 	
+	/*		GameOver Class
+	 * 	Simple class for displaying various game over state messages.
+	 * 	This class will be split up into individual scenes in JavaFX 	 * 
+	 */
+	
 	private static Scanner keyboard;
 	private static final String GAMEOVER = 
 			
@@ -69,6 +74,8 @@ public class GameOver {
 			"                          \\/\\/             \\//_____/                      \r\n";
 
 	
+	
+	// method displays game over screen if time runs out
 	public static void gameOverScreen() {
 		Game.clearConsole();
 		keyboard = new Scanner(System.in);
@@ -77,6 +84,7 @@ public class GameOver {
 		keyboard.nextLine();
 	}
 	
+	// method displays the won game screen when the player completes the game
 	public static void beatGameScreen() {
 		Game.clearConsole();
 		keyboard = new Scanner(System.in);
@@ -85,7 +93,7 @@ public class GameOver {
 		keyboard.nextLine();
 	}
 	
-	
+	// method displays a thank you screen at game exit
 	public static void thanksScreen() {
 		Game.clearConsole();
 		System.out.println(THANKS);

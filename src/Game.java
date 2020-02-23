@@ -1,22 +1,32 @@
 import java.io.IOException;
 import java.util.Scanner;
 
-import javafx.scene.shape.MoveTo;
-
 public class Game {
 	
 	/*		Game
 	 * 		Static class contains the basic game loop
-	 * 	 * 		
-	 * 		play() loops through player options on movement, return to title screen, 
-	 * 		and inspections.
+	 * 	  		
+	 * 		play() loops through the initial level setup and calls the gameLoop method.
+	 * 
+	 * 		gameLoop() loops of the initial level menu where the player can choose to enter the movement menu
+	 * 		or exit the game.
+	 * 
+	 *  	moveMenu() provides the player options on movement, return to title screen, and inspection of game objects
+	 *  	contained in the level.
+	 * 			
+	 * 		getDirection(int iMove, boolean hitObject) is used to pass the Move enum to the player for movement on the map
+	 * 		and the players "animator" to change their avatar state based on direction of movement or if they collided with a 
+	 * 		wall or object
+	 * 
+	 * 		checkGameOver() is called at points when the player is prompted for input or completing actions to check the 
+	 * 		GameClock to determine if the player has run out of game time.	 * 
 	 * 		
 	 * 		Contains a clearConsole method from: 
 	 * 			https://stackoverflow.com/questions/2979383/java-clear-the-console
 	 * 		
 	 */
 	
-
+	// booleans for various gameplay loops of the Game Class
 	private static boolean finishedTurn, gameOver, back, timeSet;
 	private static boolean startOfLevel, hitObject, invalidEntry;
 	private static int levelNum, iOption;
@@ -31,18 +41,22 @@ public class Game {
 		// and this code can be moved to a method in a class such as GameManager
 		
 		
-		// instantiate player and keyboard for input
-//		SceneManager.setScene(levelNum);
+		// instantiate level, player, and keyboard for input
 		level = new Level(SceneManager.getScene());
 		player = new Player(level.getStartX(), level.getStartY());
 		levelNum = SceneManager.getScene();
 		keyboard = new Scanner(System.in);
+		// set booleans for outer game loop to false
 		gameOver = false;
+		// set start of level to true to print the level introduction text
 		startOfLevel = true;
+		// set timeSet to false to trigger a reset of the timer for a new game
+		// or to gather the timer from a saved game
 		timeSet = false;
 		// loops through game play until player selects exit game
 		while (!gameOver) 
 		{
+			// if we have just started the level print the level intro text
 			if (startOfLevel) {
 				clearConsole();
 				System.out.println("\n" + level.getIntroText());
@@ -50,12 +64,13 @@ public class Game {
 				keyboard.nextLine();	// waits for the user to hit enter so longer story elements can be read before continuing
 				startOfLevel = false;
 			}
-			// booleans for if a player has finished a turn moving or inspecting an object,
-			// if they hit a wall/immovable object, or if they made an invalid keyboard entry.
+			// finished turn boolean controls if a player is ready to exit the main level menu of move or exit
 			finishedTurn = false;
+			// if they hit a wall/immovable object, hitObject is true and will trigger in-game text and a change in the player's
+ 			// avatar to provide immersion and player feedback.
 			hitObject = false;
+			// boolean if the player made an invalid keyboard entry.
 			invalidEntry = false;
-
 			// loops until player backs out of movement, inspection menu 
 			gameLoop();
 			
@@ -63,18 +78,21 @@ public class Game {
 	}
 	
 	
+	// the main level menu for the player. can select move which calls the moveMenu() method
+	// or exit which takes them back to the MainMenu.
 	private static void gameLoop() {
-		
+		// if the player has started a new game reset the timer
 		if(levelNum == 1 && !timeSet)
 		{
 			GameClock.resetTime();
 			timeSet = true;
 		}
+		// if the player is starting from a saved game, set the time remaining from their save
 		else if (!timeSet){
 			GameClock.setTimeRemaining(SceneManager.loadMinutes(), SceneManager.loadSeconds());
 			timeSet = true;
 		}
-
+		// while the player hasn't backed out of the main level menu
 		while (!finishedTurn)
 		{
 			clearConsole();
@@ -88,8 +106,8 @@ public class Game {
 			System.out.println("Please choose an option: ");			// main menu options
 			System.out.println("1 - Move\t  \t 0 - Main Menu");
 	
-			// checks that next input by user is an integer
-			while (!keyboard.hasNextInt() && !gameOver)
+			// checks that next input by user is an integer and loops until complete
+			while (!keyboard.hasNextInt())
 			{
 				// if user input isn't an integer, add it to a String placeholder variable
 				sOption = keyboard.next();
@@ -102,7 +120,7 @@ public class Game {
 				back = false;
 				moveMenu();
 			}
-			// if the player selects 0, ends main menu loop and exits "GameManager" loop to exit game
+			// if the player selects 0, ends play() loop and gameLoop() to exit game
 			else if (iOption == 0)
 			{
 				finishedTurn = true;
@@ -118,9 +136,10 @@ public class Game {
 	
 	
 	private static void moveMenu() {
+		// local integer variable to store the players move selection
 		int iMove = 0;
-		// boolean to determine if the player wants to go back to the main level menu
-			// while the player doesn't select the back option to the main level menu
+		
+			// while the player doesn't select the back option to return to the main level menu
 			while(!back)
 			{
 				// checks if player hit an object during the last movement loop
@@ -158,35 +177,41 @@ public class Game {
 					System.out.println("Right - 4\tBack to Menu - 0");
 					checkGameOver();
 				}
-				// check player input, verifying its an integer and loops for input
-				// displaying invalid entry message if it isn't
+				// if the player has not run out of time and it is game over
 				if (!gameOver)
 				{
+					// check player input, verifying its an integer and loops for input
+					// displaying invalid entry message if it is not
 					while (!keyboard.hasNextInt())
 					{
 						clearConsole();
 						level.displayLevel(player.getX(), player.getY(), player.getSprite());
 						System.out.println("Invalid entry!");
+						// if the player is able to interact with an object in the level show the "inspect" option
 						if (level.canInteract(player.getMinX(), player.getMaxX(), player.getY())) {
 							System.out.println("Right - 4\tInspect - 5\tBack to Menu - 0");
 							checkGameOver();
 						}	
+						// else print default movement options
 						else{
 							System.out.println("Right - 4\tBack to Menu - 0");
 							checkGameOver();
 						}
+						// sOption is a place holder to hold string input that is not numeric
 						sOption = keyboard.next();
 					}
+					// player entered a valid integer
 					iMove = keyboard.nextInt();						
 					
-					// if the integer input is less than 0 or greater than 4, its an invalid move
-					// will print invalid entry at the start of the loop
-					// (can be changed to CONSTANTS once we finalize everything
+					// if the player is in contact with an interactible object and they selected the "inspect"
+					// option.
 					if (level.canInteract(player.getMinX(), player.getMaxX(), player.getY()) && iMove == 5)
 					{		
 						clearConsole();
+						// interact with object
 						level.interaction(player.getMinX(), player.getMaxX(), player.getY());
 						checkGameOver();
+						// if the player just opened the door
 						if (level.isDoorOpen())
 						{
 							clearConsole();
@@ -194,26 +219,35 @@ public class Game {
 							System.out.print("Press enter to continue");
 							keyboard.nextLine();
 							keyboard.nextLine();
+							// check with SceneManager that there is a next level
 							if (SceneManager.nextLevelExist())
 							{
+								// increment to next scene number
 								SceneManager.nextScene();
+								// assign new scene number to levelNum integer
 								levelNum = SceneManager.getScene();
+								// save the players game so they can continue from the start of the next level
 								SceneManager.saveGame(GameClock.getMinutesRemaining(), GameClock.getMinutesRemaining());
 								startOfLevel = true;
+								// load the next level
 								level = new Level(levelNum);
+								// set players stating X/Y position in level
 								player.setX(level.getStartX());
 								player.setY(level.getStartY());
 							}
+							// else if there are no more scenes left the player
+							// has completed the game, load the good game over screen
 							else {
 								gameOver = true;
 								GameOver.beatGameScreen();
-							}
-							
-	
+							}					
+							// set game play loop booleans to true to return
+							// to the main level menu
 							finishedTurn = true;
 							back = true;
 	
 						}
+						// else the object the player interacted with is not the unlocked door
 						else {
 						System.out.print("\n\nPress enter to continue...");
 						keyboard.nextLine();	// waits for the user to hit enter so longer story elements can be read before continuing
@@ -223,6 +257,8 @@ public class Game {
 					}
 					// if the player is not in contact with an interactive object and
 					// not selected a valid movement option (1 - up, 2 - down, 3 - left, 4 - right)
+					// if the iMove integer is less than 0 or greater than 4, its an invalid move
+					// will print invalid entry at the start of the loop
 					else if (iMove < 0 || iMove > 4)
 					{
 						invalidEntry = true;
@@ -234,9 +270,11 @@ public class Game {
 						back = true;
 						checkGameOver();
 					}							
-					// else player made an correct input
+					// else player made an correct input to move 
 					else
 					{
+						// get the Move enum direction for "animator" and to check & move 
+						// the player on the map
 						Move direction = getDirection(iMove, hitObject);
 						// if the player is able to move in the input direction
 						if (level.checkMove(direction, player.getX(), player.getY(), 
@@ -244,17 +282,20 @@ public class Game {
 						{
 							// move player
 							player.move(direction);
-							// check the players new location for a trigger 							
+							// check the player's new position is a trigger, if it is
+							// it will print the trigger text to the screen
 							if(level.checkTrigger(player.getX(), player.getY()))
 							{
 								System.out.print("Press enter to continue...");
 								keyboard.nextLine();	// waits for the user to hit enter so longer story elements can be read before continuing
-							    keyboard.nextLine();   // needs 2 next lines to work properly, quirk of java operating on multiple OS cmd line?
+							    keyboard.nextLine();   // needs 2 next lines to work properly, not sure if this is related to "\n" println(), or some other
+							    						// quirk with Java, any feedback on this would be appreciated.
 							}
 						    checkGameOver();
 	
 						}
-						// if the player isn't able to move, hitObject is true and will print text informing them they hit a wall
+						// else the player isn't able to move, hitObject is true and will print text informing them they hit a wall
+						// and change the player avatar to a hit object state 
 						else {
 							hitObject = true;
 							direction = getDirection(iMove, hitObject);
@@ -270,6 +311,7 @@ public class Game {
 
 	}
 	
+	// helper method that checks if the player has gone past the time limit
 	private static void checkGameOver() {
 		if (GameClock.isGameOver())
 		{
@@ -281,6 +323,9 @@ public class Game {
 	}
 	
 	
+	
+	// helper method to convert the player's integer movement selection to
+	// a Move enum
 	private static Move getDirection(int iMove, boolean hitObject) {
 		Move direction;
 		// if the player is moving up or down but is blocked by an object or end of map string array

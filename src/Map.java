@@ -5,13 +5,18 @@ public class Map {
 	/*
 	 * 	Map class builds map and hold references to game objects
 	 * 	for us in levels in the game 
+	 * 	Level class checks using the players x,y position if they can move
+	 *  on the map
+	 *  uses a primitive collision system to keep player within the array bounds
+	 *  and not walking through walls or doors
 	 */
 	
 	private int xLen = 5, yLen = 5;				// map x,y dimensions
 	private String[][] sMap;	// string representation of map, can add to constructors
 	private int smashIndex = 0;
+	private final int CHAR1 = 0, CHAR2 = 1, CHAR3 = 2, CHAR4 = 3, CHAR5 = 4, CHAR6 = 5, CHAR7 = 6;
   // boolean array to keep track of trigger locations on map
-	 // string array for onomatopoeia (s.p.) words when player hits wall (i took the old 1960s batman show as inspiration)
+	 // string array for onomatopoeia (s.p.) words when player hits wall (i took the old 1960s Batman show as inspiration)
 	private final String[] SMASH = { "BONK", "BUMP", "SMASH", "CRASH", 
 			"OUCH", "BANG", "BLOOP", "CLANK", "CLUNK", "KAPOW", "CRUNCH", "CRRAAAAACK",
 			"OOOF", "OUCH", "OWWWW", "PLOP", "RIP", "POWIE", "SWAAP",
@@ -19,7 +24,12 @@ public class Map {
 			"ZOWIE", "ZZZZZZWAP", "SLOSH", "SOCK", "KLONK", "KRUNCH", "KERPLOP",
 			"RAKKK", "SPLATS", "SPLATT", "THUNK", "THWACK", "THWAPP"};
 	
-	//private enum pos { };
+	// using constants if we want to change the way things look for the map board
+	// in an easier fashion
+	private final String WALL = "#", HDOOR = "|", VDOOR = "=", LBORDER = "|#",
+			RBORDER = "#|", TOPLEFT = " _", TOPRIGHT = "_ ", TBORDER = "_",
+			VOUTERBORDER = "|", HOUTERBORDER = "_";
+	
 	private Random random;
 	
 	// default constructor that builds empty map with default dimensions
@@ -63,9 +73,6 @@ public class Map {
 	
 	// prints map and if player hit wall prints descriptive text
 	public void printMap(int playerX, int playerY, boolean hitWall, String sPlayer) {
-		int playerLen = sPlayer.length();
-		int playerXMin = playerX - (playerLen / 2);
-		int playerXMax = playerX + (playerLen / 2);
 		
 		System.out.println("\n\n\n\nLevel " + SceneManager.getScene() +  
 				"\t\t\t  Time Left: " + GameClock.getTimer());
@@ -73,15 +80,15 @@ public class Map {
 		{	
 			if (x == 0)
 			{
-				System.out.print(" _");
+				System.out.print(TOPLEFT);
 			}
 			else if (x == xLen - 1)
 			{
-				System.out.println("_ ");
+				System.out.println(TOPRIGHT);
 			}
 			else 
 			{
-				System.out.print("_");
+				System.out.print(TBORDER);
 			}
 
 		}
@@ -91,12 +98,12 @@ public class Map {
 			{
 				if (x == 0)
 				{
-					if (playerXMin == x && playerY == y)
+					if (playerX - 3 == x && playerY == y)
 					{
-						System.out.print("|" + sPlayer.charAt(0));
+						System.out.print(VOUTERBORDER + sPlayer.charAt(CHAR1));
 					}
 					else {
-						System.out.print("|" + sMap[y][x]);
+						System.out.print(VOUTERBORDER + sMap[y][x]);
 					}
 				}	
 				else if (x == xLen - 1)
@@ -104,39 +111,39 @@ public class Map {
 
 					if (playerX + 3 == x && playerY == y)
 					{
-						System.out.println(sPlayer.charAt(6) + "|");
+						System.out.println(sPlayer.charAt(CHAR7) + VOUTERBORDER);
 					}
 					else {
-						System.out.println(sMap[y][x] + "|");
+						System.out.println(sMap[y][x] + VOUTERBORDER);
 					}
 				}
 				else if (playerX - 3 == x && playerY == y)
 				{
-					System.out.print(sPlayer.charAt(0));
+					System.out.print(sPlayer.charAt(CHAR1));
 				}
 				else if (playerX - 2 == x && playerY == y)
 				{
-					System.out.print(sPlayer.charAt(1));
+					System.out.print(sPlayer.charAt(CHAR2));
 				}
 				else if (playerX - 1 == x && playerY == y)
 				{
-					System.out.print(sPlayer.charAt(2));
+					System.out.print(sPlayer.charAt(CHAR3));
 				}
 				else if (playerX == x && playerY == y)
 				{
-					System.out.print(sPlayer.charAt(3));
+					System.out.print(sPlayer.charAt(CHAR4));
 				}
 				else if (playerX + 1 == x && playerY == y)
 				{
-					System.out.print(sPlayer.charAt(4));
+					System.out.print(sPlayer.charAt(CHAR5));
 				}
 				else if (playerX + 2 == x && playerY == y)
 				{
-					System.out.print(sPlayer.charAt(5));
+					System.out.print(sPlayer.charAt(CHAR6));
 				}
 				else if (playerX + 3 == x && playerY == y)
 				{
-					System.out.print(sPlayer.charAt(6));
+					System.out.print(sPlayer.charAt(CHAR7));
 				}
 				else
 				{
@@ -147,15 +154,15 @@ public class Map {
 		for (int x = 0; x < xLen; x++)
 		{	
 			if ( x == 0) {
-				System.out.print("|#");
+				System.out.print(LBORDER);
 			}
 			else if (x == xLen - 1)
 			{
-				System.out.println("#|");
+				System.out.println(RBORDER);
 			}
 			else 
 			{
-				System.out.print("#");
+				System.out.print(WALL);
 			}
 
 		}
@@ -168,11 +175,8 @@ public class Map {
 		}
 	}
 	
-	// prints map without spaces
+	// prints map 
 	public void printMap(int playerX, int playerY, String sPlayer) {
-		int playerLen = sPlayer.length();
-		int playerXMin = playerX - (playerLen / 2);
-		int playerXMax = playerX + (playerLen / 2);
 
 		System.out.println("\n\n\n\nLevel " + SceneManager.getScene() +  
 				"\t\t\t  Time Left: " + GameClock.getTimer());
@@ -180,11 +184,11 @@ public class Map {
 		{	
 			if (x == 0)
 			{
-				System.out.print(" _");
+				System.out.print(TOPLEFT);
 			}
 			else if (x == xLen - 1)
 			{
-				System.out.println("_ ");
+				System.out.println(TOPRIGHT);
 			}
 			else 
 			{
@@ -196,55 +200,57 @@ public class Map {
 		{
 			for (int x = 0; x < xLen; x++)
 			{
+				// room has no wall boarder at left side of map print player and outer boarder
 				if (x == 0)
 				{
-					if (playerXMin == x && playerY == y)
+					if (playerX - 3 == x && playerY == y)
 					{
-						System.out.print("|" + sPlayer.charAt(0));
+						System.out.print(VOUTERBORDER + sPlayer.charAt(CHAR1));
 					}
 					else {
-						System.out.print("|" + sMap[y][x]);
+						System.out.print(VOUTERBORDER + sMap[y][x]);
 					}
 				}	
+				// room has no wall boarder at right side of map print player and outer boarder
 				else if (x == xLen - 1)
 				{
 
-					if (playerXMax == x && playerY == y)
+					if (playerX + 3 == x && playerY == y)
 					{
-						System.out.println(sPlayer.charAt(sPlayer.length() - 1) + "|");
+						System.out.println(sPlayer.charAt(sPlayer.length() - 1) + VOUTERBORDER);
 					}
 					else {
-						System.out.println(sMap[y][x] + "|");
+						System.out.println(sMap[y][x] + VOUTERBORDER);
 					}
 				}
 				// print player on map
 				else if (playerX - 3 == x && playerY == y)
 				{
-					System.out.print(sPlayer.charAt(0));
+					System.out.print(sPlayer.charAt(CHAR1));
 				}
 				else if (playerX - 2 == x && playerY == y)
 				{
-					System.out.print(sPlayer.charAt(1));
+					System.out.print(sPlayer.charAt(CHAR2));
 				}
 				else if (playerX - 1 == x && playerY == y)
 				{
-					System.out.print(sPlayer.charAt(2));
+					System.out.print(sPlayer.charAt(CHAR3));
 				}
 				else if (playerX == x && playerY == y)
 				{
-					System.out.print(sPlayer.charAt(3));
+					System.out.print(sPlayer.charAt(CHAR4));
 				}
 				else if (playerX + 1 == x && playerY == y)
 				{
-					System.out.print(sPlayer.charAt(4));
+					System.out.print(sPlayer.charAt(CHAR5));
 				}
 				else if (playerX + 2 == x && playerY == y)
 				{
-					System.out.print(sPlayer.charAt(5));
+					System.out.print(sPlayer.charAt(CHAR6));
 				}
 				else if (playerX + 3 == x && playerY == y)
 				{
-					System.out.print(sPlayer.charAt(6));
+					System.out.print(sPlayer.charAt(CHAR7));
 				}
 				else
 				{
@@ -255,15 +261,15 @@ public class Map {
 		for (int x = 0; x < xLen; x++)
 		{	
 			if ( x == 0) {
-				System.out.print("|#");
+				System.out.print(LBORDER);
 			}
 			else if (x == xLen - 1)
 			{
-				System.out.println("#|");
+				System.out.println(RBORDER);
 			}
 			else 
 			{
-				System.out.print("#");
+				System.out.print(WALL);
 			}
 
 		}
@@ -289,8 +295,8 @@ public class Map {
 					{
 						// if the player wants to move up to an wall/non traversable object
 						if (playerYNext <= yLen - 1)
-							if (sMap[playerYNext][x].equalsIgnoreCase("#")
-									|| sMap[playerYNext][x].equalsIgnoreCase("|"))
+							if (sMap[playerYNext][x].equalsIgnoreCase(WALL)
+									|| sMap[playerYNext][x].equalsIgnoreCase(HDOOR))
 							{
 								canMove = false;
 							}
@@ -308,8 +314,8 @@ public class Map {
 					{
 						// if the player wants to move up to an wall/non traversable object
 						if (playerYNext >= 0)
-							if (sMap[playerYNext][x].equalsIgnoreCase("#")
-									|| sMap[playerYNext][x].equalsIgnoreCase("|"))
+							if (sMap[playerYNext][x].equalsIgnoreCase(WALL)
+									|| sMap[playerYNext][x].equalsIgnoreCase(HDOOR))
 							{
 								canMove = false;
 							}
@@ -323,8 +329,8 @@ public class Map {
 				{
 					int playerXNext = playerXMin - 1;
 					// check map for immovable objects
-					if (sMap[playerY][playerXNext].equalsIgnoreCase("#")
-						 || sMap[playerY][playerXNext].equalsIgnoreCase("|"))
+					if (sMap[playerY][playerXNext].equalsIgnoreCase(WALL)
+						 || sMap[playerY][playerXNext].equalsIgnoreCase(HDOOR))
 					{
 						canMove = false;
 					}				
@@ -337,8 +343,8 @@ public class Map {
 				{
 					int playerXNext = playerXMax + 1;
 					// check map for immovable objects
-					if (sMap[playerY][playerXNext].equalsIgnoreCase("#")
-							 || sMap[playerY][playerXNext].equalsIgnoreCase("|"))
+					if (sMap[playerY][playerXNext].equalsIgnoreCase(WALL)
+							 || sMap[playerY][playerXNext].equalsIgnoreCase(HDOOR))
 					{
 						canMove = false;
 					}			

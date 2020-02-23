@@ -35,9 +35,17 @@
  \$$   \$$  \$$$$$$$     \$      \$$$$$$$ \$$   \$$    \$$$$   \$$$$$$  \$$        \$$$$$$$
                                                                                            
                                                                                            
-                                                                                           
 
+--------------------------------------------------------------------------------------------------
+How to Compile and Run Game                                                                                           
+--------------------------------------------------------------------------------------------------
+To compile:
+	javac AdventureGame.java
+To run:
+	Place all level_.cfg and level_.map (the _ represents the level numbers) files in the directory containing the compile class
+	files, then run:
 
+	java AdventureGame
 
 --------------------------------------------------------------------------------------------------
 Game Information

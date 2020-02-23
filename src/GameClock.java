@@ -7,7 +7,7 @@ public class GameClock {
 	 *  Methods return minutes and seconds remaining for
 	 *  continue feature, returns a string of the remaining time
 	 *  for the games map view, and is checked for for game over if the
-	 *  player goes over the 20 minute  time limit (for current build). * 
+	 *  player goes over the 20 minute time limit (for current build). 
 	 * 
 	 */
 	
@@ -20,7 +20,7 @@ public class GameClock {
 	private static final int HOURCONV = 3600, MINCONV = 60;
 
 	
-
+	// method that checks if the player has gone over the game's time limit
 	public static boolean isGameOver() {
 		 int currentTimeInSeconds = getTimeInSeconds();
 		 boolean gameOver = true;
@@ -30,7 +30,7 @@ public class GameClock {
 	}	
 	
 
-	// returns a string time in "00:00" for the games map view
+	// returns a string time in "00:00" format for the game's map view
 	public static String getTimer()	{
 		String remainingTime = "";
 		int minutesRemaining = getMinutesRemaining();

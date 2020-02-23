@@ -20,34 +20,34 @@ public class Cipher extends Puzzle{
 	public void playCipher() {
 		
 		boolean isCorrect = false;
+		Scanner myObj = new Scanner(System.in);
 		System.out.println(super.getQuestion());
-				
-		Scanner myObj2 = new Scanner(System.in);
+
 		System.out.println("Hint(yes/no)?:");
-	    String hint1 = myObj2.nextLine();
+	    String hint1 = myObj.nextLine();
 	    if(hint1.equalsIgnoreCase("yes") || hint1.equalsIgnoreCase("y")) {
 	    	System.out.println(hint);
 	    	
 	    }
 	    
-	    
+	    // give the player 3 tries to get answer before exiting cipher puzzle
 		for(int i=0;i<3;i++) {
-			Scanner myObj = new Scanner(System.in);
+
 			System.out.println("What is the name?:");
-		    String userName = myObj.nextLine();
-		   
+		    String userName = myObj.nextLine();   
 		    
-		    
+		    // check if name is correct
 		    if (userName.equalsIgnoreCase(super.getAnswer()) ) {
 		    	System.out.println("Correct.");
 		    	isCorrect=true;
 		    	break;
 		    }
+		    // else prompt them to enter again
 		    else {
 		    	System.out.println("Incorrect Answer.");
 				System.out.println("Want to try again(yes/no)?:");
-			    String yesNo = myObj2.nextLine();
-			    if (yesNo.equalsIgnoreCase("yes")) {
+			    String yesNo = myObj.nextLine();
+			    if (hint1.equalsIgnoreCase("yes") || hint1.equalsIgnoreCase("y")) {
 			    	System.out.println("");
 			    }
 			    else if (yesNo.equalsIgnoreCase("no")){

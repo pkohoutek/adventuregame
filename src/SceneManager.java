@@ -15,6 +15,9 @@ public class SceneManager {
 
 	private static int currentScene = 0;
 	private final static String FILENAME = "advgame.sav";
+	private final static String SLVLNUM = "<LEVELNUM>", ELVLNUM = "</LEVELNUM>", 
+			SMINLEFT = "<MINLEFT>", EMINLEFT = "</MINLEFT>", SSECLEFT = "<SECLEFT>",
+			ESECLEFT = "</SECLEFT>";
 	
 	
 	// load scene from argument
@@ -65,15 +68,15 @@ public class SceneManager {
 					+ ". Exiting game.");
 			System.exit(0);
 		}
-		outputStream.println("<LEVELNUM>");
+		outputStream.println(SLVLNUM);
 		outputStream.println(currentScene);
-		outputStream.println("</LEVELNUM>");
-		outputStream.println("<MINLEFT>");
+		outputStream.println(ELVLNUM);
+		outputStream.println(SMINLEFT);
 		outputStream.println(Integer.toString(minutes));
-		outputStream.println("</MINLEFT>");
-		outputStream.println("<SECLEFT>");
+		outputStream.println(EMINLEFT);
+		outputStream.println(SSECLEFT);
 		outputStream.println(Integer.toString(seconds));
-		outputStream.println("</SECLEFT>");
+		outputStream.println(ESECLEFT);
 		outputStream.close();
 		
 	}
@@ -95,7 +98,7 @@ public class SceneManager {
 		{
 			line = inputStream.nextLine();
 			line.trim();
-			if (line.equals("<LEVELNUM>"))
+			if (line.equals(SLVLNUM))
 			{
 				line = inputStream.nextLine();
 				try 
@@ -130,7 +133,7 @@ public class SceneManager {
 		{
 			line = inputStream.nextLine();
 			line.trim();
-			if (line.equals("<MINLEFT>"))
+			if (line.equals(SMINLEFT))
 			{
 				line = inputStream.nextLine();
 				try 
@@ -168,7 +171,7 @@ public class SceneManager {
 		{
 			line = inputStream.nextLine();
 			line.trim();
-			if (line.equals("<SECLEFT>"))
+			if (line.equals(SSECLEFT))
 			{
 				line = inputStream.nextLine();
 				try 

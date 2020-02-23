@@ -1,5 +1,12 @@
 
 public class Door {
+	
+	
+	/*		Door Class
+	 * 	Door is an object that represents the door and exit to the level
+	 * 	it is locked at invocation and unlocked by the player solving puzzles 
+	 * 	within the level
+	 */
 	private boolean lock, open;
 	private int xPos;
 	private int yPos;

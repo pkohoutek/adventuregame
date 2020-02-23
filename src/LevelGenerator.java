@@ -6,9 +6,11 @@ import java.util.ArrayList;
 public class LevelGenerator {
 	
 	/*
-	 * 	LevelGenerator
-	 * 	Class to use a text file to generate a map
-
+	 * 		LevelGenerator
+	 * 	Class to use a .map text file to generate a map, and .cfg
+	 * 	files to construct all the level's game objects attributes, including
+	 * 	questions, answers, and x and y positions.
+	 * 
 	 * 	Currently able to build map with walls, interactive props, 
 	 *  puzzles, ciphers, and triggers.
 	 * 	
@@ -16,7 +18,9 @@ public class LevelGenerator {
 	 * 	features the team implements in the future
 	 * 
 	 *  Hoping some of the functionality can be incorporated when 
-	 *  porting code to JavaFX 
+	 *  porting code to JavaFX, we will have to hard code the 
+	 *  coordinates of the objects as parsing a text file will not work
+	 *  for the tile map or JFrame.
 	 */
 	
 	
@@ -48,6 +52,33 @@ public class LevelGenerator {
 	// constant chars for level generation
 	private final char WALL = '#', PROP = '$', TRIGGER ='x',
 			PUZZLE = '?', CIPHER = '@', VDOOR = '|', HDOOR = '=';
+	
+	// delimiter constants for prop generation
+	private final String SPROPS = "<PROPS>", EPROPS = "</PROPS>", SPROPDES = "<pdes>",
+			EPROPDES = "</pdes>";
+	
+	// delimiter constants for trigger generation
+	private final String STRIGGERS = "<TRIGGERS>", ETRIGGERS = "</TRIGGERS>",
+			STRIGGERTEXT = "<trigger>", ETRIGGERTEXT = "</trigger>";
+	
+	// delimiter constants for puzzle generation
+	private final String SPUZZLES = "<PUZZLES>", EPUZZLES = "</PUZZLES>", SPUZQUESTIONS = "<PQUESTIONS>", 
+			EPUZQUESTIONS = "</PQUESTIONS>", SPUZQ = "<pquestion>", EPUZQ = "</pquestion>", 
+			SPUZANSWERS = "<PANSWERS>", EPUZANSWERS = "</PANSWERS>", SPUZA = "<panswer>",
+			EPUZA = "</panswer>";
+	
+	// delimiter constants for cipher generation
+	private final String SCIPHERS = "<CIPHERS>", ECIPHERS = "</CIPHERS>", SCIPHERQS = "<CQUESTIONS>",
+			ECIPHERQS = "</CQUESTIONS>", SCIPHQ = "<cquestion>", ECIPHQ = "</cquestion>",
+			SCIPHERHINTS = "<CHINTS>", ECIPHERHINTS = "</CHINTS>", SCIPHH = "<chint>", ECIPHH = "</chint>",
+			SCIPHERANS = "<CANSWERS>", ECIPHERANS = "</CANSWERS>", SCIPHA = "<canswer>", ECIPHA = "</canswer>";
+	
+	// delimiter constants for player start position
+	private final String SSTART = "<START>", ESTART = "</START>";
+	
+	// delimiter constants for Level text generation
+	private final String SLVLTEXT = "<LEVELTEXT>", ELVLTEXT = "</LEVELTEXT>", SLVLSTARTTXT = "<STARTTEXT>", ELVLSTARTTXT = "</STARTTEXT>",
+			SLVLENDTXT = "<ENDTEXT>", ELVLENDTXT = "</ENDTEXT>";
 	
 	// Level constructor takes level number and generates level from .map and .cfg files
 	// this class could be split up to helper classes for each object generated
@@ -120,6 +151,8 @@ public class LevelGenerator {
 	}
 	
 	
+	// method parses the level#.cfg file (# being the number of the current level generated)
+	// generates the props, puzzles, ciphers, intro text, exit text, player position on map, and more
 	private void genGameObjects() 
 	{
 		// create new input stream for level#.cfg file
@@ -145,7 +178,8 @@ public class LevelGenerator {
 			line = inputStream.nextLine();
 			line.trim();
 			
-			if (line.equals("<PROPS>"))
+			// if the level#.cfg file has a props section
+			if (line.equals(SPROPS))
 			{
 				boolean endDescriptions = false;
 				String description = "";
@@ -156,19 +190,19 @@ public class LevelGenerator {
 					line.trim();
 					// if the line is the delimiter indicating that we have reached the end
 					// of prop descriptions, exit while loop.
-					if (line.equals("</PROPS>"))
+					if (line.equals(EPROPS))
 					{
 						endDescriptions = true;
 					}
 					// if the line equals the delimiter indicating that we have found a new
 					// Prop description, create empty string for the next lines of text
-					else if  (line.equals("<pdes>"))
+					else if  (line.equals(SPROPDES))
 					{
 						description = "";
 					}
 					// if the line equals the delimiter indicating that we have ended a
 					// Prop description, add description string to prop description ArrayList
-					else if  (line.equals("</pdes>"))
+					else if  (line.equals(EPROPDES))
 					{
 						descriptions.add(description);
 					}
@@ -185,8 +219,8 @@ public class LevelGenerator {
 					
 				}
 			}
-			
-			else if (line.equals("<TRIGGERS>"))
+			// if the level#.cfg file has a trigger section
+			else if (line.equals(STRIGGERS))
 			{
 				boolean endTrText = false;
 				String trText = "";
@@ -197,19 +231,19 @@ public class LevelGenerator {
 					line = inputStream.nextLine();
 					line.trim();
 					// if we find the end trigger text delimiter we are done
-					if (line.equals("</TRIGGERS>"))
+					if (line.equals(ETRIGGERS))
 					{
 						endTrText = true;
 					}
 					// if we find the start of a new trigger text string
 					// initialize an empty string
-					else if  (line.equals("<trigger>"))
+					else if  (line.equals(STRIGGERTEXT))
 					{
 						trText = "";
 					}
 					// if we find the end of the current trigger text string
 					// add the trigger text string to the ArrayList
-					else if  (line.equals("</trigger>"))
+					else if  (line.equals(ETRIGGERTEXT))
 					{
 						triggerText.add(trText);
 					}
@@ -226,7 +260,9 @@ public class LevelGenerator {
 					}					
 				}
 			}
-			else if (line.equals("<PUZZLES>"))
+			
+			// if the level has a puzzles section
+			else if (line.equals(SPUZZLES))
 			{				
 				boolean endPuzText = false;
 				String puzQText = "";
@@ -240,7 +276,7 @@ public class LevelGenerator {
 					line.trim();
 					// if we find delimiter that indicates we are in the 
 					// Puzzle Questions section of the level#.cfg file
-					if (line.equals("<PQUESTIONS>"))
+					if (line.equals(SPUZQUESTIONS))
 					{
 						boolean endQuestions = false;
 						// while we have not reached the end of the puzzle questions
@@ -251,19 +287,19 @@ public class LevelGenerator {
 							line.trim();
 							// if we have reached the end of the puzzle questions
 							// section, we are done.
-							if (line.equals("</PQUESTIONS>"))
+							if (line.equals(EPUZQUESTIONS))
 							{
 								endQuestions = true;
 							}
 							// if we find a new puzzle question string
 							// create empty string
-							else if (line.equals("<pquestion>"))
+							else if (line.equals(SPUZQ))
 							{
 								puzQText = "";
 							}
 							// if we find the end of the current puzzle question
 							// string, add it to the puzzle question arraylist
-							else if (line.equals("</pquestion>"))
+							else if (line.equals(EPUZQ))
 							{
 								pQuestions.add(puzQText);
 							}
@@ -279,9 +315,10 @@ public class LevelGenerator {
 							}
 						}
 					}
-					else if (line.equals("<PANSWERS>"))
+					// if we find delimiter that indicates we are in the 
+					// Puzzle Answers section of the level#.cfg file
+					else if (line.equals(SPUZANSWERS))
 					{							
-
 						boolean endAnswers = false;
 						while (!endAnswers)
 						{
@@ -289,19 +326,19 @@ public class LevelGenerator {
 							line.trim();
 							// if we have found the delimiter indicating that we have reached the end
 							// of the puzzle section we are done.
-							if (line.equals("</PANSWERS>"))
+							if (line.equals(EPUZANSWERS))
 							{
 								endAnswers = true;
 							}
 							// if we find the delimiter for a new puzzle answer
 							// create a new empty string
-							else if  (line.equals("<panswer>"))
+							else if  (line.equals(SPUZA))
 							{
 								puzAText = "";
 							}
 							// if we have reached the end of the current puzzle answer string
 							// add it to the arraylist
-							else if  (line.equals("</panswer>"))
+							else if  (line.equals(EPUZA))
 							{
 								pAnswers.add(puzAText);
 							}
@@ -316,8 +353,10 @@ public class LevelGenerator {
 								puzAText = "" + puzAText + line;
 							}
 						}
-					}					
-					else if (line.equals("</PUZZLES>"))
+					}	
+					// if we find the end of puzzles delimiter we are done with the 
+					// levels puzzles
+					else if (line.equals(EPUZZLES))
 					{
 						endPuzText = true;
 					}		
@@ -325,7 +364,7 @@ public class LevelGenerator {
 			}
 			// if we find the delimiter indicating the start of the cipher section of
 			// the level#.cfg file
-			else if (line.equals("<CIPHERS>"))
+			else if (line.equals(SCIPHERS))
 			{
 				boolean endCiphText = false;
 				 String ciphQText = "";
@@ -336,7 +375,7 @@ public class LevelGenerator {
 					line.trim();
 					// if we find the delimiter indicating we are in the Cipher
 					// Questions section of the .cfg file
-					if (line.equals("<CQUESTIONS>"))
+					if (line.equals(SCIPHERQS))
 					{	
 						boolean endQuestions = false;
 						// while not at the end of the cipher queston section
@@ -346,19 +385,19 @@ public class LevelGenerator {
 							line.trim();
 							// if we find the delimiter indicating we are at the end of the
 							// cipher question section we are done
-							if (line.equals("</CQUESTIONS>"))
+							if (line.equals(ECIPHERQS))
 							{
 								endQuestions = true;
 							}
 							// if we find the delimiter indicating we have started a new
 							// cipher question, create an empty string
-							else if  (line.equals("<cquestion>"))
+							else if  (line.equals(SCIPHQ))
 							{
 								ciphQText = "";
 							}
 							// if we find the delimiter indicating that we have ended the 
 							// current cipher question, add the string to the arraylist
-							else if  (line.equals("</cquestion>"))
+							else if  (line.equals(ECIPHQ))
 							{
 								ciphQuestions.add(ciphQText);
 							}
@@ -375,7 +414,7 @@ public class LevelGenerator {
 						}
 					}
 					// if we find the delimiter for the cipher hints section of the file
-					else if (line.equals("<CHINTS>"))
+					else if (line.equals(SCIPHERHINTS))
 					{
 						String ciphHText = "";
 						boolean endHints = false;
@@ -386,19 +425,19 @@ public class LevelGenerator {
 							line.trim();
 							// if we find the delimiter indicating  we have reached the end
 							// of the cipher hints section we are done
-							if (line.equals("</CHINTS>"))
+							if (line.equals(ECIPHERHINTS))
 							{
 								endHints = true;
 							}
 							// if we have a new cipher hint string to generate
 							// empty string
-							else if  (line.equals("<chint>"))
+							else if  (line.equals(SCIPHH))
 							{
 								ciphHText = "";
 							}
 							// if we reached the end of the current cipher hint text
 							// add string to cipher hints arraylist
-							else if  (line.equals("</chint>"))
+							else if  (line.equals(ECIPHH))
 							{
 								ciphHints.add(ciphHText);
 							}
@@ -414,7 +453,8 @@ public class LevelGenerator {
 							}
 						}
 					}	
-					else if (line.equals("<CANSWERS>"))
+					// if we find the start of the cipher answers section
+					else if (line.equals(SCIPHERANS))
 					{
 						boolean endAnswers = false;
 						String ciphAText = "";
@@ -425,19 +465,19 @@ public class LevelGenerator {
 							line.trim();
 							// if we find the delimiter indicating we are at the end of
 							// cipher answers we are done
-							if (line.equals("</CANSWERS>"))
+							if (line.equals(ECIPHERANS))
 							{
 								endAnswers = true;
 							}
 							// if we find the delimiter for a new Cipher answer string, make empty
 							// string
-							else if  (line.equals("<canswer>"))
+							else if  (line.equals(SCIPHA))
 							{
 								ciphAText = "";
 							}
 							// if we find the delimiter indicating we have reached the end of the current
 							// cipher answer string, add it to the arraylist
-							else if  (line.equals("</canswer>"))
+							else if  (line.equals(ECIPHA))
 							{
 								ciphAnswers.add(ciphAText);
 							}
@@ -455,13 +495,15 @@ public class LevelGenerator {
 						}
 					}		
 					// if we reached the end of the cipher section we are done
-					if (line.equals("</CIPHERS>"))
+					if (line.equals(ECIPHERS))
 					{
 						endCiphText = true;
 					}
 				}					
 			}
-			else if (line.equals("<START>"))
+			// if we find the player start position section of the 
+			// level.cfg file
+			else if (line.equals(SSTART))
 			{
 				boolean endStart = false;
 				int count = 0;
@@ -473,7 +515,7 @@ public class LevelGenerator {
 					line.trim();
 					// if we find delimited indicating end of player start section
 					// we are done
-					if (line.equals("</START>"))
+					if (line.equals(ESTART))
 					{
 						endStart = true;
 					}
@@ -509,7 +551,9 @@ public class LevelGenerator {
 					}
 				}
 			}
-			else if (line.equals("<LEVELTEXT>"))
+			// if we have found the start of the level introduction 
+			// and ending text section
+			else if (line.equals(SLVLTEXT))
 			{
 				boolean endLevelText = false;
 				String tIntroText = "";
@@ -521,7 +565,7 @@ public class LevelGenerator {
 					line = inputStream.nextLine();
 					line.trim();
 					// if we find the delimiter for the level introduction text string
-					if (line.equals("<STARTTEXT>"))
+					if (line.equals(SLVLSTARTTXT))
 					{
 						boolean endIntro = false;
 						// while we haven't reached the end of the introduction text section
@@ -530,7 +574,7 @@ public class LevelGenerator {
 							line = inputStream.nextLine();
 							line.trim();
 							// if we have reached the end of the introduction text section we are done
-							if (line.equals("</STARTTEXT>"))
+							if (line.equals(ELVLSTARTTXT))
 							{
 								endIntro = true;
 							}
@@ -547,7 +591,7 @@ public class LevelGenerator {
 						}
 					}
 					// if we found the delimiter indicating we have reached the level end text section
-					if (line.equals("<ENDTEXT>"))
+					if (line.equals(SLVLENDTXT))
 					{
 						boolean endEnding = false;
 						// while we haven't reached the ending of the level end text section
@@ -556,7 +600,7 @@ public class LevelGenerator {
 							line = inputStream.nextLine();
 							line.trim();
 							// if we reached the end of the level end text section we are done
-							if (line.equals("</ENDTEXT>"))
+							if (line.equals(ELVLENDTXT))
 							{
 								endEnding = true;
 							}
@@ -573,7 +617,7 @@ public class LevelGenerator {
 						}
 					}
 					// if we reached the end of the level text section we are done
-					if (line.equals("</LEVELTEXT>"))
+					if (line.equals(ELVLTEXT))
 					{
 						endLevelText = true;
 					}

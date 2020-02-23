@@ -12,7 +12,7 @@ public class MainMenu {
 	private static boolean endGame = false;
 	private static final String TITLE =
 
-			"          ____  ____   ___   __   ____  ____ \n" + 
+			"           ____  ____   ___   __   ____  ____ \n" + 
 			"          (  __)/ ___) / __) / _\\ (  _ \\(  __)\n" + 
 			"           ) _) \\___ \\( (__ /    \\ ) __/ ) _) \n" + 
 			"          (____)(____/ \\___)\\_/\\_/(__)  (____)\n" + 
