@@ -3,6 +3,8 @@
 ## How to Compile and Run Game                                                                                           
 --------------------------------------------------------------------------------------------------
 ### To compile:
+	Copy *.java files to a folder and then run:
+		
 	javac AdventureGame.java
 ### To run:
 	Place all level_.cfg and level_.map (the _ represents the level numbers) files 

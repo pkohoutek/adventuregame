@@ -16,7 +16,7 @@ public class GameClock {
 	private static int endTimeInSeconds;
 	
 	// game timer constant
-	private static final int TIMELIMIT = 20;
+	private static final int TIMELIMIT = 1;
 	private static final int HOURCONV = 3600, MINCONV = 60;
 
 	

@@ -26,9 +26,9 @@ public class Map {
 	
 	// using constants if we want to change the way things look for the map board
 	// in an easier fashion
-	private final String WALL = "#", HDOOR = "|", VDOOR = "=", LBORDER = "|#",
+	private final String WALL = "#", HDOOR = "|", LBORDER = "|#",
 			RBORDER = "#|", TOPLEFT = " _", TOPRIGHT = "_ ", TBORDER = "_",
-			VOUTERBORDER = "|", HOUTERBORDER = "_";
+			VOUTERBORDER = "|";
 	
 	private Random random;
 	
@@ -192,7 +192,7 @@ public class Map {
 			}
 			else 
 			{
-				System.out.print("_");
+				System.out.print(TBORDER);
 			}
 
 		}
