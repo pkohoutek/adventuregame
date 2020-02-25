@@ -6,17 +6,17 @@
 	Adventure Game .java source files can be downloaded from:
 	https://github.com/pkohoutek/adventuregame/
 	
-	**Source code is located in the Project src folder.**
+	Source code is located in the Project src folder.
 	
-	**Level .map and .cfg files are also necessary to play the game and are located 
+	Level .map and .cfg files are also necessary to play the game and are located 
 	in the root of the project (place *.map and *.cfg in the same directory 
-	as the compiled Java .class files when running the game.**
+	as the compiled Java .class files when running the game.
 
 ### To compile:
 	javac AdventureGame.java
 ### To run:
-	**Place all level_.cfg and level_.map (the _ represents the level numbers) files 
-	in the directory containing the compiled class files**, then run:
+	Place all level_.cfg and level_.map (the _ represents the level numbers) files 
+	in the directory containing the compiled class files, then run:
 
 	java AdventureGame
 --------------------------------------------------------------------------------------------------
