@@ -2,6 +2,14 @@
 --------------------------------------------------------------------------------------------------
 ## How to Compile and Run Game                                                                                           
 --------------------------------------------------------------------------------------------------
+### How to download:
+	Adventure Game .java source files can be downloaded from:
+	https://github.com/pkohoutek/adventuregame/
+	
+	Source code is located in the Project src folder.
+	Level .map and .cfg files are also necessary to play the game and are located in the root of the project (place *.map and *.cfg in
+	the same directory as the compiled Java .class files when running the game.
+
 ### To compile:
 	javac AdventureGame.java
 ### To run:
