@@ -63,12 +63,9 @@ To run:
 Game Information
 --------------------------------------------------------------------------------------------------
 
-A text adventure game where you stuck are a detective trying to solve a murder mystery,
-the and discover who killed Scarlett Johanson.
+A text adventure game where you are trapped in a room, playing as a detective trying to solve a murder mystery and discover who killed Scarlett Johanson in order to escape.
 
-The game is played with the keyboard and the player needs to solve puzzles to advance in the 
-game and unlock doors to proceed. The game is timed like an escape room and the player has to 
-beat the game (escape the mansion) before the timer expires.
+The game is played with the keyboard and the player needs to solve puzzles and navigate through each level to advance in the game and unlock doors to escape. The game is timed like an escape room and the player has to beat the game (escape all of the rooms) before the timer expires.
 
 --------------------------------------------------------------------------------------------------
 Classes
@@ -125,9 +122,9 @@ Cipher
 
 Door
 	The Door is an object that is invoked once per level. It is the exit for the current room. 
-	The door is locked until the player progresses through the level and solves the levels puzzles 
-	and ciphers. Once the levels challenges have been completed the Level class unlocks the door and
-	player is notified in game that they can exit the level.
+	The door is locked until the player progresses through the level and solves all of the levels 
+	puzzles and ciphers. Once the levels challenges have been completed the Level class unlocks the door 
+	and the player is notified in game that they can exit the level/advance to the next level.
 	
 Map
 	Map class uses a two-dimensional String array to keep track of objects on the level and handles
@@ -136,8 +133,14 @@ Map
 	class.
 	
 Level
-	Level is the class that represents the level the player is playing in. It is constructed using the LevelGenerator class with 		returns ArrayLists containing the game objects for the level, which can include props, walls, triggers, puzzles, ciphers, and 		doors. The LevelGenerator also returns the level map and the level and map determine if a player is able to move to a position 		on the map.
-	Level determines if a player is able to interact with a game object like a puzzle or cipher, and has checks when the player has 	completed a level’s objective and tries to unlock the door. If all objectives are completed the level informs the player if the 	door is unlocked and the player can exit the level to continue on their quest to escape and solve the mystery of Scarlett’s 		death.
+	Level is the class that represents the level the player is playing in. It is constructed using the
+	LevelGenerator class with returns ArrayLists containing the game objects for the level, which can include
+	props, walls, triggers, puzzles, ciphers, and doors. The LevelGenerator also returns the level map and the 
+	level and map determine if a player is able to move to a position on the map.
+	Level determines if a player is able to interact with a game object like a puzzle or cipher, and has checks
+	when the player has completed a level’s objective and tries to unlock the door. If all objectives are completed 
+	the level informs the player if the door is unlocked and the player can exit the level to continue on their 
+	quest to escape and solve the mystery of Scarlett’s death.
 
 	
 LevelGenerator
