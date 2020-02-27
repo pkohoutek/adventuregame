@@ -54,8 +54,8 @@ How to download:
 To compile:
 	javac AdventureGame.java
 To run:
-	Place all level_.cfg and level_.map (the _ represents the level numbers) files in the directory containing the compile class
-	files, then run:
+	Place all level_.cfg and level_.map (the _ represents the level numbers) files in the 
+	directory containing the compile class files, then run:
 
 	java AdventureGame
 
@@ -63,9 +63,12 @@ To run:
 Game Information
 --------------------------------------------------------------------------------------------------
 
-A text adventure game where you are trapped in a room, playing as a detective trying to solve a murder mystery and discover who killed Scarlett Johanson in order to escape.
+A text adventure game where you are trapped in a room, playing as a detective trying to solve a 
+murder mystery and discover who killed Scarlett Johanson in order to escape.
 
-The game is played with the keyboard and the player needs to solve puzzles and navigate through each level to advance in the game and unlock doors to escape. The game is timed like an escape room and the player has to beat the game (escape all of the rooms) before the timer expires.
+The game is played with the keyboard and the player needs to solve puzzles and navigate through each 
+level to advance in the game and unlock doors to escape. The game is timed like an escape room and 
+the player has to beat the game (escape all of the rooms) before the timer expires.
 
 --------------------------------------------------------------------------------------------------
 Classes
