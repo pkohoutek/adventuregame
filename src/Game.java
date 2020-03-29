@@ -1,42 +1,43 @@
+// import libraries
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Game class contains the basic game loop
+ * play() loops through the initial level setup and calls the gameLoop method.
+ * gameLoop() loops of the initial level menu where the player can choose to enter the movement menu
+ * or exit the game.
+ * moveMenu() provides the player options on movement, return to title screen, and inspection of game objects
+ * contained in the level.
+ * getDirection(int iMove, boolean hitObject) is used to pass the Move enum to the player for movement on the map
+ * and the players "animator" to change their avatar state based on direction of movement or if they collided with a 
+ * wall or object
+ * checkisGameOver() is called at points when the player is prompted for input or completing actions to check the 
+ * GameClock to determine if the player has run out of game time.	 * 
+ * Contains a clearConsole method from: 
+ * https://stackoverflow.com/questions/2979383/java-clear-the-console
+ * @author Paul
+ */
 public class Game {
 	
-	/*		Game
-	 * 		Static class contains the basic game loop
-	 * 	  		
-	 * 		play() loops through the initial level setup and calls the gameLoop method.
-	 * 
-	 * 		gameLoop() loops of the initial level menu where the player can choose to enter the movement menu
-	 * 		or exit the game.
-	 * 
-	 *  	moveMenu() provides the player options on movement, return to title screen, and inspection of game objects
-	 *  	contained in the level.
-	 * 			
-	 * 		getDirection(int iMove, boolean hitObject) is used to pass the Move enum to the player for movement on the map
-	 * 		and the players "animator" to change their avatar state based on direction of movement or if they collided with a 
-	 * 		wall or object
-	 * 
-	 * 		checkGameOver() is called at points when the player is prompted for input or completing actions to check the 
-	 * 		GameClock to determine if the player has run out of game time.	 * 
-	 * 		
-	 * 		Contains a clearConsole method from: 
-	 * 			https://stackoverflow.com/questions/2979383/java-clear-the-console
-	 * 		
-	 */
+
 	
 	// booleans for various gameplay loops of the Game Class
-	private static boolean finishedTurn, gameOver, back, timeSet;
-	private static boolean startOfLevel, hitObject, invalidEntry;
-	private static int levelNum, iOption;
-	private static String sOption;
-	private static Level level;
-	private static Scanner keyboard;
-	private static Player player;
+	private boolean finishedTurn, isGameOver, back, timeSet;
+	private boolean startOfLevel, hitObject, invalidEntry;
+	private int levelNum, iOption;
+	private String sOption;
+	private Level level;
+	private Scanner keyboard;
+	private Player player;
+	private GameOver gameOver;
+	private GameClock clock;
 	
 	
-	public static void play() {
+	/**
+	 * method contains initial level game loop
+	 */
+	public void play() {
 		// this is the main gameplay loop controller, can be loaded by the scene
 		// and this code can be moved to a method in a class such as GameManager
 		
@@ -46,15 +47,17 @@ public class Game {
 		player = new Player(level.getStartX(), level.getStartY());
 		levelNum = SceneManager.getScene();
 		keyboard = new Scanner(System.in);
+		gameOver = new GameOver();
+		clock = new GameClock();
 		// set booleans for outer game loop to false
-		gameOver = false;
+		isGameOver = false;
 		// set start of level to true to print the level introduction text
 		startOfLevel = true;
 		// set timeSet to false to trigger a reset of the timer for a new game
 		// or to gather the timer from a saved game
 		timeSet = false;
 		// loops through game play until player selects exit game
-		while (!gameOver) 
+		while (!isGameOver) 
 		{
 			// if we have just started the level print the level intro text
 			if (startOfLevel) {
@@ -78,25 +81,28 @@ public class Game {
 	}
 	
 	
-	// the main level menu for the player. can select move which calls the moveMenu() method
-	// or exit which takes them back to the MainMenu.
-	private static void gameLoop() {
+	/**
+	 * Game play loop for the main level menu for the player. 
+	 * Can select move which calls the moveMenu() method,
+	 * or exit which takes them back to the MainMenu.
+	 */
+	private void gameLoop() {
 		// if the player has started a new game reset the timer
 		if(levelNum == 1 && !timeSet)
 		{
-			GameClock.resetTime();
+			clock.resetTime();
 			timeSet = true;
 		}
 		// if the player is starting from a saved game, set the time remaining from their save
 		else if (!timeSet){
-			GameClock.setTimeRemaining(SceneManager.loadMinutes(), SceneManager.loadSeconds());
+			clock.setTimeRemaining(SceneManager.loadMinutes(), SceneManager.loadSeconds());
 			timeSet = true;
 		}
 		// while the player hasn't backed out of the main level menu
 		while (!finishedTurn)
 		{
 			clearConsole();
-			level.displayLevel(player.getX(), player.getY(), player.getSprite());   // displays map
+			level.displayLevel(player.getX(), player.getY(), player.getSprite(), new GameClock(clock));   // displays map
 			// if player made an invalid entry in the main menu, prints invalid entry below map
 			if (invalidEntry)
 			{
@@ -124,7 +130,7 @@ public class Game {
 			else if (iOption == 0)
 			{
 				finishedTurn = true;
-				gameOver = true;
+				isGameOver = true;
 			}
 			// user input an invalid entry
 			else
@@ -135,7 +141,10 @@ public class Game {
 	}
 	
 	
-	private static void moveMenu() {
+	/**
+	 * Method contains the movement menu loop for the game
+	 */
+	private void moveMenu() {
 		// local integer variable to store the players move selection
 		int iMove = 0;
 		
@@ -147,7 +156,7 @@ public class Game {
 				{	
 					// prints map and adds a descriptive String to inform the player they hit a wall
 					clearConsole();
-					level.displayLevel(player.getX(), player.getY(), hitObject, player.getSprite());
+					level.displayLevel(player.getX(), player.getY(), hitObject, player.getSprite(), new GameClock(clock));
 					hitObject = false;
 				}
 				// checks if the player input was incorrect during the last loop and prints a message
@@ -155,7 +164,7 @@ public class Game {
 				else if (invalidEntry)
 				{
 					clearConsole();
-					level.displayLevel(player.getX(), player.getY(), player.getSprite());
+					level.displayLevel(player.getX(), player.getY(), player.getSprite(), new GameClock(clock));
 					System.out.println("Invalid entry!");
 					invalidEntry = false;
 				}
@@ -163,39 +172,39 @@ public class Game {
 				else
 				{
 					clearConsole();
-					level.displayLevel(player.getX(), player.getY(), player.getSprite());
+					level.displayLevel(player.getX(), player.getY(), player.getSprite(), new GameClock(clock));
 					System.out.print("\n");
 				}
 				System.out.println("Move Up - 1\tDown - 2\tMove Left - 3");
 				// if the player is in contact with an interactive object print the "inspect" option
 				if (level.canInteract(player.getMinX(), player.getMaxX(), player.getY())) {
 						System.out.println("Right - 4\tInspect - 5\tBack to Menu - 0");
-						checkGameOver();
+						checkisGameOver();
 				}	
 				// else print the options without "Inspect"
 				else{
 					System.out.println("Right - 4\tBack to Menu - 0");
-					checkGameOver();
+					checkisGameOver();
 				}
 				// if the player has not run out of time and it is game over
-				if (!gameOver)
+				if (!isGameOver)
 				{
 					// check player input, verifying its an integer and loops for input
 					// displaying invalid entry message if it is not
 					while (!keyboard.hasNextInt())
 					{
 						clearConsole();
-						level.displayLevel(player.getX(), player.getY(), player.getSprite());
+						level.displayLevel(player.getX(), player.getY(), player.getSprite(), new GameClock(clock));
 						System.out.println("Invalid entry!");
 						// if the player is able to interact with an object in the level show the "inspect" option
 						if (level.canInteract(player.getMinX(), player.getMaxX(), player.getY())) {
 							System.out.println("Right - 4\tInspect - 5\tBack to Menu - 0");
-							checkGameOver();
+							checkisGameOver();
 						}	
 						// else print default movement options
 						else{
 							System.out.println("Right - 4\tBack to Menu - 0");
-							checkGameOver();
+							checkisGameOver();
 						}
 						// sOption is a place holder to hold string input that is not numeric
 						sOption = keyboard.next();
@@ -210,7 +219,7 @@ public class Game {
 						clearConsole();
 						// interact with object
 						level.interaction(player.getMinX(), player.getMaxX(), player.getY());
-						checkGameOver();
+						checkisGameOver();
 						// if the player just opened the door
 						if (level.isDoorOpen())
 						{
@@ -227,7 +236,7 @@ public class Game {
 								// assign new scene number to levelNum integer
 								levelNum = SceneManager.getScene();
 								// save the players game so they can continue from the start of the next level
-								SceneManager.saveGame(GameClock.getMinutesRemaining(), GameClock.getMinutesRemaining());
+								SceneManager.saveGame(clock.getMinutesRemaining(), clock.getMinutesRemaining());
 								startOfLevel = true;
 								// load the next level
 								level = new Level(levelNum);
@@ -238,8 +247,8 @@ public class Game {
 							// else if there are no more scenes left the player
 							// has completed the game, load the good game over screen
 							else {
-								gameOver = true;
-								GameOver.beatGameScreen();
+								isGameOver = true;
+								gameOver.beatGameScreen();
 							}					
 							// set game play loop booleans to true to return
 							// to the main level menu
@@ -262,13 +271,13 @@ public class Game {
 					else if (iMove < 0 || iMove > 4)
 					{
 						invalidEntry = true;
-						checkGameOver();
+						checkisGameOver();
 					}
 					// else if entry is 0, go back a menu
 					else if(iMove == 0)
 					{
 						back = true;
-						checkGameOver();
+						checkisGameOver();
 					}							
 					// else player made an correct input to move 
 					else
@@ -291,7 +300,7 @@ public class Game {
 							    keyboard.nextLine();   // needs 2 next lines to work properly, not sure if this is related to "\n" println(), or some other
 							    						// quirk with Java, any feedback on this would be appreciated.
 							}
-						    checkGameOver();
+						    checkisGameOver();
 	
 						}
 						// else the player isn't able to move, hitObject is true and will print text informing them they hit a wall
@@ -300,7 +309,7 @@ public class Game {
 							hitObject = true;
 							direction = getDirection(iMove, hitObject);
 							player.hitAnimation(direction);
-							checkGameOver();
+							checkisGameOver();
 						}
 					}
 			}
@@ -311,22 +320,29 @@ public class Game {
 
 	}
 	
-	// helper method that checks if the player has gone past the time limit
-	private static void checkGameOver() {
-		if (GameClock.isGameOver())
+	/**
+	 * Helper method that checks if the player has gone past the time limit
+	 */
+	private void checkisGameOver() {
+		if (clock.isGameOver())
 		{
 			finishedTurn = true;
-			gameOver = true;
-			GameOver.gameOverScreen();
+			isGameOver = true;
+			gameOver.gameOverScreen();
 			back = true;
 		}
 	}
 	
 	
 	
-	// helper method to convert the player's integer movement selection to
-	// a Move enum
-	private static Move getDirection(int iMove, boolean hitObject) {
+	/**
+	 * Helper method to convert the player's integer movement selection to
+	 * a Move enum.
+	 * @param iMove int inputted by player for direction of movement
+	 * @param hitObject boolean representing if they hit an object with selected move
+	 * @return Move enum representing direction and new x,y position of player
+	 */
+	private Move getDirection(int iMove, boolean hitObject) {
 		Move direction;
 		// if the player is moving up or down but is blocked by an object or end of map string array
 		if ((iMove == 1 || iMove == 2 ) && hitObject){
@@ -375,16 +391,16 @@ public class Game {
 		return direction;
 	}
 
-	//
-	// clearConsole method clears terminal/cmd and checks 
-	// Operating system and runs the revelant commmand.
-	// It is used to improve immersion and user experience.
-	//
-	// credit for code goes to Abhishek Kashyap & community at Stack Overflow.
-	// URL: 
-	// 	https://stackoverflow.com/questions/2979383/java-clear-the-console
-	// 
-	public final static void clearConsole() {
+	/**
+	 * clearConsole helper method clears terminal/cmd and checks 
+	 * Operating system and runs the revelant commmand.
+	 * It is used to improve immersion and user experience.
+	 * 
+	 * credit for code goes to Abhishek Kashyap & community at Stack Overflow.
+	 * URL: 
+	 * https://stackoverflow.com/questions/2979383/java-clear-the-console
+	 */
+	private final void clearConsole() {
 	    //Clears Screen in java
 	    try {
 	        if (System.getProperty("os.name").contains("Windows")) {

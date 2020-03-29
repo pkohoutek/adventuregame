@@ -1,28 +1,33 @@
-
+/**
+ * Wall Class 
+ * represents a wall object that is not traversable by
+ * the player. Used to add variation to levels and to guide
+ *  the player to goals 
+ */	
 public class Wall {
 
-	/*
-	 *      Wall Class 
-	 *      represents a wall object that is not traversable by
-	 *      the player. Used to add variation to levels and to guide
-	 *      the player to goals 
-	 */	
-	
 	// config parameters, x/y position, and the String sprite representation
 	private int xPos = 0;
 	private int yPos = 0;
 	private String sSprite;
 	
 	
-	// non-interactive prop, think walls, columns, etc can be replaced with a image (sprite) when we move to graphical
-	// can be moved to a child class using extends
+	/**
+	 * 	Wall constructor. Non-interactive prop, think walls, columns, etc can be replaced
+	 *  with a image (sprite) when we move to graphical.
+	 * @param x int of walls x position on game map
+	 * @param y int of walls y position on game map
+	 */
 	public Wall(int x, int y) {
 		xPos = x;
 		yPos = y;
 		sSprite = "#";
 	}
 	
-	// copy constructor if needed
+	/**
+	 * copy constructor
+	 * @param wall to copy
+	 */
 	public Wall(Wall wall)
 	{
 		this.xPos = wall.xPos;
@@ -30,18 +35,26 @@ public class Wall {
 		this.sSprite = wall.sSprite;
 	}
 	
-	// get Wall x value
+	/**
+	 * getter method for Wall x value
+	 * @return int of wall's x value on game map
+	 */
 	public int getX() {
 		return xPos;
 	}
 	
-	// get prop y value
+	/**
+	 * getter method for Wall y value
+	 * @return int of wall's y value on game map
+	 */
 	public int getY() {
 		return yPos;
 	}
 	
-	// gets the String representation of the sprite (can change type to Sprite when we move to JavaFX),
-	// for scalability
+	/**
+	 * getter method for the String representation of the wall on the game map
+	 * @return String of wall object for game map
+	 */
 	public String getSprite() {
 		return sSprite;
 	}

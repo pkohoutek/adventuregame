@@ -1,17 +1,18 @@
 import java.util.ArrayList;
 
+/**
+ * Level Class
+ * Level contains all the game objects and the game map. The player interacts
+ * with the objects contained in the level
+ * The level checks the map to ensure the player can move
+ * Levels are constructed using the LeveLGenerator class to provide
+ * modularity and ease of implementation when dealing with the volume
+ * of text of this style of adventure game
+ * @author Paul
+ *
+ */
 public class Level {
-	
-	/*
-	 * 		Level Class
-	 * 	Level contains all the game objects and the game map. The player interacts
-	 * 	with the objects contained in the level
-	 * 	The level checks the map to ensure the player can move
-	 * 	Levels are constructed using the LeveLGenerator class to provide
-	 * 	modularity and ease of implementation when dealing with the volume
-	 * 	of text of this style of adventure game
-	 */
-	
+		
 	// level number of object
 	private int levelNumber;
 	// array lists for the levels props and puzzles, and story text (can be changed, just testing things)
@@ -27,8 +28,11 @@ public class Level {
 	private int playerStartX, playerStartY;	
 	
 	
-	// constructor uses level number combined LevelGenerator to generate map, props, puzzles, and 
-	// triggers from text config files.
+	/**
+	 * copy constructor uses level number combined LevelGenerator to generate map, props, puzzles, and 
+	 * triggers from text config files.
+	 * @param level to copy
+	 */
 	public Level(int level)
 	{
 		levelNumber = level;
@@ -42,13 +46,16 @@ public class Level {
 		playerStartX = levelGenerator.getPlayerStartX();
 		playerStartY = levelGenerator.getPlayerStartY();
 		levelIntroText = levelGenerator.getIntroText();
-		levelExitText = levelGenerator.getExitText();
-
-		
-		
+		levelExitText = levelGenerator.getExitText();		
 	}
-	// instantiates level without puzzles, can be used for making scenes with story elements
-	// no map
+
+	/**
+	 * Level constructor instantiates level without puzzles, can be used 
+	 * for making scenes with story elements on map.
+	 * @param lNum int of level number
+	 * @param iText String of level's introduction text
+	 * @param oText String of level's ending text
+	 */
 	public Level(int lNum,  String iText, String oText) {
 		
 			levelNumber = lNum;
@@ -58,29 +65,59 @@ public class Level {
 			levelExitText = oText;
 	}
 	
-	// get level number for map view
+	/**
+	 * 	getter for level number for map view
+	 * @return int of level number
+	 */
 	public int getLevelNum() {
 		return levelNumber;
 	}
 	
-	public void displayLevel(int playerX, int playerY, boolean hitObject, String sPlayer) {
-		map.printMap(playerX, playerY, hitObject, sPlayer);
+	/**
+	 * method to display level in console
+	 * @param playerX int of players x position
+	 * @param playerY int of players y position
+	 * @param hitObject boolean true if player has collided with an object
+	 * @param sPlayer String of players avatar
+	 * @param clock GameClock object to display remaining time of game
+	 */
+	public void displayLevel(int playerX, int playerY, boolean hitObject, String sPlayer, GameClock clock) {
+		map.printMap(playerX, playerY, hitObject, sPlayer, clock);
 	}
 	
-	// displays level without spaces between the map String "tiles"
-	public void displayLevel(int playerX, int playerY, String sPlayer) {
-		map.printMap(playerX, playerY, sPlayer);
+	/**
+	 * 	method displays level without spaces between the map String "tiles"
+	 * @param playerX int of players x position
+	 * @param playerY int of players y position
+	 * @param sPlayer String of players avatar
+	 * @param clock GameClock object to display remaining time of game
+	 */
+	public void displayLevel(int playerX, int playerY, String sPlayer, GameClock clock) {
+		map.printMap(playerX, playerY, sPlayer, clock);
 	}
 		
-	// checks the map to see if the player can move
+	/**
+	 * 	method checks the map to see if the player can move
+	 * @param move Move enum representing players direction in x and y coordinates
+	 * @param playerX int of players center x position
+	 * @param playerY int of players y position
+	 * @param playerXMin int of players avatar minimum x position
+	 * @param playerXMax int of players avatar maximum x position
+	 * @return
+	 */
 	public boolean checkMove(Move move, int playerX, int playerY, int playerXMin, int playerXMax) {
 		return map.canMove(move, playerX, playerY, playerXMin, playerXMax);
 	}
 	
-	// checks the map to see if the player has stepped on a trigger
-	// triggers activate dead center on players x position so be dilligent
-	// placing them in levels, can be modified to activate if any part
-	// of the player avatar is on the same x/y location as player.
+	/**
+	 * checks the map to see if the player has stepped on a trigger
+	 * triggers activate dead center on players x position so be dilligent
+	 * placing them in levels, can be modified to activate if any part
+	 * of the player avatar is on the same x/y location as player.
+	 * @param playerX int of players x position on map
+	 * @param playerY int of players y position on map
+	 * @return boolean true if the player has stepped on a trigger object on the map
+	 */
 	public boolean checkTrigger(int playerX, int playerY)
 	{
 		boolean isTrigger = false;
@@ -98,9 +135,15 @@ public class Level {
 		return isTrigger;
 	}
 	
-	// iterates over all interactive objects returning true 
-	// if there is an object in the players range
-	// this code will have to be updated when moving to JavaFX
+	/**
+	 * iterates over all interactive objects returning true 
+	 * if there is an object in the players range
+	 * this code will have to be updated when moving to JavaFX
+	 * @param playerXMin int of player avatar x min position on map
+	 * @param playerXMax int of player avatar x max position on map
+	 * @param playerY int of player y position on map
+	 * @return boolean true if player avatar is positioned on a interactible object
+	 */
 	public boolean canInteract(int playerXMin, int playerXMax, int playerY)
 	{
 		boolean interact = false;
@@ -168,7 +211,12 @@ public class Level {
 		return interact;
 	}
 	
-	// method to interact with objects that the player is in contact with
+	/**
+	 * method to interact with objects that the player is in contact with
+	 * @param playerXMin int of player avatar x min position on map
+	 * @param playerXMax int of player avatar x max position on map
+	 * @param playerY int of player y position on map
+	 */
 	public void interaction(int playerXMin, int playerXMax, int playerY)
 	{
 		// to avoid printing trigger multiple times if the player moves up on a
@@ -287,8 +335,10 @@ public class Level {
 		}
 	}
 	
-	// method to check all puzzles and ciphers in level
-	// and if all puzzles have been solved unlock the door
+	/**
+	 * method to check all puzzles and ciphers in level
+	 * and if all puzzles have been solved unlock the door
+	 */
 	private void tryToOpenLock()
 	{
 		boolean locked = false;
@@ -313,44 +363,68 @@ public class Level {
 		}
 	}
 	
-	// boolean getter to return if the level's door is still locked
+	/**
+	 * getter to return if the level's door is still locked
+	 * @return boolean true if the door is locked
+	 */
 	public boolean isDoorLocked() {
 		return door.isLocked();
 	}
 	
-	// boolean getter to return if the player has opened the door to exit the level
+	/**
+	 * getter to return if the player has opened the door to exit the level
+	 * @return boolean true if door is opened
+	 */
 	public boolean isDoorOpen() {
 		return door.isOpen();
 	}
 	
-	// simple getter for Map X length if needed
+	/**
+	 * getter for Map X length
+	 * @return int of map X length
+	 */
 	public int mapX() {
 		return map.getXLen();
 	}
 	
-	// simple getter for Map Y lengthS if needed
+	/**
+	 * getter for Map Y lengthS if needed
+	 * @return int of map y length
+	 */
 	public int mapY() {
 		return map.getYLen();
 	}
 	
-	// getter that returns the players X starting position for the level
+	/**
+	 * getter that returns the players X starting position for the level
+	 * @return int of player x starting position
+	 */
 	public int getStartX()
 	{
 		return playerStartX;
 	}
 	
-	// getter that returns the players Y starting position for the level
+	/**
+	 * getter that returns the players Y starting position for the level
+	 * @return int of player y starting position
+	 */
 	public int getStartY()
 	{
 		return playerStartY;
 	}
 	
-	// getter for Level introduction text (for story elements)
+	/**
+	 * getter for Level introduction text (for story elements)
+	 * @return string of level introduction text
+	 */
 	public String getIntroText() {
 		return levelIntroText;
 	}
 	
-	// getter for Level exit text (for story elements)
+	/**
+	 *  getter for Level exit text (for story elements)
+	 * @return string of level exit text
+	 */
 	public String getExitText() {
 		return levelExitText;
 	}

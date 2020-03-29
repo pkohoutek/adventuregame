@@ -1,26 +1,28 @@
-import java.io.IOException;
-import java.util.Scanner;
-
 
 public class AdventureGame {
 	
-	/*		Adventure Game
+	/**		Adventure Game
 	 * 		Main function calls MainMenu.menu() to begin game,
 	 * 		and loops until the user chooses to exit the game.
 	 * 		Moving to JavaFX in the future we felt it best to keep 
 	 * 		most of the code out of the class containing main()
-	 * 		
+	 * 		@author Paul 
 	 */
 
-
+	
+	/**
+	 * 	main method of game, instantiates main menu and game over objects
+	 * @param args
+	 */
 	public static void main(String[] args) {
-		
+		MainMenu mainMenu = new MainMenu();
+		GameOver gameOver = new GameOver();
 		// while the player hasn't exited the game
-		while(!MainMenu.exitGame())
+		while(!mainMenu.exitGame())
 		{
-			MainMenu.menu();
+			mainMenu.menu();
 		}
-		GameOver.thanksScreen();
+		gameOver.thanksScreen();
 		System.exit(0);
 	}	
 }

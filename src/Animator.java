@@ -1,5 +1,14 @@
+// import Hashmap
 import java.util.HashMap;
 
+/**
+ * Animator class
+ * Provides limited animation by changing the player
+ * avatar's string representation based on direction moved
+ * and if they have collided with another object
+ * @author Paul
+ *
+ */
 public class Animator {
 	
 	// string array containing the player "animation sprites"
@@ -14,15 +23,19 @@ public class Animator {
 	
 
 	
-	// constructor for Animator object
+	/**
+	 * 	constructor for Animator object
+	 */
 	public Animator() {
 		sprites = new HashMap<Move, Integer>();
 		generateActions();
 	}
 	
-	// assigns the index numbers of the string array actions 
-	// to use in the getSprite() methods below to improve readability 
-	// and a good excuse to learn about hashmaps in Java
+	/**
+	 * generateActions() assigns the index numbers of the string array actions 
+	 * to use in the getSprite() methods below to improve readability 
+	 * and a good excuse to learn about hashmaps in Java
+	 */
 	private void generateActions() {
 		int index = 0;
 		for (Move move : Move.values())
@@ -32,8 +45,12 @@ public class Animator {
 		}
 	}	
 	
-	// takes player move integer and boolean if they hit an object and
-	// returns string representation of sprite.
+	/**
+	 * getter takes player move integer and boolean if they hit an object and
+	 * returns string representation of sprite.
+	 * @param move enum for direction of player movement
+	 * @return String of player avatar based on direction moved or if a collision occured
+	 */
 	public String getSprite(Move move)
 	{
 		String sSprite = "";

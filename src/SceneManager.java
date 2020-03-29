@@ -4,15 +4,17 @@ import java.io.File;
 import java.util.Scanner;
 import java.util.ArrayList;
 
+/**
+ * Scene Manager class.
+ * When we move to JavaFX the methods and attributes of this class can be moved,
+ * to JavaFX Scene manager class (or equivalent).
+ * 
+ * Using static class as this does not need to be invoked in any classes and needs
+ * to remain static to reference the current levels, loading and saving of levels in multiple
+ * classes.
+ */
 public class SceneManager {
 	
-	/*
-	 * 		Scene Manager class
-	 * 		When we move to JavaFX the methods and attributes of this class can be moved,
-	 * 		to JavaFX Scene manager class (or equivalent)
-	 * 
-	 */
-
 	private static int currentScene = 0;
 	private final static String FILENAME = "advgame.sav";
 	private final static String SLVLNUM = "<LEVELNUM>", ELVLNUM = "</LEVELNUM>", 
@@ -20,13 +22,18 @@ public class SceneManager {
 			ESECLEFT = "</SECLEFT>";
 	
 	
-	// load scene from argument
+	/**
+	 * method loads scene from argument
+	 * @param scene int representing the level number
+	 */
 	public static void loadScene(int scene)
 	{
 		currentScene = scene;
 	}
 	
-	// loads next scene
+	/**
+	 * method loads next scene
+	 */
 	public static void nextScene() {
 		// if the next level exits increment to the next scene
 		if (nextLevelExist())
@@ -55,7 +62,11 @@ public class SceneManager {
 		}
 	}
 	
-	// saves game to text file
+	/**
+	 * Method saves game to text file
+	 * @param minutes int representing remaining time in game in minutes
+	 * @param seconds int representing remaining time in game in seconds
+	 */
 	public static void saveGame(int minutes, int seconds) {
 		PrintWriter outputStream = null;
 		try
@@ -81,7 +92,9 @@ public class SceneManager {
 		
 	}
 	
-	// loads game from text file
+	/**
+	 * Method loads game from text file
+	 */
 	public static void loadGame() {
 		Scanner inputStream = null;
 		String line = "";
@@ -115,6 +128,10 @@ public class SceneManager {
 		inputStream.close();
 	}
 	
+	/**
+	 * Method returns remaining minutes for GameClock
+	 * @return int of game time remaining in minutes
+	 */
 	public static int loadMinutes() {
 		Scanner inputStream = null;
 		String line = "";
@@ -152,7 +169,10 @@ public class SceneManager {
 	}
 	
 	
-	
+	/**
+	 * Getter method for remaining seconds when loading the a saved game
+	 * @return int representing the remaining seconds in a loaded save game
+	 */
 	public static int loadSeconds() {
 		Scanner inputStream = null;
 		String line = "";
@@ -189,7 +209,10 @@ public class SceneManager {
 		return secLeft;
 	}
 		
-	// method returns boolean if level .cfg file exists for the next level
+	/**
+	 * method returns boolean if level .cfg file exists for the next level
+	 * @return boolean true if a next level exits
+	 */
 	public static boolean nextLevelExist() {
 		boolean lExist = false;
 		int nextScene = currentScene + 1;
@@ -202,7 +225,11 @@ public class SceneManager {
 		return lExist;
 	}
 	
-	// method returns boolean if level .cfg file exists for the next level
+	/**
+	 * method returns boolean if level .cfg file exists for the next level. Overloaded method.
+	 * @param lvlNum int representing the level number
+	 * @return boolean true if the level number exists
+	 */
 	private static boolean levelExist(int lvlNum) {
 		boolean lExist = false;
 		String levelFile = "level" + Integer.toString(lvlNum) + ".cfg";
@@ -214,6 +241,10 @@ public class SceneManager {
 		return lExist;
 	}
 	
+	/**
+	 * Method checks if a save file exists
+	 * @return boolean true if a save file exists
+	 */
 	public static boolean saveExist() {
 		boolean saveExist = false;
 		File testFile = new File(FILENAME);
@@ -224,8 +255,6 @@ public class SceneManager {
 		
 		return saveExist;
 	}
-	
-	
 	
 	
 }

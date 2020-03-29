@@ -1,13 +1,12 @@
-
-public class Prop {
 	
-	
-	/*
+	/**
 	 * 		Prop Class
 	 * 		creates objects on the map for the player to interact with.
 	 * 		Typically in game development props are non-interactive but due to
 	 * 		the limitation of a text game props are interactive to add more atmosphere to game
 	 */
+	
+public class Prop {
 	
 	private int xPos = 0;
 	private int yPos = 0;
@@ -19,7 +18,10 @@ public class Prop {
 
 
 
-	// prop coping constructor
+	/**
+	 *  prop coping constructor
+	 * @param prop to copy
+	 */
 	public Prop(Prop prop)
 	{
 		xPos = prop.getX();
@@ -29,8 +31,12 @@ public class Prop {
 	}
 	
 	
-	// story prop / trigger
-	// can be split and moved to a child classes
+	/**
+	 * Prop constructor
+	 * @param des String of descriptive text of prop object
+	 * @param x int representing props x position on game map
+	 * @param y int representing props y position on game map
+	 */
 	public Prop(String des, int x, int y) {
 		xPos = x;
 		yPos = y;
@@ -39,34 +45,45 @@ public class Prop {
 	} 
 	
 	
-	// gets prop description string
+	/**
+	 * getter method for prop description string
+	 * @return String of prop description/story text
+	 */
 	public String getDescription() {
 		return description;
 	}
 	
-	// prints prop description to screen
+	/**
+	 * public helper method to print descriptive text to console
+	 */
 	public void printDescription()
 	{
 		System.out.println(description);
 	}
 		
-	// gets the String representation of the sprite (can change type to Sprite when we move to JavaFX),
-	// for scalability
+	/**
+	 * getter method for String representation of the sprite when displaying on map
+	 * @return String of Prop object for map
+	 */
 	public String getSprite() {
 		return sSprite;
 	}
 	
-	// get prop x value
+	/**
+	 *  getter for prop x value
+	 * @return int of props x position on map
+	 */
 	public int getX() {
 		return xPos;
 	}
 	
-	// get prop y value
+	/**
+	 * getter for prop y value
+	 * @return int of props y position on map
+	 */
 	public int getY() {
 		return yPos;
 	}
-	
-	
 
 	
 }

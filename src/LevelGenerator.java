@@ -3,27 +3,25 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
+/**
+ * 		LevelGenerator
+ * 	Class to use a .map text file to generate a map, and .cfg
+ * 	files to construct all the level's game objects attributes, including
+ * 	questions, answers, and x and y positions.
+ * 
+ * 	Currently able to build map with walls, interactive props, 
+ *  puzzles, ciphers, and triggers.
+ * 	
+ * 	Plan to add functionality for whatever other objects and other
+ * 	features the team implements in the future
+ * 
+ *  Hoping some of the functionality can be incorporated when 
+ *  porting code to JavaFX, we will have to hard code the 
+ *  coordinates of the objects as parsing a text file will not work
+ *  for the tile map or JFrame.
+ */
 public class LevelGenerator {
-	
-	/*
-	 * 		LevelGenerator
-	 * 	Class to use a .map text file to generate a map, and .cfg
-	 * 	files to construct all the level's game objects attributes, including
-	 * 	questions, answers, and x and y positions.
-	 * 
-	 * 	Currently able to build map with walls, interactive props, 
-	 *  puzzles, ciphers, and triggers.
-	 * 	
-	 * 	Plan to add functionality for whatever other objects and other
-	 * 	features the team implements in the future
-	 * 
-	 *  Hoping some of the functionality can be incorporated when 
-	 *  porting code to JavaFX, we will have to hard code the 
-	 *  coordinates of the objects as parsing a text file will not work
-	 *  for the tile map or JFrame.
-	 */
-	
-	
+		
 	// config parameters
 	private int levelNumber = 0;
 	private int levelX = 0;				// level x/y length for map generation
@@ -80,8 +78,11 @@ public class LevelGenerator {
 	private final String SLVLTEXT = "<LEVELTEXT>", ELVLTEXT = "</LEVELTEXT>", SLVLSTARTTXT = "<STARTTEXT>", ELVLSTARTTXT = "</STARTTEXT>",
 			SLVLENDTXT = "<ENDTEXT>", ELVLENDTXT = "</ENDTEXT>";
 	
-	// Level constructor takes level number and generates level from .map and .cfg files
-	// this class could be split up to helper classes for each object generated
+	/**
+	 * 
+	 * LevelGenerator constructor
+	 * @param lNumber int of level number
+	 */
 	public LevelGenerator(int lNumber){
 		levelNumber = lNumber;
 		walls = new ArrayList<Wall>();
@@ -100,10 +101,11 @@ public class LevelGenerator {
 		genGameObjects();
 		generate();
 		putObjectsInMap();
-
 	}
 	
-	// puts walls and other visible objects (not triggers) in the map
+	/**
+	 * helper function puts walls and other visible objects (not triggers) in the map
+	 */
 	private void putObjectsInMap()
 	{
 		// generate map using the x and y dimensions from the .map file
@@ -143,7 +145,10 @@ public class LevelGenerator {
 	}
 	
 	
-	// returns copy of the level map 
+	/**
+	 * 	getter returns copy of the level map 
+	 * @return Map copy of level map
+	 */
 	public Map getMap()
 	{
 		Map tMap = new Map(map);
@@ -151,8 +156,10 @@ public class LevelGenerator {
 	}
 	
 	
-	// method parses the level#.cfg file (# being the number of the current level generated)
-	// generates the props, puzzles, ciphers, intro text, exit text, player position on map, and more
+	/**
+	 * 	helper method parses the level#.cfg file (# being the number of the current level generated)
+	 * generates the props, puzzles, ciphers, intro text, exit text, player position on map, and more
+	 */
 	private void genGameObjects() 
 	{
 		// create new input stream for level#.cfg file
@@ -627,19 +634,14 @@ public class LevelGenerator {
 			}			
 		}		
 		inputStream.close();
-	}
-
-
+	}	
 
 	
-	
-
-
-	
-	
-	// method generates walls, props, puzzles, ciphers, and triggers
-	// based on chars from .map file and adds the constructor parameters
-	// from ArrayLists generated in other methods of this class
+	/**
+	 * helper method generates walls, props, puzzles, ciphers, and triggers
+	 * based on chars from .map file and adds the constructor parameters
+	 * from ArrayLists generated in other methods of this class.
+	 */
 	private void generate() {
 		walls = new ArrayList<Wall>();
 		Scanner inputStream = null;
@@ -757,7 +759,10 @@ public class LevelGenerator {
 	}
 	
 	
-	// getter method returns copy of props ArrayList
+	/**
+	 * getter method returns copy of props ArrayList
+	 * @return Prop ArrayList for the level
+	 */
 	public ArrayList<Prop> getProps()
 	{
 		ArrayList<Prop> tProps = new ArrayList<Prop>();
@@ -768,7 +773,10 @@ public class LevelGenerator {
 		return tProps;
 	}
 	
-	// get method returns copy of triggers ArrayList
+	/**
+	 * getter method returns copy of triggers ArrayList
+	 * @return Trigger ArrayList for the level
+	 */
 	public ArrayList<Trigger> getTriggers()
 	{
 		ArrayList<Trigger> tTriggers = new ArrayList<Trigger>();
@@ -779,7 +787,10 @@ public class LevelGenerator {
 		return tTriggers;
 	}
 	
-	// getter method returns copy of puzzles arraylist
+	/**
+	 * getter method returns copy of puzzles arraylist
+	 * @return Puzzle ArrayList for the level
+	 */
 	public ArrayList<Puzzle> getPuzzles()
 	{
 		ArrayList<Puzzle> tPuzzles = new ArrayList<Puzzle>();
@@ -790,7 +801,10 @@ public class LevelGenerator {
 		return tPuzzles;
 	}
 	
-	// getter method returns copy of ciphers ArrayList
+	/**
+	 * getter method returns copy of ciphers ArrayList
+	 * @return Cipher ArrayList for the level
+	 */
 	public ArrayList<Cipher> getCiphers()
 	{
 		ArrayList<Cipher> tCiphs = new ArrayList<Cipher>();
@@ -801,31 +815,46 @@ public class LevelGenerator {
 		return tCiphs;
 	}
 	
-	// getter method returns door
+	/**
+	 * getter method returns door
+	 * @return Door object for the level
+	 */
 	public Door getDoor() {
 		Door tDoor = new Door(door);
 		return tDoor;
 	}
 	
 	
-	// getter returns player's starting X position for level
+	/**
+	 * getter returns player's starting X position for level
+	 * @return int of player's x starting position in level
+	 */
 	public int getPlayerStartX()
 	{
 		return startX;
 	}
 	
-	// getter returns players starting Y position for level
+	/**
+	 * getter returns players starting Y position for level
+	 * @return int of player's y starting position in level
+	 */
 	public int getPlayerStartY()
 	{
 		return startY;
 	}
 	
-	// getter method for level introduction string
+	/**
+	 * getter method for level introduction string
+	 * @return String of level introduction text
+	 */
 	public String getIntroText() {
 		return introText;
 	}
 	
-	// getter method for level ending string
+	/**
+	 * getter method for level ending string
+	 * @return String of level exit text
+	 */
 	public String getExitText() {
 		return exitText;
 	}

@@ -1,16 +1,15 @@
 import java.util.Random;
 
+/**
+ * 	Map class builds map and hold references to game objects
+ * 	for us in levels in the game. 
+ * 	Level class checks using the players x,y position if they can move
+ *  on the map.
+ *  Uses a primitive collision system to keep player within the array bounds
+ *  and not walking through walls or doors.
+ */
 public class Map {
-	
-	/*
-	 * 	Map class builds map and hold references to game objects
-	 * 	for us in levels in the game 
-	 * 	Level class checks using the players x,y position if they can move
-	 *  on the map
-	 *  uses a primitive collision system to keep player within the array bounds
-	 *  and not walking through walls or doors
-	 */
-	
+		
 	private int xLen = 5, yLen = 5;				// map x,y dimensions
 	private String[][] sMap;	// string representation of map, can add to constructors
 	private int smashIndex = 0;
@@ -32,14 +31,19 @@ public class Map {
 	
 	private Random random;
 	
-	// default constructor that builds empty map with default dimensions
+	/**
+	 * default constructor that builds empty map with default dimensions
+	 */
 	public Map() {
 		random = new Random();
 		buildMap();
 		
 	}
 	
-	// copy constructor
+	/**
+	 * Map copy constructor
+	 * @param map Map to copy
+	 */
 	public Map(Map map)
 	{
 		xLen = map.getXLen();
@@ -48,7 +52,11 @@ public class Map {
 		sMap = map.getSMap();
 	}
 	
-	// constructor to build map with the x and y length as parameters
+	/**
+	 * Map constructor to build map with the x and y length as parameters
+	 * @param x int of maps x length
+	 * @param y int of maps y length
+	 */
 	public Map(int x, int y) {
 		xLen = x;
 		yLen = y;
@@ -58,8 +66,10 @@ public class Map {
 	}
 	
 	
-	// build map method that generates the sMap String array
-	// iterates backwards so that (0,0) is in bottom left corner
+	/**
+	 * helper method build map method that generates the sMap String array, 
+	 * iterates backwards so that (0,0) is in bottom left corner
+	 */
 	private void buildMap() {
 		for (int y = yLen - 1; y >= 0; y--)
 		{
@@ -71,11 +81,18 @@ public class Map {
 	}
 
 	
-	// prints map and if player hit wall prints descriptive text
-	public void printMap(int playerX, int playerY, boolean hitWall, String sPlayer) {
+	/**
+	 * Method prints map and if player hit wall prints descriptive text
+	 * @param playerX int players x position
+	 * @param playerY int players y position
+	 * @param hitWall boolean true if player hit wall
+	 * @param sPlayer String of player's avatar
+	 * @param clock GameClock object to display remaining time
+	 */
+	public void printMap(int playerX, int playerY, boolean hitWall, String sPlayer, GameClock clock) {
 		
 		System.out.println("\n\n\n\nLevel " + SceneManager.getScene() +  
-				"\t\t\t  Time Left: " + GameClock.getTimer());
+				"\t\t\t  Time Left: " + clock.getTimer());
 		for (int x = 0; x < xLen; x++)
 		{	
 			if (x == 0)
@@ -175,11 +192,17 @@ public class Map {
 		}
 	}
 	
-	// prints map 
-	public void printMap(int playerX, int playerY, String sPlayer) {
+	/**
+	 * Method prints map to console 
+	 * @param playerX int player's x position
+	 * @param playerY int player's y position
+	 * @param sPlayer STring of player's avatar
+	 * @param clock GameClock object to display remaining time in game
+	 */
+	public void printMap(int playerX, int playerY, String sPlayer, GameClock clock) {
 
 		System.out.println("\n\n\n\nLevel " + SceneManager.getScene() +  
-				"\t\t\t  Time Left: " + GameClock.getTimer());
+				"\t\t\t  Time Left: " + clock.getTimer());
 		for (int x = 0; x < xLen; x++)
 		{	
 			if (x == 0)
@@ -277,7 +300,15 @@ public class Map {
 	}	
 	
 	
-	// checks if players next move is good, returns true if so, false otherwise
+	/**
+	 * Method checks if players next move is good, returns true if so, false otherwise
+	 * @param move Move enum representing the player's movement direction
+	 * @param playerX int of player's x position on map
+	 * @param playerY int of player's y position on map
+	 * @param playerXMin int of player avatar's x minimum position on map
+	 * @param playerXMax int of player avatar's y minimum position on map
+	 * @return boolean true if player can move
+	 */
 	public boolean canMove(Move move, int playerX, int playerY, int playerXMin, int playerXMax) {
 		
 		boolean canMove = false;
@@ -360,20 +391,29 @@ public class Map {
 	}
 	
 	
-	// adds prop string to map, and adds trigger to boolean array
+	/**
+	 * Method adds prop string to map, and adds trigger to boolean array
+	 * @param prop object to be added to level
+	 */
 	public void addProp(Prop prop)
 	{
 		sMap[prop.getY()][prop.getX()] = prop.getSprite();
 
 	}
 	
-	// adds walls to map
+	/**
+	 * Method adds walls to map
+	 * @param wall object to be added to map
+	 */
 	public void addProp(Wall wall)
 	{
 		sMap[wall.getY()][wall.getX()] = wall.getSprite();
 	}
 	
-	// adds door to map
+	/**
+	 * Method adds door to map (both vertical and horizontally positioned)
+	 * @param door object to be added to map
+	 */
 	public void addDoor(Door door) {
 		// if the door is vertical ie "||"
 		if (door.isVertical())
@@ -401,34 +441,53 @@ public class Map {
 
 	}
 	
-	// adds puzzle to map
+	/**
+	 * Method adds puzzle to map
+	 * @param puzzle object to be added to map
+	 */
 	public void addPuzzle(Puzzle puzzle){
 		sMap[puzzle.getY()][puzzle.getX()] = puzzle.getSprite();
 	}
 	
-	// adds cipher puzzle to map
+	/**
+	 * Method adds cipher puzzle to map
+	 * @param cipher object to be added to map
+	 */
 	public void addPuzzle(Cipher cipher) {
 		sMap[cipher.getY()][cipher.getX()] = cipher.getSprite();
 	}
 	
-	// clears array element in map (used when completed a puzzle or cipher)
-	// can be used to remove walls or other objects as well for gameplay purposes
+	/**
+	 * Method clears array element in map (used when completed a puzzle or cipher).
+	 * Can be used to remove walls or other objects as well for game play purposes
+	 * @param x int representing x position on map to clear
+	 * @param y int representing y position on map to clear
+	 */
 	public void clearSquare(int x, int y)
 	{
 		sMap[y][x] = " ";
 	}
 	
-	// simple map x length getter
+	/**
+	 *  getter method for map x length
+	 * @return int of map's x length
+	 */
 	public int getXLen(){
 		return xLen;
 	}
 	
-	// simple map y length getter
+	/**
+	 * getter method for map y length
+	 * @return int of map's y length
+	 */
 	public int getYLen() {
 		return yLen;
 	}
 	
-	// returns the string array map
+	/**
+	 * getter method for map string array
+	 * @return String array of map
+	 */
 	public String[][] getSMap()
 	{
 		String[][] tempArray = sMap.clone();
