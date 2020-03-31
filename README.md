@@ -4,7 +4,7 @@
 --------------------------------------------------------------------------------------------------
 ### How to download:
 	Adventure Game .java source files can be downloaded from:
-	https://github.com/pkohoutek/adventuregame/
+	https://github.com/pkohoutek/adventuregame.git
 	
 	Source code is located in the Project src folder.
 	
