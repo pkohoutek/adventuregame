@@ -1,3 +1,4 @@
+package scripts;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -300,7 +301,7 @@ public class LevelGenerator {
 	private void genProps() {
 		// create new input stream for level#.cfg file
 		Scanner inputStream = null;
-		String filename = "level" + Integer.toString(levelNumber) + ".cfg";
+		String filename = "/levels/level" + Integer.toString(levelNumber) + ".cfg";
 		String line = "";
 		// try catch in case file doesn't exist
 		try
