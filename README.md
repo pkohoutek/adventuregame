@@ -144,5 +144,32 @@ room and the player has to beat the game (escape all of the rooms) before the ti
 	Simple static class that displays either the Game Over screen if the player runs out of time,
 	or the Beat Game screen congratulating the player on completing the game.
 	
-	
-	
+--------------------------------------------------------------------------------------------------
+## Puzzle Solutions
+--------------------------------------------------------------------------------------------------	
+### Level 1
+
+#### Lock Puzzle:
+	Solution: 2678
+
+#### Invitation Puzzle:
+	Solution: New Years Eve
+
+#### Cipher Puzzle:
+	Solution: Chris
+
+### Level 2
+
+#### Lock Puzzle:
+	Solution : ACE
+
+#### Keypad Puzzle:
+	Solution: 9
+
+### Level 3
+
+#### Sticky Note Cipher Puzzle:
+	Solution: Footnotes
+
+#### Dagger Puzzle (Final puzzle of game):
+	Solution: Louie
